@@ -1,5 +1,12 @@
+from tag import Tag
+
+
 class MemoryStore:
-    pass
+    def __init__(self):
+        self._store = []
+
+    def add_document(self, tags, document):
+        self._store.append((tags, document))
 
 
 class TestMemoryStore():
@@ -8,3 +15,9 @@ class TestMemoryStore():
 
     def test_store_exists(self):
         store = MemoryStore()
+
+    def test_can_store(self):
+        store = MemoryStore()
+        tags = [Tag("author", "ron"), Tag("title", "nature")]
+        document = "these are the facts"
+        store.add_document(tags, document)
