@@ -1,4 +1,5 @@
 from tag import Tag
+from test_pythonista_1 import TagSet
 
 
 class MemoryStore:
@@ -53,10 +54,15 @@ class TestMemoryStore():
         for author in authors:
             for topic in topics:
                 for student in students:
-                    time_stamp = f"t-20240129083200.{time:03d}Z"
-                    line = f"{time_stamp}_author-{author}_topic-{topic}_student-{student}.curry"
+                    time_stamp = f"20240129083200.{time:03d}Z"
+                    ts = TagSet()
+                    ts.add_at(time_stamp, "t")
+                    ts.add_at(author, "author")
+                    ts.add_at(topic, "topic")
+                    ts.add_at(student, "student")
+                    line = ts.get_file_name()
                     time += 1
                     names.append(line)
-        assert names[0] == "t-20240129083200.000Z_author-ron_topic-math_student-alice.curry"
+        assert names[0] == "t-20240129083200.000Z_author-ron_student-alice_topic-math.curry"
 
 

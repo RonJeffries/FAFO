@@ -33,6 +33,17 @@ class TagSet:
     def add_at(self, value, name):
         self._cont.add(Atom(value, name))
 
+    def get_file_name(self):
+        ts = next(filter(lambda pair: pair.name == "t", self._cont))
+        remainder = self._cont.copy()
+        remainder.discard(ts)
+        tags = [pair for pair in remainder]
+        tags.sort(key=lambda p: (p.name, p.value))
+        tags.insert(0, ts)
+        strings = [f"{t.name}-{t.value}" for t in tags]
+        return "_".join(strings) + ".curry"
+
+
     def has_at(self, v, n):
         return (v, n) in self._cont
 
