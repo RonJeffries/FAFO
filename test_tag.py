@@ -17,3 +17,7 @@ class TestTag:
         with pytest.raises(AttributeError):
             tag.value = "not gonna happen"
 
+    def test_does_not_equal_non_tag(self):
+        tag = Tag("author", "ron")
+        assert tag != ("author", "ron")
+
