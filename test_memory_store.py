@@ -93,7 +93,7 @@ class TestMemoryStore():
                     db_file.writelines(doc)
         elapsed = datetime.now() - start
         print(elapsed)
-        assert False
+        # assert False
 
 
 
