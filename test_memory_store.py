@@ -24,7 +24,6 @@ class MemoryStore:
         return result
 
 
-
 class TestMemoryStore():
     def test_hookup(self):
         assert 2 + 2 == 4
