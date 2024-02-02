@@ -24,7 +24,7 @@ class TestDatabase:
         assert len(math_hill) == 10
         assert len(hector) == 1
 
-    @pytest.mark.skip("timing")
+    @pytest.mark.skip("timing skip")
     def test_selections_per_second(self):
         start = datetime.now()
         for i in range(1500):
