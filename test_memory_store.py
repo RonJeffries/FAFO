@@ -49,7 +49,7 @@ class TestMemoryStore():
 
     def test_make_file_names(self):
         names = self.make_filenames()
-        assert names[0] == "t-20240129083200.000Z_author-ron_student-alice_topic-math.curry"
+        assert names[0] == "t-20240129083200.000Z_author-ron_student-alice_topic-math_.curry"
 
     def make_filenames(self):
         authors = ["ron", "bill", "geepaw", "chet", "sam", "amy", "janet", "susan", "beyonce", "taylor"]

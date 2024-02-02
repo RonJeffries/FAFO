@@ -41,7 +41,7 @@ class TagSet:
         tags.sort(key=lambda p: (p.name, p.value))
         tags.insert(0, ts)
         strings = [f"{t.name}-{t.value}" for t in tags]
-        return "_".join(strings) + ".curry"
+        return "_".join(strings) + "_.curry"
 
 
     def has_at(self, v, n):
