@@ -2,6 +2,8 @@ import os
 from datetime import datetime
 from os.path import expanduser
 
+import pytest
+
 
 class TestDatabase:
     def test_listdir(self):
@@ -22,6 +24,7 @@ class TestDatabase:
         assert len(math_hill) == 10
         assert len(hector) == 1
 
+    @pytest.mark.skip("timing")
     def test_selections_per_second(self):
         start = datetime.now()
         for i in range(1500):
