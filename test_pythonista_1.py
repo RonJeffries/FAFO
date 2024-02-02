@@ -1,8 +1,7 @@
-import pytest
 from collections import namedtuple
 
 
-def test_tagset_exists():
+def test_tag_set_exists():
     ts = TagSet()
 
 
@@ -42,7 +41,6 @@ class TagSet:
         tags.insert(0, ts)
         strings = [f"{t.name}-{t.value}" for t in tags]
         return "_".join(strings) + "_.curry"
-
 
     def has_at(self, v, n):
         return (v, n) in self._cont
