@@ -53,4 +53,4 @@ class TagSet:
 
     def is_subset(self, s):
         return self._cont.issubset(s._cont) if isinstance(s, self.__class__) else False
-        # consider double dispatch? Used to use try:except:
+        # consider double dispatch? Still would have to check type. Used to use try:except:
