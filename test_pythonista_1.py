@@ -17,9 +17,13 @@ def test_subset():
     s2 = TagSet()
     s2.add_at("bill", "author")
     s2.add_at("ron", "author")
-
     assert s1.is_subset(s2)
     assert not s2.is_subset(s1)
+
+def test_bad_subset():
+    s1 = TagSet()
+    assert not s1.is_subset(37)
+
 
 
 Atom = namedtuple("Atom", ["value", "name"])
@@ -48,5 +52,5 @@ class TagSet:
     # return any([value == v and name == n for value, name in self._cont])
 
     def is_subset(self, s):
-        # return all([s.has_at(v, n) for v, n in self._cont])
-        return self._cont.issubset(s._cont)
+        return self._cont.issubset(s._cont) if isinstance(s, self.__class__) else False
+        # consider double dispatch? Used to use try:except:
