@@ -54,6 +54,17 @@ class TestXST:
         assert r2rev not in personnel  # but we need it to be
         assert r3 not in personnel
 
+    def test_frozen_sets(self):
+        r1 = frozenset([Atom("jeffries", "last"), Atom("ron", "first")])
+        r2 = frozenset([Atom("chet", "first"), Atom("hendrickson", "last")])
+        r2rev = frozenset([Atom("hendrickson", "last"), Atom("chet", "first")])
+        r3 = frozenset([Atom("hill", "last"), Atom("geepaw", "first")])
+        personnel = frozenset([r1, r2])
+        assert r1 in personnel
+        assert r2 in personnel
+        assert r2rev in personnel  # <======
+        assert r3 not in personnel
+
     def test_xset_in(self):
         list1 = [Atom("x", 1), Atom("y", 2)]
         list2 = [Atom("y", 2), Atom("x", 1)]
@@ -74,4 +85,12 @@ class TestXST:
         assert r2 in personnel
         assert r2rev in personnel  # this test killed Python {}
         assert r3 not in personnel
+
+    def test_frozen_operators(self):
+        s1 = frozenset(("a", "b", "c"))
+        s2 = frozenset(("x", "y"))
+        s3 = s1 | s2
+        assert s3 == {"a", "x", "c", "b", "y"}
+        s2 |= s1
+        assert s2 == s3
 
