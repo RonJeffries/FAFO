@@ -25,9 +25,7 @@ def test_bad_subset():
     assert not s1.is_subset(37)
 
 
-
 Atom = namedtuple("Atom", ["value", "name"])
-
 
 class TagSet:
     def __init__(self):
