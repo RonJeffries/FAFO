@@ -4,7 +4,7 @@ Atom = namedtuple("Atom", ["element", "scope"])
 
 class XSet:
     def __init__(self, a_list):
-        self.contents = a_list
+        self.contents = frozenset(a_list)
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -12,13 +12,16 @@ class XSet:
         else:
             return False
 
+    def __hash__(self):
+        return hash(self.contents)
+
     def __iter__(self):
         return self.contents.__iter__()
 
     def is_subset(self, other):
         if not isinstance(other, self.__class__):
             return False
-        return all(atom in other for atom in self)
+        return self.contents.issubset(other.contents)
 
 
 class TestXST:
