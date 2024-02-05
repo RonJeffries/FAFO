@@ -1,4 +1,5 @@
 from collections import namedtuple
+
 Atom = namedtuple("Atom", ["element", "scope"])
 
 
@@ -24,17 +25,24 @@ class XSet:
         else:
             return NotImplemented
 
+    def restrict(self, other):
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return frozenset(
+            [candidate for candidate in self.contents
+             if any([check.is_subset(candidate) for check in other.contents])])
+
 
 class TestXST:
     def test_tuples(self):
         a1 = Atom(1, 2)
-        a2 = Atom(2-1, 3-1)
+        a2 = Atom(2 - 1, 3 - 1)
         a3 = Atom(2, 1)
         assert a1 == a2
         assert not a1 == a3
 
     def test_members(self):
-        a1 = Atom (31, 42)
+        a1 = Atom(31, 42)
         assert a1.element == 31
         assert a1.scope == 42
 
@@ -90,6 +98,30 @@ class TestXST:
         assert r2rev in personnel  # this test killed Python {}
         assert r3 not in personnel
 
+    def test_xset_restrict(self):
+        ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
+        chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
+        hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
+        personnel = XSet([ron, chet, hill])
+        boss_record = XSet([Atom("boss", "job")])
+        boss_set = XSet([boss_record])
+        bosses = personnel.restrict(boss_set)
+        assert ron in bosses
+        assert chet in bosses
+        assert hill not in bosses
+
+    def test_xset_restrict_again(self):
+        ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
+        chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
+        hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
+        personnel = XSet([ron, chet, hill])
+        serf_record = XSet([Atom("serf", "job")])
+        serf_set = XSet([serf_record])
+        serfs = personnel.restrict(serf_set)
+        assert ron not in serfs
+        assert chet not in serfs
+        assert hill in serfs
+
     def test_frozen_operators(self):
         s1 = frozenset(("a", "b", "c"))
         s2 = frozenset(("x", "y"))
@@ -97,4 +129,3 @@ class TestXST:
         assert s3 == {"a", "x", "c", "b", "y"}
         s2 |= s1
         assert s2 == s3
-
