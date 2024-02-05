@@ -8,9 +8,9 @@ class XSet:
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.is_subset(other) and other.is_subset(self)
+            return self.contents == other.contents
         else:
-            return False
+            return NotImplemented
 
     def __hash__(self):
         return hash(self.contents)
@@ -19,9 +19,10 @@ class XSet:
         return self.contents.__iter__()
 
     def is_subset(self, other):
-        if not isinstance(other, self.__class__):
-            return False
-        return self.contents.issubset(other.contents)
+        if isinstance(other, self.__class__):
+            return self.contents.issubset(other.contents)
+        else:
+            return NotImplemented
 
 
 class TestXST:
