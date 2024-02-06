@@ -1,3 +1,4 @@
+from __future__ import annotations
 from collections import namedtuple
 
 Atom = namedtuple("Atom", ["element", "scope"])
@@ -36,17 +37,16 @@ class XSet:
         else:
             return NotImplemented
 
-    def restrict(self, other):
+    def restrict(self, other) -> XSet:
         if not isinstance(other, self.__class__):
             return NotImplemented
-        result_atoms = []
-        for candidate_atom in self.contents:
-            for check_atom in other.contents:
-                if check_atom.element.is_subset(candidate_atom.element):
-                    result_atoms.append(candidate_atom)
-        return frozenset(result_atoms)
+        return XSet((candidate_atom for candidate_atom in self.contents
+                          if any((check_atom.element.is_subset(candidate_atom.element)
+                                  for check_atom in other.contents))))
+
 
 XSet.null = XSet([])
+# end of XSet ----------------------
 
 
 class TestXST:
@@ -130,6 +130,7 @@ class TestXST:
         boss_record = XSet([Atom("boss", "job")])
         boss_set = XSet.classical_set([boss_record])
         bosses = personnel.restrict(boss_set)
+        assert isinstance(bosses, XSet)
         assert Atom(ron, XSet.null) in bosses
         assert Atom(chet, XSet.null) in bosses
         assert Atom(hill, XSet.null) not in bosses
@@ -169,3 +170,5 @@ class TestXST:
 
     def test_syntax(self):
         a = {"last": "hill"}
+        m = max((1, 2, 3, 4))
+        assert m == 4
