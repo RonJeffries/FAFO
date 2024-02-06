@@ -46,6 +46,8 @@ class XSet:
                     result_atoms.append(candidate_atom)
         return frozenset(result_atoms)
 
+XSet.null = XSet([])
+
 
 class TestXST:
     def test_tuples(self):
@@ -115,8 +117,7 @@ class TestXST:
     def test_classical_set(self):
         things = ["a", "b", "c"]
         classical = XSet.classical_set(things)
-        null = XSet([])
-        b_atom = Atom("b", null)
+        b_atom = Atom("b", XSet.null)
         assert b_atom in classical
         wrong_atom = Atom("b", 1)
         assert wrong_atom not in classical
@@ -129,10 +130,9 @@ class TestXST:
         boss_record = XSet([Atom("boss", "job")])
         boss_set = XSet.classical_set([boss_record])
         bosses = personnel.restrict(boss_set)
-        null = XSet([])
-        assert Atom(ron, null) in bosses
-        assert Atom(chet, null) in bosses
-        assert Atom(hill, null) not in bosses
+        assert Atom(ron, XSet.null) in bosses
+        assert Atom(chet, XSet.null) in bosses
+        assert Atom(hill, XSet.null) not in bosses
 
     def test_xset_tuple_restrict(self):
         ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
@@ -166,3 +166,6 @@ class TestXST:
         assert s3 == {"a", "x", "c", "b", "y"}
         s2 |= s1
         assert s2 == s3
+
+    def test_syntax(self):
+        a = {"last": "hill"}
