@@ -6,13 +6,13 @@ Atom = namedtuple("Atom", ["element", "scope"])
 
 class XSet:
     @classmethod
-    def classical_set(cls, a_list):
+    def classical_set(cls, a_list) -> Self:
         null = cls([])
         wrapped = [Atom(item, null) for item in a_list]
         return cls(wrapped)
 
     @classmethod
-    def tuple_set(cls, a_list):
+    def tuple_set(cls, a_list) -> Self:
         wrapped = [Atom(item, index+1) for index, item in enumerate(a_list)]
         return cls(wrapped)
 
