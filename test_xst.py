@@ -31,7 +31,10 @@ class XSet:
     def __iter__(self):
         return self.contents.__iter__()
 
-    def is_subset(self, other):
+    def __bool__(self):
+        return bool(self.contents)
+
+    def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):
             return self.contents.issubset(other.contents)
         else:
@@ -159,6 +162,11 @@ class TestXST:
         assert Atom(ron, null) not in serfs
         assert Atom(chet, null) not in serfs
         assert Atom(hill, null) in serfs
+
+    def test_bool(self):
+        assert not XSet.null
+        assert not XSet([])
+        assert XSet.classical_set((1, 2, 3))
 
     def test_frozen_operators(self):
         s1 = frozenset(("a", "b", "c"))
