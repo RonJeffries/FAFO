@@ -4,6 +4,17 @@ Atom = namedtuple("Atom", ["element", "scope"])
 
 
 class XSet:
+    @classmethod
+    def classical_set(cls, a_list):
+        null = cls([])
+        wrapped = [Atom(item, null) for item in a_list]
+        return cls(wrapped)
+
+    @classmethod
+    def tuple_set(cls, a_list):
+        wrapped = [Atom(item, index+1) for index, item in enumerate(a_list)]
+        return cls(wrapped)
+
     def __init__(self, a_list):
         self.contents = frozenset(a_list)
 
@@ -28,9 +39,12 @@ class XSet:
     def restrict(self, other):
         if not isinstance(other, self.__class__):
             return NotImplemented
-        return frozenset(
-            [candidate for candidate in self.contents
-             if any([check.is_subset(candidate) for check in other.contents])])
+        result_atoms = []
+        for candidate_atom in self.contents:
+            for check_atom in other.contents:
+                if check_atom.element.is_subset(candidate_atom.element):
+                    result_atoms.append(candidate_atom)
+        return frozenset(result_atoms)
 
 
 class TestXST:
@@ -98,29 +112,52 @@ class TestXST:
         assert r2rev in personnel  # this test killed Python {}
         assert r3 not in personnel
 
+    def test_classical_set(self):
+        things = ["a", "b", "c"]
+        classical = XSet.classical_set(things)
+        null = XSet([])
+        b_atom = Atom("b", null)
+        assert b_atom in classical
+        wrong_atom = Atom("b", 1)
+        assert wrong_atom not in classical
+
     def test_xset_restrict(self):
         ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
         chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
         hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
-        personnel = XSet([ron, chet, hill])
+        personnel = XSet.classical_set([ron, chet, hill])
         boss_record = XSet([Atom("boss", "job")])
-        boss_set = XSet([boss_record])
+        boss_set = XSet.classical_set([boss_record])
         bosses = personnel.restrict(boss_set)
-        assert ron in bosses
-        assert chet in bosses
-        assert hill not in bosses
+        null = XSet([])
+        assert Atom(ron, null) in bosses
+        assert Atom(chet, null) in bosses
+        assert Atom(hill, null) not in bosses
+
+    def test_xset_tuple_restrict(self):
+        ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
+        chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
+        hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
+        personnel = XSet.tuple_set([ron, chet, hill])
+        boss_record = XSet([Atom("boss", "job")])
+        boss_set = XSet.tuple_set([boss_record])
+        bosses = personnel.restrict(boss_set)
+        assert Atom(ron, 1) in bosses
+        assert Atom(chet, 2) in bosses
+        assert Atom(hill, 3) not in bosses
 
     def test_xset_restrict_again(self):
         ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
         chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
         hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
-        personnel = XSet([ron, chet, hill])
+        personnel = XSet.classical_set([ron, chet, hill])
         serf_record = XSet([Atom("serf", "job")])
-        serf_set = XSet([serf_record])
+        serf_set = XSet.classical_set([serf_record])
         serfs = personnel.restrict(serf_set)
-        assert ron not in serfs
-        assert chet not in serfs
-        assert hill in serfs
+        null = XSet([])
+        assert Atom(ron, null) not in serfs
+        assert Atom(chet, null) not in serfs
+        assert Atom(hill, null) in serfs
 
     def test_frozen_operators(self):
         s1 = frozenset(("a", "b", "c"))
