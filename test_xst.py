@@ -1,4 +1,4 @@
-from __future__ import annotations
+from typing import Any, Self
 from collections import namedtuple
 
 Atom = namedtuple("Atom", ["element", "scope"])
@@ -37,7 +37,7 @@ class XSet:
         else:
             return NotImplemented
 
-    def restrict(self, other) -> XSet:
+    def restrict(self, other) -> Self:
         if not isinstance(other, self.__class__):
             return NotImplemented
         return XSet((candidate_atom for candidate_atom in self.contents
