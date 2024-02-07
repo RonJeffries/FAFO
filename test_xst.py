@@ -114,7 +114,6 @@ class TestXST:
     def test_select(self):
         def sel(a):
             return a.element > 3
-
         s1 = XSet.tuple_set((0, 1, 2, 3, 4, 5, 6))
         selected = s1.select(sel)
         assert Atom(4, 5) in selected
