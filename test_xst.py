@@ -135,6 +135,13 @@ class TestXST:
         assert Atom(5, null) in result
         assert Atom(6, null) not in result
 
+    def test_has_at(self):
+        odd_set = XSet([Atom(42, "answer"), Atom(666, XSet.null)])
+        assert odd_set.has_at(42, "answer")
+        assert odd_set.has_at(666, XSet.null)
+        assert odd_set.has_at(666)
+        assert not odd_set.has_at(42)
+
     def test_bool(self):
         assert not XSet.null
         assert not XSet([])

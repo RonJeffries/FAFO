@@ -41,6 +41,10 @@ class XSet:
     def __bool__(self):
         return bool(self.contents)
 
+    def has_at(self, element, scope=None):
+        atom = Atom(element, scope if scope else self.null)
+        return atom in self
+
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):
             return self.contents.issubset(other.contents)
@@ -54,13 +58,6 @@ class XSet:
         def other_has_match(our_atom):
             return any((other_item.element.is_subset(our_atom.element) for other_item in other.contents))
         return self.select(other_has_match)
-
-    # def restrict(self, other) -> Self:
-    #     if not isinstance(other, self.__class__):
-    #         return NotImplemented
-    #     return XSet((candidate_atom for candidate_atom in self.contents
-    #                       if any((check_atom.element.is_subset(candidate_atom.element)
-    #                               for check_atom in other.contents))))
 
     def select(self, cond):
         return XSet((candidate_atom for candidate_atom in self.contents if cond(candidate_atom)))
