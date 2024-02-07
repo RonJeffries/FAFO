@@ -112,19 +112,19 @@ class TestXST:
         assert serfs.includes(hill, None)
 
     def test_select(self):
-        s1 = XSet.tuple_set((0, 1, 2, 3, 4, 5, 6))
-
         def sel(a):
             return a.element > 3
+
+        s1 = XSet.tuple_set((0, 1, 2, 3, 4, 5, 6))
         selected = s1.select(sel)
         assert Atom(4, 5) in selected
 
     def test_harder_select(self):
-        likes = XSet.classical_set((3, 4, 5))
-        haves = XSet.classical_set((1, 2, 3, 4, 5, 6, 7))
-
         def sel(a):
             return a in likes
+
+        likes = XSet.classical_set((3, 4, 5))
+        haves = XSet.classical_set((1, 2, 3, 4, 5, 6, 7))
         result: XSet = haves.select(sel)
         assert result.excludes(1, None)
         assert result.excludes(2, None)
