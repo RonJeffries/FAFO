@@ -28,7 +28,7 @@ class XSet:
 
     def __repr__(self):
         if self == self.null:
-            return "XSet.null"
+            return "∅"
         else:
             return f"XSet({self.contents})"
 

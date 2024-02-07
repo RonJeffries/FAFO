@@ -128,7 +128,7 @@ class TestXST:
             return a in likes
         result = haves.select(sel)
         null = XSet.null
-        assert Atom(1, null) not in result
+        assert Atom(1, null) in result
         assert Atom(2, null) not in result
         assert Atom(3, null) in result
         assert Atom(4, null) in result
@@ -138,6 +138,7 @@ class TestXST:
     def test_bool(self):
         assert not XSet.null
         assert not XSet([])
+        assert XSet.null == XSet([])
         assert XSet.classical_set((1, 2, 3))
 
     def test_frozen_operators(self):
