@@ -1,55 +1,4 @@
-from typing import Any, Self
-from collections import namedtuple
-
-Atom = namedtuple("Atom", ["element", "scope"])
-
-
-class XSet:
-    @classmethod
-    def classical_set(cls, a_list) -> Self:
-        null = cls([])
-        wrapped = [Atom(item, null) for item in a_list]
-        return cls(wrapped)
-
-    @classmethod
-    def tuple_set(cls, a_list) -> Self:
-        wrapped = [Atom(item, index+1) for index, item in enumerate(a_list)]
-        return cls(wrapped)
-
-    def __init__(self, a_list):
-        self.contents = frozenset(a_list)
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.contents == other.contents
-        else:
-            return NotImplemented
-
-    def __hash__(self):
-        return hash(self.contents)
-
-    def __iter__(self):
-        return self.contents.__iter__()
-
-    def __bool__(self):
-        return bool(self.contents)
-
-    def is_subset(self, other) -> bool:
-        if isinstance(other, self.__class__):
-            return self.contents.issubset(other.contents)
-        else:
-            return NotImplemented
-
-    def restrict(self, other) -> Self:
-        if not isinstance(other, self.__class__):
-            return NotImplemented
-        return XSet((candidate_atom for candidate_atom in self.contents
-                          if any((check_atom.element.is_subset(candidate_atom.element)
-                                  for check_atom in other.contents))))
-
-
-XSet.null = XSet([])
-# end of XSet ----------------------
+from xset import Atom, XSet
 
 
 class TestXST:
@@ -162,6 +111,29 @@ class TestXST:
         assert Atom(ron, null) not in serfs
         assert Atom(chet, null) not in serfs
         assert Atom(hill, null) in serfs
+
+    def test_select(self):
+        s1 = XSet.tuple_set((0, 1, 2, 3, 4, 5, 6))
+
+        def sel(a):
+            return a.element > 3
+        selected = s1.select(sel)
+        assert Atom(4, 5) in selected
+
+    def test_harder_select(self):
+        likes = XSet.classical_set((3, 4, 5))
+        haves = XSet.classical_set((1, 2, 3, 4, 5, 6, 7))
+
+        def sel(a):
+            return a in likes
+        result = haves.select(sel)
+        null = XSet.null
+        assert Atom(1, null) not in result
+        assert Atom(2, null) not in result
+        assert Atom(3, null) in result
+        assert Atom(4, null) in result
+        assert Atom(5, null) in result
+        assert Atom(6, null) not in result
 
     def test_bool(self):
         assert not XSet.null
