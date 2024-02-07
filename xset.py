@@ -63,7 +63,7 @@ class XSet:
     #                               for check_atom in other.contents))))
 
     def select(self, cond):
-        return XSet(list(candidate_atom for candidate_atom in self.contents if cond(candidate_atom)))
+        return XSet((candidate_atom for candidate_atom in self.contents if cond(candidate_atom)))
 
 
 XSet.null = XSet([])

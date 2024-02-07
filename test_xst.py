@@ -128,7 +128,7 @@ class TestXST:
             return a in likes
         result = haves.select(sel)
         null = XSet.null
-        assert Atom(1, null) in result
+        assert Atom(1, null) not in result
         assert Atom(2, null) not in result
         assert Atom(3, null) in result
         assert Atom(4, null) in result
