@@ -83,9 +83,9 @@ class TestXST:
         boss_set = XSet.classical_set([boss_record])
         bosses = personnel.restrict(boss_set)
         assert isinstance(bosses, XSet)
-        assert Atom(ron, XSet.null) in bosses
-        assert Atom(chet, XSet.null) in bosses
-        assert Atom(hill, XSet.null) not in bosses
+        assert bosses.includes(ron)
+        assert bosses.includes(chet)
+        assert bosses.excludes(hill)
 
     def test_xset_tuple_restrict(self):
         ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
@@ -95,9 +95,9 @@ class TestXST:
         boss_record = XSet([Atom("boss", "job")])
         boss_set = XSet.tuple_set([boss_record])
         bosses = personnel.restrict(boss_set)
-        assert Atom(ron, 1) in bosses
-        assert Atom(chet, 2) in bosses
-        assert Atom(hill, 3) not in bosses
+        assert bosses.includes(ron, 1)
+        assert bosses.includes(chet, 2)
+        assert bosses.excludes(hill, 3)
 
     def test_xset_restrict_again(self):
         ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
@@ -108,9 +108,9 @@ class TestXST:
         serf_set = XSet.classical_set([serf_record])
         serfs = personnel.restrict(serf_set)
         null = XSet([])
-        assert Atom(ron, null) not in serfs
-        assert Atom(chet, null) not in serfs
-        assert Atom(hill, null) in serfs
+        assert serfs.excludes(ron)
+        assert serfs.excludes(chet)
+        assert serfs.includes(hill)
 
     def test_select(self):
         s1 = XSet.tuple_set((0, 1, 2, 3, 4, 5, 6))
@@ -127,20 +127,19 @@ class TestXST:
         def sel(a):
             return a in likes
         result = haves.select(sel)
-        null = XSet.null
-        assert Atom(1, null) not in result
-        assert Atom(2, null) not in result
-        assert Atom(3, null) in result
-        assert Atom(4, null) in result
-        assert Atom(5, null) in result
-        assert Atom(6, null) not in result
+        assert result.excludes(1)
+        assert result.excludes(2)
+        assert result.includes(3)
+        assert result.includes(4)
+        assert result.includes(5)
+        assert result.excludes(6)
 
     def test_has_at(self):
         odd_set = XSet([Atom(42, "answer"), Atom(666, XSet.null)])
-        assert odd_set.has_at(42, "answer")
-        assert odd_set.has_at(666, XSet.null)
-        assert odd_set.has_at(666)
-        assert not odd_set.has_at(42)
+        assert odd_set.includes(42, "answer")
+        assert odd_set.includes(666, XSet.null)
+        assert odd_set.includes(666)
+        assert not odd_set.includes(42)
 
     def test_bool(self):
         assert not XSet.null

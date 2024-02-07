@@ -41,7 +41,10 @@ class XSet:
     def __bool__(self):
         return bool(self.contents)
 
-    def has_at(self, element, scope=None):
+    def excludes(self, element, scope=None):
+        return not self.includes(element, scope)
+
+    def includes(self, element, scope=None):
         atom = Atom(element, scope if scope else self.null)
         return atom in self
 
