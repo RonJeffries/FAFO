@@ -41,10 +41,10 @@ class XSet:
     def __bool__(self):
         return bool(self.contents)
 
-    def excludes(self, element, scope=None):
+    def excludes(self, element, scope) -> bool:
         return not self.includes(element, scope)
 
-    def includes(self, element, scope=None):
+    def includes(self, element, scope) -> bool:
         atom = Atom(element, scope if scope else self.null)
         return atom in self
 
@@ -62,7 +62,7 @@ class XSet:
             return any((other_item.element.is_subset(our_atom.element) for other_item in other.contents))
         return self.select(other_has_match)
 
-    def select(self, cond):
+    def select(self, cond) -> Self:
         return XSet((candidate_atom for candidate_atom in self.contents if cond(candidate_atom)))
 
 
