@@ -54,6 +54,18 @@ class XSet:
         else:
             return NotImplemented
 
+    def project(self, other) -> Self:
+        projected = []
+        for record_atom in self.contents:
+            new_list = []
+            for atom_scope in other.contents:
+                for atom_fields in record_atom.element.contents:
+                    if atom_scope.element == atom_fields.scope:
+                        new_list.append(atom_fields)
+            new_rec = XSet(new_list)
+            projected.append(new_rec)
+        return XSet.classical_set(projected)
+
     def restrict(self, other) -> Self:
         if not isinstance(other, self.__class__):
             return NotImplemented

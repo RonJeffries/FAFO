@@ -157,3 +157,18 @@ class TestXST:
         a = {"last": "hill"}
         m = max((1, 2, 3, 4))
         assert m == 4
+
+    def test_project(self):
+        ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
+        ron_name = XSet([Atom("jeffries", "last"), Atom("ron", "first")])
+        chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
+        chet_name = XSet([Atom("chet", "first"), Atom("hendrickson", "last")])
+        hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
+        personnel = XSet.classical_set([ron, chet, hill])
+        print(personnel)
+        fields = XSet.classical_set(("first", "last"))
+        result = personnel.project(fields)
+        print(result)
+        assert result.includes(ron_name, None)
+        assert result.includes(chet_name, None)
+
