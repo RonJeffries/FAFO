@@ -155,6 +155,7 @@ class TestXST:
 
     def test_syntax(self):
         a = {"last": "hill"}
+        # x = "last": "hill" unfortunately can't say this.
         m = max((1, 2, 3, 4))
         assert m == 4
 
