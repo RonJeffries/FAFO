@@ -1,7 +1,7 @@
 from collections import namedtuple
 from typing import Self
 
-Atom = namedtuple("Atom", ["element", "scope"])
+# Atom = namedtuple("Atom", ["element", "scope"])
 
 
 class XSet:
