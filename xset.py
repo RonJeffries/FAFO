@@ -55,16 +55,16 @@ class XSet:
             return NotImplemented
 
     def project(self, field_selector: Self) -> Self:
-        projected = []
-        for record_element, record_scope in self.contents:
-            new_atoms = []
-            for desired_field_name, _ in field_selector.contents:
-                for field, field_name in record_element.contents:
-                    if desired_field_name == field_name:
-                        new_atoms.append(Atom(field, field_name))
-            new_rec = XSet(new_atoms)
-            projected.append(new_rec) # should retain input scope?
+        projected = [self.project_one_record(record_element, field_selector)
+                     for record_element, record_scope in self.contents]
         return XSet.classical_set(projected)
+
+    def project_one_record(self, record_element, field_selector):
+        new_atoms = [Atom(field, field_name)
+                     for field, field_name in record_element.contents
+                     for desired_field_name, _ in field_selector.contents
+                     if desired_field_name == field_name]
+        return XSet(new_atoms)
 
     def restrict(self, other) -> Self:
         if not isinstance(other, self.__class__):
