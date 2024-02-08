@@ -1,33 +1,33 @@
-from xset import Atom, XSet
+from xset import XSet
 
 
 class TestXST:
     def test_tuples(self):
-        a1 = Atom(1, 2)
-        a2 = Atom(2 - 1, 3 - 1)
-        a3 = Atom(2, 1)
+        a1 = (1, 2)
+        a2 = (2 - 1, 3 - 1)
+        a3 = (2, 1)
         assert a1 == a2
         assert not a1 == a3
 
-    def test_members(self):
-        a1 = Atom(31, 42)
-        assert a1.element == 31
-        assert a1.scope == 42
+    # def test_members(self):
+    #     a1 = Atom(31, 42)
+    #     assert a1.element == 31
+    #     assert a1.scope == 42
 
     def test_set_in(self):
-        a1 = Atom("jeffries", "name")
-        a2 = Atom("hendrickson", "name")
-        a3 = Atom("hill", "name")
+        a1 = ("jeffries", "name")
+        a2 = ("hendrickson", "name")
+        a3 = ("hill", "name")
         s1 = {a1, a2}
         assert a1 in s1
         assert a2 in s1
         assert a3 not in s1
 
     def test_show_sets_insufficient_for_xst(self):
-        r1 = [Atom("jeffries", "last"), Atom("ron", "first")]
-        r2 = [Atom("chet", "first"), Atom("hendrickson", "last")]
-        r2rev = [Atom("hendrickson", "last"), Atom("chet", "first")]
-        r3 = [Atom("hill", "last"), Atom("geepaw", "first")]
+        r1 = [("jeffries", "last"), ("ron", "first")]
+        r2 = [("chet", "first"), ("hendrickson", "last")]
+        r2rev = [("hendrickson", "last"), ("chet", "first")]
+        r3 = [("hill", "last"), ("geepaw", "first")]
         personnel = [r1, r2]
         assert r1 in personnel
         assert r2 in personnel
@@ -35,10 +35,10 @@ class TestXST:
         assert r3 not in personnel
 
     def test_frozen_sets(self):
-        r1 = frozenset([Atom("jeffries", "last"), Atom("ron", "first")])
-        r2 = frozenset([Atom("chet", "first"), Atom("hendrickson", "last")])
-        r2rev = frozenset([Atom("hendrickson", "last"), Atom("chet", "first")])
-        r3 = frozenset([Atom("hill", "last"), Atom("geepaw", "first")])
+        r1 = frozenset([("jeffries", "last"), ("ron", "first")])
+        r2 = frozenset([("chet", "first"), ("hendrickson", "last")])
+        r2rev = frozenset([("hendrickson", "last"), ("chet", "first")])
+        r3 = frozenset([("hill", "last"), ("geepaw", "first")])
         personnel = frozenset([r1, r2])
         assert r1 in personnel
         assert r2 in personnel
@@ -46,20 +46,20 @@ class TestXST:
         assert r3 not in personnel
 
     def test_xset_in(self):
-        list1 = [Atom("x", 1), Atom("y", 2)]
-        list2 = [Atom("y", 2), Atom("x", 1)]
+        list1 = [("x", 1), ("y", 2)]
+        list2 = [("y", 2), ("x", 1)]
         assert list1 != list2
         set1 = XSet(list1)
         set2 = XSet(list2)
         assert set1 == set2
-        set3 = XSet([Atom("z", 1), Atom("y", 2)])
+        set3 = XSet([("z", 1), ("y", 2)])
         assert set1 != set3
 
     def test_xset_records_in(self):
-        r1 = XSet([Atom("jeffries", "last"), Atom("ron", "first")])
-        r2 = XSet([Atom("chet", "first"), Atom("hendrickson", "last")])
-        r2rev = XSet([Atom("hendrickson", "last"), Atom("chet", "first")])
-        r3 = XSet([Atom("hill", "last"), Atom("geepaw", "first")])
+        r1 = XSet([("jeffries", "last"), ("ron", "first")])
+        r2 = XSet([("chet", "first"), ("hendrickson", "last")])
+        r2rev = XSet([("hendrickson", "last"), ("chet", "first")])
+        r3 = XSet([("hill", "last"), ("geepaw", "first")])
         personnel = XSet([r1, r2])
         assert r1 in personnel
         assert r2 in personnel
@@ -69,17 +69,17 @@ class TestXST:
     def test_classical_set(self):
         things = ["a", "b", "c"]
         classical = XSet.classical_set(things)
-        b_atom = Atom("b", XSet.null)
+        b_atom = ("b", XSet.null)
         assert b_atom in classical
-        wrong_atom = Atom("b", 1)
+        wrong_atom = ("b", 1)
         assert wrong_atom not in classical
 
     def test_xset_restrict(self):
-        ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
-        chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
-        hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
+        ron = XSet([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
+        chet = XSet([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
+        hill = XSet([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
         personnel = XSet.classical_set([ron, chet, hill])
-        boss_record = XSet([Atom("boss", "job")])
+        boss_record = XSet([("boss", "job")])
         boss_set = XSet.classical_set([boss_record])
         bosses = personnel.restrict(boss_set)
         assert isinstance(bosses, XSet)
@@ -88,11 +88,11 @@ class TestXST:
         assert bosses.excludes(hill, None)
 
     def test_xset_tuple_restrict(self):
-        ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
-        chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
-        hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
+        ron = XSet([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
+        chet = XSet([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
+        hill = XSet([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
         personnel = XSet.tuple_set([ron, chet, hill])
-        boss_record = XSet([Atom("boss", "job")])
+        boss_record = XSet([("boss", "job")])
         boss_set = XSet.tuple_set([boss_record])
         bosses = personnel.restrict(boss_set)
         assert bosses.includes(ron, 1)
@@ -100,11 +100,11 @@ class TestXST:
         assert bosses.excludes(hill, 3)
 
     def test_xset_restrict_again(self):
-        ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
-        chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
-        hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
+        ron = XSet([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
+        chet = XSet([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
+        hill = XSet([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
         personnel = XSet.classical_set([ron, chet, hill])
-        serf_record = XSet([Atom("serf", "job")])
+        serf_record = XSet([("serf", "job")])
         serf_set = XSet.classical_set([serf_record])
         serfs: XSet = personnel.restrict(serf_set)
         assert serfs.excludes(ron, None)
@@ -112,15 +112,15 @@ class TestXST:
         assert serfs.includes(hill, None)
 
     def test_select(self):
-        def sel(a):
-            return a.element > 3
+        def sel(e, s):
+            return e > 3
         s1 = XSet.tuple_set((0, 1, 2, 3, 4, 5, 6))
         selected = s1.select(sel)
-        assert Atom(4, 5) in selected
+        assert (4, 5) in selected
 
     def test_harder_select(self):
-        def sel(a):
-            return a in likes
+        def sel(e, s):
+            return (e, s) in likes
 
         likes = XSet.classical_set((3, 4, 5))
         haves = XSet.classical_set((1, 2, 3, 4, 5, 6, 7))
@@ -133,7 +133,7 @@ class TestXST:
         assert result.excludes(6, None)
 
     def test_has_at(self):
-        odd_set = XSet([Atom(42, "answer"), Atom(666, XSet.null)])
+        odd_set = XSet([(42, "answer"), (666, XSet.null)])
         assert odd_set.includes(42, "answer")
         assert odd_set.includes(666, XSet.null)
         assert odd_set.includes(666, None)
@@ -160,11 +160,11 @@ class TestXST:
         assert m == 4
 
     def test_project(self):
-        ron = XSet([Atom("jeffries", "last"), Atom("ron", "first"), Atom("boss", "job")])
-        ron_name = XSet([Atom("jeffries", "last"), Atom("ron", "first")])
-        chet = XSet([Atom("chet", "first"), Atom("hendrickson", "last"), Atom("boss", "job")])
-        chet_name = XSet([Atom("chet", "first"), Atom("hendrickson", "last")])
-        hill = XSet([Atom("hill", "last"), Atom("geepaw", "first"), Atom("serf", "job")])
+        ron = XSet([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
+        ron_name = XSet([("jeffries", "last"), ("ron", "first")])
+        chet = XSet([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
+        chet_name = XSet([("chet", "first"), ("hendrickson", "last")])
+        hill = XSet([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
         personnel = XSet.classical_set([ron, chet, hill])
         print(personnel)
         fields = XSet.classical_set(("first", "last"))
