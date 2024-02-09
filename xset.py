@@ -74,11 +74,11 @@ class XSet:
         return XSet(new_atoms)
 
     def restrict(self, other) -> Self:
-        if not isinstance(other, self.__class__):
-            return NotImplemented
-
         def other_has_match(our_e, our_s):
             return any((other_e.is_subset(our_e) for other_e, other_s in other.contents))
+
+        if not isinstance(other, self.__class__):
+            return NotImplemented
         return self.select(other_has_match)
 
     def select(self, cond) -> Self:
