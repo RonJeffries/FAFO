@@ -63,13 +63,13 @@ class XSet:
 
     def project(self, field_selector: Self) -> Self:
         projected = [self.project_one_record(record_element, field_selector)
-                     for record_element, record_scope in self.contents]
+                     for record_element, record_scope in self]
         return XSet.classical_set(projected)
 
     def project_one_record(self, record_element, field_selector):
         new_atoms = [(field, field_name)
-                     for field, field_name in record_element.contents
-                     for desired_field_name, _ in field_selector.contents
+                     for field, field_name in record_element
+                     for desired_field_name, _ in field_selector
                      if desired_field_name == field_name]
         return XSet(new_atoms)
 
@@ -82,7 +82,7 @@ class XSet:
         return self.select(other_has_match)
 
     def select(self, cond) -> Self:
-        return XSet(((e, s) for e, s in self.contents if cond(e, s)))
+        return XSet(((e, s) for e, s in self if cond(e, s)))
 
 
 XSet.null = XSet([])
