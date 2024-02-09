@@ -1,3 +1,5 @@
+import pytest
+
 from xset import XSet
 
 
@@ -60,11 +62,12 @@ class TestXST:
         r2 = XSet([("chet", "first"), ("hendrickson", "last")])
         r2rev = XSet([("hendrickson", "last"), ("chet", "first")])
         r3 = XSet([("hill", "last"), ("geepaw", "first")])
-        personnel = XSet([r1, r2])
-        assert r1 in personnel
-        assert r2 in personnel
-        assert r2rev in personnel  # this test killed Python {}
-        assert r3 not in personnel
+        personnel = XSet.classical_set([r1, r2])
+        null = XSet.null
+        assert (r1, null) in personnel
+        assert (r2, null) in personnel
+        assert (r2rev, null) in personnel  # this test killed Python {}
+        assert (r3, null) not in personnel
 
     def test_classical_set(self):
         things = ["a", "b", "c"]
@@ -83,6 +86,7 @@ class TestXST:
         boss_set = XSet.classical_set([boss_record])
         bosses = personnel.restrict(boss_set)
         assert isinstance(bosses, XSet)
+        assert len(bosses.contents) > 0
         assert bosses.includes(ron, None)
         assert bosses.includes(chet, None)
         assert bosses.excludes(hill, None)
@@ -113,10 +117,12 @@ class TestXST:
 
     def test_select(self):
         def sel(e, s):
+            print("checking", e, s)
             return e > 3
         s1 = XSet.tuple_set((0, 1, 2, 3, 4, 5, 6))
         selected = s1.select(sel)
         assert (4, 5) in selected
+        assert selected.includes(4, 5)
 
     def test_harder_select(self):
         def sel(e, s):
@@ -172,4 +178,9 @@ class TestXST:
         print(result)
         assert result.includes(ron_name, None)
         assert result.includes(chet_name, None)
+
+    def test_invalid_xset(self):
+        with pytest.raises(AttributeError):
+            bad = XSet([1, 2, 3])
+
 

@@ -6,6 +6,7 @@ from typing import Self
 
 class XSet:
     null = None
+
     @classmethod
     def classical_set(cls, a_list) -> Self:
         null = cls([])
@@ -18,7 +19,12 @@ class XSet:
         return cls(wrapped)
 
     def __init__(self, a_list):
+        def is_2_tuple(a):
+            return isinstance(a, tuple) and len(a) == 2
+
         self.contents = frozenset(a_list)
+        if not all(is_2_tuple(a) for a in self.contents):
+            raise AttributeError
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
