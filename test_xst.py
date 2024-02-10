@@ -1,6 +1,6 @@
 import pytest
 
-from xset import XSet
+from xset import XSet, X_tuple
 
 
 class TestXST:
@@ -182,5 +182,16 @@ class TestXST:
     def test_invalid_xset(self):
         with pytest.raises(AttributeError):
             bad = XSet([1, 2, 3])
+
+    def test_hacked_n_tuple(self):
+        n_tuple = ("a", "b", "c")
+        test_set = XSet.tuple_set(n_tuple)
+        impl = X_tuple(n_tuple)
+        test_set.contents = impl  # Jam it in there
+        assert test_set.includes("a", 1)
+        assert test_set.includes("c", 3)
+        assert test_set.excludes("a", None)
+        assert test_set.excludes("a", 3)
+        assert test_set.excludes("d", 4)
 
 

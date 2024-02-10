@@ -4,6 +4,14 @@ from typing import Self
 # Atom = namedtuple("Atom", ["element", "scope"])
 
 
+class X_tuple:
+    def __init__(self, data):
+        self.data = data
+
+    def includes(self, e, s):
+        return isinstance(s, int) and s <= len(self.data) and self.data[s-1] == e
+
+
 class XSet:
     null = None
 
@@ -53,7 +61,10 @@ class XSet:
     def includes(self, element, scope) -> bool:
         if not scope:
             scope = self.null
-        return (element, scope) in self
+        try:
+            return self.contents.includes(element, scope)
+        except AttributeError:
+            return (element, scope) in self
 
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):
