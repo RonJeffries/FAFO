@@ -8,7 +8,8 @@ class X_tuple:
     def __init__(self, data):
         self.data = data
 
-    def includes(self, e, s):
+    def __contains__(self, t):
+        e, s = t
         return isinstance(s, int) and s <= len(self.data) and self.data[s-1] == e
 
 
@@ -58,10 +59,7 @@ class XSet:
     def includes(self, element, scope) -> bool:
         if not scope:
             scope = self.null
-        try:
-            return self.implementation.includes(element, scope)
-        except AttributeError:
-            return (element, scope) in self
+        return (element, scope) in self.implementation
 
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):
