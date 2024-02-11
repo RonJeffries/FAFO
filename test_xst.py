@@ -86,7 +86,7 @@ class TestXST:
         boss_set = XSet.classical_set([boss_record])
         bosses = personnel.restrict(boss_set)
         assert isinstance(bosses, XSet)
-        assert len(bosses.contents) > 0
+        assert len(bosses.implementation) > 0
         assert bosses.includes(ron, None)
         assert bosses.includes(chet, None)
         assert bosses.excludes(hill, None)
@@ -187,7 +187,7 @@ class TestXST:
         n_tuple = ("a", "b", "c")
         test_set = XSet.tuple_set(n_tuple)
         impl = X_tuple(n_tuple)
-        test_set.contents = impl  # Jam it in there
+        test_set.implementation = impl  # Jam it in there
         assert test_set.includes("a", 1)
         assert test_set.includes("c", 3)
         assert test_set.excludes("a", None)

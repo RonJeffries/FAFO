@@ -30,13 +30,13 @@ class XSet:
         def is_2_tuple(a):
             return isinstance(a, tuple) and len(a) == 2
 
-        self.contents = frozenset(a_list)
-        if not all(is_2_tuple(a) for a in self.contents):
+        self.implementation = frozenset(a_list)
+        if not all(is_2_tuple(a) for a in self.implementation):
             raise AttributeError
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.contents == other.contents
+            return self.implementation == other.implementation
         else:
             return NotImplemented
 
@@ -44,16 +44,16 @@ class XSet:
         if self == self.null:
             return "∅"
         else:
-            return f"XSet({self.contents})"
+            return f"XSet({self.implementation})"
 
     def __hash__(self):
-        return hash(self.contents)
+        return hash(self.implementation)
 
     def __iter__(self):
-        return self.contents.__iter__()
+        return self.implementation.__iter__()
 
     def __bool__(self):
-        return bool(self.contents)
+        return bool(self.implementation)
 
     def excludes(self, element, scope) -> bool:
         return not self.includes(element, scope)
@@ -62,13 +62,13 @@ class XSet:
         if not scope:
             scope = self.null
         try:
-            return self.contents.includes(element, scope)
+            return self.implementation.includes(element, scope)
         except AttributeError:
             return (element, scope) in self
 
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):
-            return self.contents.issubset(other.contents)
+            return self.implementation.issubset(other.implementation)
         else:
             return NotImplemented
 
