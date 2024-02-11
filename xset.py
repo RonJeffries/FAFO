@@ -65,7 +65,7 @@ class XSet:
 
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):
-            return self.implementation.issubset(other.implementation)
+            return all(other.includes(e, s) for e,s in self)
         else:
             return NotImplemented
 

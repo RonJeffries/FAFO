@@ -47,6 +47,20 @@ class TestXST:
         assert r2rev in personnel  # <======
         assert r3 not in personnel
 
+    def test_classical_is_subset(self):
+        c1 = XSet.classical_set((1, 2, 3, 4, 5))
+        c2 = XSet.classical_set((2, 4))
+        c3 = XSet.classical_set((1, 6))
+        assert c2.is_subset(c1)
+        assert not c3.is_subset(c1)
+
+    def test_is_subset(self):
+        r1 = XSet([("jeffries", "last"), ("ron", "first")])
+        r2 = XSet([("jeffries", "last")])
+        assert r2.is_subset(r1)
+        assert not r1.is_subset(r2)
+
+
     def test_xset_in(self):
         list1 = [("x", 1), ("y", 2)]
         list2 = [("y", 2), ("x", 1)]
@@ -138,7 +152,7 @@ class TestXST:
         assert result.includes(5, None)
         assert result.excludes(6, None)
 
-    def test_has_at(self):
+    def test_includes(self):
         odd_set = XSet([(42, "answer"), (666, XSet.null)])
         assert odd_set.includes(42, "answer")
         assert odd_set.includes(666, XSet.null)
