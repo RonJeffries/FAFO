@@ -52,9 +52,6 @@ class XSet:
     def __iter__(self):
         return self.implementation.__iter__()
 
-    def __bool__(self):
-        return bool(self.implementation)
-
     def excludes(self, element, scope) -> bool:
         return not self.includes(element, scope)
 

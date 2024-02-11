@@ -145,12 +145,6 @@ class TestXST:
         assert odd_set.includes(666, None)
         assert not odd_set.includes(42, None)
 
-    def test_bool(self):
-        assert not XSet.null
-        assert not XSet([])
-        assert XSet.null == XSet([])
-        assert XSet.classical_set((1, 2, 3))
-
     def test_frozen_operators(self):
         s1 = frozenset(("a", "b", "c"))
         s2 = frozenset(("x", "y"))
