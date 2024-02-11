@@ -36,7 +36,7 @@ class XSet:
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.implementation == other.implementation
+            return self.is_subset(other) and other.is_subset(self)
         else:
             return NotImplemented
 
