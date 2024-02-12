@@ -1,6 +1,6 @@
 import pytest
 
-from xset import XSet, X_tuple
+from src.xset import XSet, X_tuple
 
 
 class TestXST:

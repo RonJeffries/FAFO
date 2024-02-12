@@ -3,9 +3,10 @@ from datetime import datetime
 
 from lorem.text import TextLorem
 
-from tag import Tag
-from test_pythonista_1 import TagSet
+from src.tag import Tag
 from os.path import expanduser, exists
+
+from tst.test_pythonista_1 import TagSet
 
 
 class MemoryStore:
