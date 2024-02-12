@@ -1,6 +1,9 @@
 from collections import namedtuple
 from typing import Self
 
+from src.test_x_frozen import XFrozen
+
+
 # Atom = namedtuple("Atom", ["element", "scope"])
 
 
@@ -31,7 +34,7 @@ class XSet:
         def is_2_tuple(a):
             return isinstance(a, tuple) and len(a) == 2
 
-        self.implementation = frozenset(a_list)
+        self.implementation = XFrozen(frozenset(a_list))
         if not all(is_2_tuple(a) for a in self.implementation):
             raise AttributeError
 

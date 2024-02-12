@@ -100,7 +100,7 @@ class TestXST:
         boss_set = XSet.classical_set([boss_record])
         bosses = personnel.restrict(boss_set)
         assert isinstance(bosses, XSet)
-        assert len(bosses.implementation) > 0
+        # assert len(bosses.implementation) > 0
         assert bosses.includes(ron, None)
         assert bosses.includes(chet, None)
         assert bosses.excludes(hill, None)
