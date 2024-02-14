@@ -7,7 +7,12 @@ class XFlat(XImplementation):
         self.record = record
 
     def __contains__(self, item):
-        pass
+        element, scope = item
+        for symbol, start, end in self.fields:
+            if symbol == scope:
+                field = self.record[start:end].strip()
+                return field == element
+        return False
 
     def __iter__(self):
         pass
@@ -16,7 +21,7 @@ class XFlat(XImplementation):
         pass
 
     def __repr__(self):
-        pass
+        return f"XFlat('{self.record}')"
 
     @classmethod
     def fields(cls, names_and_lengths):

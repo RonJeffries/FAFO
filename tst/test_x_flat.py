@@ -47,6 +47,14 @@ class TestXFlat:
         record = 'Jeffries    Ronald    Wizard              '
         flat = XFlat(fields, record)
 
+    def test_contains(self):
+        fields = XFlat.fields(("last", 12, "first", 10, "job", 20))
+        record = 'Jeffries    Ronald    Wizard              '
+        flat = XFlat(fields, record)
+        assert ('Jeffries', 'last') in flat
+        assert ('Ron', 'first') not in flat
+        assert ('Wizard', 'job') in flat
+
 
 
 
