@@ -1,4 +1,4 @@
-from src.x_impl import XImplementation
+from x_impl import XImplementation
 
 
 class XFrozen(XImplementation):
