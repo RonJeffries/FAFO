@@ -18,7 +18,7 @@ class XFlat(XImplementation):
         return ((self.record[start:end].strip(), symbol) for symbol, start, end in self.fields)
 
     def __hash__(self):
-        pass
+        return -1
 
     def __repr__(self):
         return f"XFlat('{self.record}')"
