@@ -12,8 +12,10 @@ class X_tuple:
         self.data = data
 
     def __contains__(self, t):
+        if not isinstance(t, tuple):
+            return False  # should raise?
         e, s = t
-        return isinstance(s, int) and s <= len(self.data) and self.data[s-1] == e
+        return isinstance(s, int) and 0 < s <= len(self.data) and self.data[s-1] == e
 
 
 class XSet:

@@ -142,5 +142,11 @@ class TestXST:
         assert test_set.excludes("a", None)
         assert test_set.excludes("a", 3)
         assert test_set.excludes("d", 4)
+        assert test_set.excludes("c", 0)
+        assert test_set.excludes("b", 0)
+        assert test_set.excludes("a", 0)
+        assert test_set.excludes("c", -1)
+        assert test_set.excludes("b", -1)
+        assert test_set.excludes("a", -1)
 
 
