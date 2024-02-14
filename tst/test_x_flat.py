@@ -26,14 +26,14 @@ class TestXFlat:
 
     def test_unpack(self):
         def field_set(record, symbols):
-            result = ((record[start:finish], name) for name, start, finish in symbols)
+            result = ((record[start:finish].strip(), name) for name, start, finish in symbols)
             return XSet(result)
         record = 'Jeffries    Ronald      Boss        '
         symbols = (("last", 0, 12), ("first", 12, 24), ("job", 24, 36))
         fields = field_set(record, symbols)
-        assert fields.includes("Jeffries    ", "last")
-        assert fields.includes("Ronald      ", "first")
-        assert fields.includes("Boss        ", "job")
+        assert fields.includes("Jeffries", "last")
+        assert fields.includes("Ronald", "first")
+        assert fields.includes("Boss", "job")
 
 
 

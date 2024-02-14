@@ -12,9 +12,14 @@ class X_tuple:
         self.data = data
 
     def __contains__(self, t):
+        print("contains", t)
         if not isinstance(t, tuple):
             return False  # should raise?
         e, s = t
+        if s == 0:
+            print(self.data[s-1])
+        else:
+            print(e, s)
         return isinstance(s, int) and 0 < s <= len(self.data) and self.data[s-1] == e
 
 
@@ -62,7 +67,7 @@ class XSet:
         return not self.includes(element, scope)
 
     def includes(self, element, scope) -> bool:
-        if not scope:
+        if scope is None:
             scope = self.null
         return (element, scope) in self.implementation
 
