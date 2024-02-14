@@ -1,5 +1,5 @@
-from src.test_x_frozen import XFrozen
-from src.xset import XSet
+from x_frozen import XFrozen
+from xset import XSet
 
 
 class TestXFrozen:

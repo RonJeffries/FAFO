@@ -1,7 +1,7 @@
 from collections import namedtuple
 from typing import Self
 
-from src.test_x_frozen import XFrozen
+from src.x_frozen import XFrozen
 
 
 # Atom = namedtuple("Atom", ["element", "scope"])

@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from os.path import expanduser
 
 import pytest

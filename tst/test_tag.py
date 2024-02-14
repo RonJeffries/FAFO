@@ -1,6 +1,6 @@
 import pytest
 
-from src.tag import Tag
+from tag import Tag
 
 
 class TestTag:

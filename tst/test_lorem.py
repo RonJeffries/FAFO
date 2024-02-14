@@ -1,4 +1,3 @@
-import lorem
 from lorem.text import TextLorem
 
 
