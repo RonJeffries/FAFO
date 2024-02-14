@@ -1,3 +1,4 @@
+from xflat import XFlat
 from xset import XSet
 
 
@@ -34,6 +35,12 @@ class TestXFlat:
         assert fields.includes("Jeffries", "last")
         assert fields.includes("Ronald", "first")
         assert fields.includes("Boss", "job")
+
+    def test_flat_set_makes_fields(self):
+        f1, f2, f3 = XFlat.fields(("last", 12, "first", 10, "job", 20))
+        assert f1 == ("last", 0, 12)
+        assert f2 == ("first", 12, 22)
+        assert f3 == ("job", 22, 42)
 
 
 
