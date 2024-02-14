@@ -15,7 +15,7 @@ class XFlat(XImplementation):
         return False
 
     def __iter__(self):
-        pass
+        return ((self.record[start:end].strip(), symbol) for symbol, start, end in self.fields)
 
     def __hash__(self):
         pass

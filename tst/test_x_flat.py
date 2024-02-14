@@ -55,6 +55,18 @@ class TestXFlat:
         assert ('Ron', 'first') not in flat
         assert ('Wizard', 'job') in flat
 
+    def test_iteration(self):
+        fields = XFlat.fields(("last", 12, "first", 10, "job", 20))
+        record = 'Jeffries    Ronald    Wizard              '
+        flat = XFlat(fields, record)
+        elements = []
+        scopes = []
+        for e,s in flat:
+            elements.append(e)
+            scopes.append(s)
+        assert elements == ['Jeffries', 'Ronald', 'Wizard']
+        assert scopes == ['last', 'first', 'job']
+
 
 
 
