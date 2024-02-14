@@ -1,5 +1,4 @@
 import pytest
-
 from xset import XSet, X_tuple
 
 
