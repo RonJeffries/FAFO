@@ -42,6 +42,11 @@ class TestXFlat:
         assert f2 == ("first", 12, 22)
         assert f3 == ("job", 22, 42)
 
+    def test_drive_out_init(self):
+        fields = XFlat.fields(("last", 12, "first", 10, "job", 20))
+        record = 'Jeffries    Ronald    Wizard              '
+        flat = XFlat(fields, record)
+
 
 
 
