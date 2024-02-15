@@ -64,9 +64,9 @@ class TestXST:
         ron = XSet([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
         chet = XSet([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
         hill = XSet([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
-        personnel = XSet.tuple_set([ron, chet, hill])
+        personnel = XSet.n_tuple([ron, chet, hill])
         boss_record = XSet([("boss", "job")])
-        boss_set = XSet.tuple_set([boss_record])
+        boss_set = XSet.n_tuple([boss_record])
         bosses = personnel.restrict(boss_set)
         assert bosses.includes(ron, 1)
         assert bosses.includes(chet, 2)
@@ -88,7 +88,7 @@ class TestXST:
         def sel(e, s):
             print("checking", e, s)
             return e > 3
-        s1 = XSet.tuple_set((0, 1, 2, 3, 4, 5, 6))
+        s1 = XSet.n_tuple((0, 1, 2, 3, 4, 5, 6))
         selected = s1.select(sel)
         assert (4, 5) in selected
         assert selected.includes(4, 5)
@@ -134,7 +134,7 @@ class TestXST:
 
     def test_hacked_n_tuple(self):
         n_tuple = ("a", "b", "c")
-        test_set = XSet.tuple_set(n_tuple)
+        test_set = XSet.n_tuple(n_tuple)
         impl = X_tuple(n_tuple)
         test_set.implementation = impl  # Jam it in there
         assert test_set.includes("a", 1)

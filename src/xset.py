@@ -33,7 +33,7 @@ class XSet:
         return cls(wrapped)
 
     @classmethod
-    def tuple_set(cls, a_list) -> Self:
+    def n_tuple(cls, a_list) -> Self:
         wrapped = [(item, index+1) for index, item in enumerate(a_list)]
         return cls(wrapped)
 
