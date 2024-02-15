@@ -1,5 +1,48 @@
+from itertools import product
+from os.path import expanduser, isfile
+
+from x_impl import XImplementation
 from xflat import XFlat
 from xset import XSet
+
+
+class XFlatFileIterator:
+    def __init__(self, flat_file):
+        self.file = flat_file
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index < 1:
+            # rec = self.file.get_record(self.index)
+            rec = 'jeffries    ron         serf            9000'
+            flat = XFlat(self.file.fields, rec)
+            flat_set = XSet(())
+            flat_set.implementation = flat
+            self.index += 1
+            return flat_set
+        else:
+            raise StopIteration
+
+
+class XFlatFile(XImplementation):
+    def __init__(self, file, fields):
+        self.file = file
+        self.fields = fields
+
+    def __contains__(self, item):
+        pass
+
+    def __iter__(self):
+        return XFlatFileIterator(self)
+
+    def __hash__(self):
+        pass
+
+    def __repr__(self):
+        pass
 
 
 class TestXFlat:
@@ -66,6 +109,35 @@ class TestXFlat:
             scopes.append(s)
         assert elements == ['Jeffries', 'Ronald', 'Wizard']
         assert scopes == ['last', 'first', 'job']
+
+    def test_padded_line(self):
+        author = "ron"
+        topic = "math"
+        student = "dorothy"
+        line = f'{author:12s}{topic:12s}{student:12s}'
+        assert len(line) == 36
+        assert line == 'ron         math        dorothy     '
+
+    def test_make_flat_file(self):
+        path = expanduser('~/Desktop/job_db')
+        if isfile(path):
+            return
+        lasts = ["jeffries", "wake", "hill", "hendrickson", "iam"]
+        firsts = ["ron", "bill", "geepaw", "chet", "sam", "amy", "janet", "susan", "beyonce", "taylor"]
+        jobs = ['serf', 'boss', 'clerk', 'coder', 'architect']
+        pays = [9000, 10000, 11000, 12000]
+        with open(path, "w") as db:
+            for l, f, j, p in product(lasts, firsts, jobs, pays):
+                db.write(f'{l:12s}{f:12s}{j:12s}{p:8d}')
+
+    def test_x_flatfile(self):
+        path = expanduser('~/Desktop/job_db')
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        ff_set = XSet(())
+        ff_set.implementation = ff
+        for record in ff_set:
+            assert record.includes('serf', 'job')
 
 
 
