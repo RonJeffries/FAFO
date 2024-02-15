@@ -11,8 +11,8 @@ class TestXST:
         assert not c3.is_subset(c1)
 
     def test_is_subset(self):
-        r1 = XSet([("jeffries", "last"), ("ron", "first")])
-        r2 = XSet([("jeffries", "last")])
+        r1 = XSet.from_tuples([("jeffries", "last"), ("ron", "first")])
+        r2 = XSet.from_tuples([("jeffries", "last")])
         assert r2.is_subset(r1)
         assert not r1.is_subset(r2)
 
@@ -20,17 +20,17 @@ class TestXST:
         list1 = [("x", 1), ("y", 2)]
         list2 = [("y", 2), ("x", 1)]
         assert list1 != list2
-        set1 = XSet(list1)
-        set2 = XSet(list2)
+        set1 = XSet.from_tuples(list1)
+        set2 = XSet.from_tuples(list2)
         assert set1 == set2
-        set3 = XSet([("z", 1), ("y", 2)])
+        set3 = XSet.from_tuples([("z", 1), ("y", 2)])
         assert set1 != set3
 
     def test_xset_records_in(self):
-        r1 = XSet([("jeffries", "last"), ("ron", "first")])
-        r2 = XSet([("chet", "first"), ("hendrickson", "last")])
-        r2rev = XSet([("hendrickson", "last"), ("chet", "first")])
-        r3 = XSet([("hill", "last"), ("geepaw", "first")])
+        r1 = XSet.from_tuples([("jeffries", "last"), ("ron", "first")])
+        r2 = XSet.from_tuples([("chet", "first"), ("hendrickson", "last")])
+        r2rev = XSet.from_tuples([("hendrickson", "last"), ("chet", "first")])
+        r3 = XSet.from_tuples([("hill", "last"), ("geepaw", "first")])
         personnel = XSet.classical_set([r1, r2])
         null = XSet.null
         assert (r1, null) in personnel
@@ -47,11 +47,11 @@ class TestXST:
         assert wrong_atom not in classical
 
     def test_xset_restrict(self):
-        ron = XSet([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
-        chet = XSet([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
-        hill = XSet([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
+        ron = XSet.from_tuples([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
+        chet = XSet.from_tuples([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
+        hill = XSet.from_tuples([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
         personnel = XSet.classical_set([ron, chet, hill])
-        boss_record = XSet([("boss", "job")])
+        boss_record = XSet.from_tuples([("boss", "job")])
         boss_set = XSet.classical_set([boss_record])
         bosses = personnel.restrict(boss_set)
         assert isinstance(bosses, XSet)
@@ -61,11 +61,11 @@ class TestXST:
         assert bosses.excludes(hill, None)
 
     def test_xset_tuple_restrict(self):
-        ron = XSet([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
-        chet = XSet([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
-        hill = XSet([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
+        ron = XSet.from_tuples([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
+        chet = XSet.from_tuples([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
+        hill = XSet.from_tuples([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
         personnel = XSet.n_tuple([ron, chet, hill])
-        boss_record = XSet([("boss", "job")])
+        boss_record = XSet.from_tuples([("boss", "job")])
         boss_set = XSet.n_tuple([boss_record])
         bosses = personnel.restrict(boss_set)
         assert bosses.includes(ron, 1)
@@ -73,11 +73,11 @@ class TestXST:
         assert bosses.excludes(hill, 3)
 
     def test_xset_restrict_again(self):
-        ron = XSet([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
-        chet = XSet([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
-        hill = XSet([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
+        ron = XSet.from_tuples([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
+        chet = XSet.from_tuples([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
+        hill = XSet.from_tuples([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
         personnel = XSet.classical_set([ron, chet, hill])
-        serf_record = XSet([("serf", "job")])
+        serf_record = XSet.from_tuples([("serf", "job")])
         serf_set = XSet.classical_set([serf_record])
         serfs: XSet = personnel.restrict(serf_set)
         assert serfs.excludes(ron, None)
@@ -108,18 +108,18 @@ class TestXST:
         assert result.excludes(6, None)
 
     def test_includes(self):
-        odd_set = XSet([(42, "answer"), (666, XSet.null)])
+        odd_set = XSet.from_tuples([(42, "answer"), (666, XSet.null)])
         assert odd_set.includes(42, "answer")
         assert odd_set.includes(666, XSet.null)
         assert odd_set.includes(666, None)
         assert not odd_set.includes(42, None)
 
     def test_project(self):
-        ron = XSet([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
-        ron_name = XSet([("jeffries", "last"), ("ron", "first")])
-        chet = XSet([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
-        chet_name = XSet([("chet", "first"), ("hendrickson", "last")])
-        hill = XSet([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
+        ron = XSet.from_tuples([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
+        ron_name = XSet.from_tuples([("jeffries", "last"), ("ron", "first")])
+        chet = XSet.from_tuples([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
+        chet_name = XSet.from_tuples([("chet", "first"), ("hendrickson", "last")])
+        hill = XSet.from_tuples([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
         personnel = XSet.classical_set([ron, chet, hill])
         print(personnel)
         fields = XSet.classical_set(("first", "last"))
@@ -130,7 +130,7 @@ class TestXST:
 
     def test_invalid_xset(self):
         with pytest.raises(AttributeError):
-            bad = XSet([1, 2, 3])
+            bad = XSet.from_tuples([1, 2, 3])
 
     def test_hacked_n_tuple(self):
         n_tuple = ("a", "b", "c")

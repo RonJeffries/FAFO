@@ -21,7 +21,7 @@ class XFlatFileIterator:
         else:
             self.index += 1
             flat = XFlat(self.file.fields, rec)
-            flat_set = XSet(())
+            flat_set = XSet.from_tuples(())
             flat_set.implementation = flat
             return flat_set
 
@@ -79,7 +79,7 @@ class TestXFlat:
     def test_unpack(self):
         def field_set(record, symbols):
             result = ((record[start:finish].strip(), name) for name, start, finish in symbols)
-            return XSet(result)
+            return XSet.from_tuples(result)
         record = 'Jeffries    Ronald      Boss        '
         symbols = (("last", 0, 12), ("first", 12, 24), ("job", 24, 36))
         fields = field_set(record, symbols)
@@ -143,7 +143,7 @@ class TestXFlat:
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
         assert ff.record_length == 44
-        ff_set = XSet(())
+        ff_set = XSet.from_tuples(())
         ff_set.implementation = ff
         count = 0
         for record in ff_set:

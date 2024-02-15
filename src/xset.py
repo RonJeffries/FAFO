@@ -37,6 +37,10 @@ class XSet:
         wrapped = [(item, index+1) for index, item in enumerate(a_list)]
         return cls(wrapped)
 
+    @classmethod
+    def from_tuples(cls, tuples):
+        return cls(tuples)
+
     def __init__(self, a_list):
         def is_2_tuple(a):
             return isinstance(a, tuple) and len(a) == 2
@@ -87,7 +91,7 @@ class XSet:
                      for field, field_name in record_element
                      for desired_field_name, _ in field_selector
                      if desired_field_name == field_name]
-        return XSet(new_atoms)
+        return XSet.from_tuples(new_atoms)
 
     def restrict(self, restrictor) -> Self:
         def other_has_match(e, s):
@@ -101,5 +105,5 @@ class XSet:
         return XSet(((e, s) for e, s in self if cond(e, s)))
 
 
-XSet.null = XSet([])
+XSet.null = XSet.from_tuples([])
 # end of XSet ----------------------
