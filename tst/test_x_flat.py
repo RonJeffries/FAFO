@@ -16,8 +16,8 @@ class XFlatFileIterator:
 
     def __next__(self):
         if self.index < 1:
-            # rec = self.file.get_record(self.index)
-            rec = 'jeffries    ron         serf            9000'
+            rec = self.file.get_record(self.index)
+            # rec = 'jeffries    ron         serf            9000'
             flat = XFlat(self.file.fields, rec)
             flat_set = XSet(())
             flat_set.implementation = flat
@@ -31,6 +31,8 @@ class XFlatFile(XImplementation):
     def __init__(self, file, fields):
         self.file = file
         self.fields = fields
+        field_def = self.fields[-1]
+        self.record_length = field_def[-1]
 
     def __contains__(self, item):
         pass
@@ -43,6 +45,13 @@ class XFlatFile(XImplementation):
 
     def __repr__(self):
         pass
+
+    def get_record(self, index):
+        seek_address = index*self.record_length
+        with open(self.file, "r") as f:
+            f.seek(seek_address)
+            rec = f.read(self.record_length)
+        return rec
 
 
 class TestXFlat:
@@ -134,10 +143,12 @@ class TestXFlat:
         path = expanduser('~/Desktop/job_db')
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
+        assert ff.record_length == 44
         ff_set = XSet(())
         ff_set.implementation = ff
         for record in ff_set:
             assert record.includes('serf', 'job')
+            # assert record.includes('wake', 'last')
 
 
 
