@@ -15,16 +15,15 @@ class XFlatFileIterator:
         return self
 
     def __next__(self):
-        if self.index < 1:
-            rec = self.file.get_record(self.index)
-            # rec = 'jeffries    ron         serf            9000'
+        rec = self.file.get_record(self.index)
+        if rec == '':
+            raise StopIteration
+        else:
+            self.index += 1
             flat = XFlat(self.file.fields, rec)
             flat_set = XSet(())
             flat_set.implementation = flat
-            self.index += 1
             return flat_set
-        else:
-            raise StopIteration
 
 
 class XFlatFile(XImplementation):
@@ -146,9 +145,10 @@ class TestXFlat:
         assert ff.record_length == 44
         ff_set = XSet(())
         ff_set.implementation = ff
+        count = 0
         for record in ff_set:
-            assert record.includes('serf', 'job')
-            # assert record.includes('wake', 'last')
+            count += 1
+        assert count == 1000
 
 
 
