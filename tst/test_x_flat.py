@@ -26,7 +26,7 @@ class XFlatFileIterator:
 
 class XFlatFile(XImplementation):
     def __init__(self, file_path, fields):
-        self.file = expanduser(file_path)
+        self.file_path = file_path
         self.fields = fields
         field_def = self.fields[-1]
         self.record_length = field_def[-1]
@@ -41,11 +41,11 @@ class XFlatFile(XImplementation):
         pass
 
     def __repr__(self):
-        pass
+        return f'XFlatFile({self.file_path})'
 
     def get_record(self, index):
         seek_address = index*self.record_length
-        with open(self.file, "r") as f:
+        with open(expanduser(self.file_path), "r") as f:
             f.seek(seek_address)
             rec = f.read(self.record_length)
         return rec
@@ -149,6 +149,13 @@ class TestXFlat:
             record_number_sum += record_number
         assert count == 1000
         assert record_number_sum == 500500
+
+    def test_repr(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        assert repr(ff) == 'XFlatFile(~/Desktop/job_db)'
+
 
 
 
