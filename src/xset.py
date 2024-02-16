@@ -1,7 +1,8 @@
 from collections import namedtuple
 from typing import Self
 
-from src.x_frozen import XFrozen
+from x_frozen import XFrozen
+from x_impl import XImplementation
 
 
 # Atom = namedtuple("Atom", ["element", "scope"])
@@ -12,14 +13,9 @@ class X_tuple:
         self.data = data
 
     def __contains__(self, t):
-        print("contains", t)
         if not isinstance(t, tuple):
             return False  # should raise?
         e, s = t
-        if s == 0:
-            print(self.data[s-1])
-        else:
-            print(e, s)
         return isinstance(s, int) and 0 < s <= len(self.data) and self.data[s-1] == e
 
 
@@ -28,26 +24,28 @@ class XSet:
 
     @classmethod
     def classical_set(cls, a_list) -> Self:
-        null = cls([])
+        null = cls.null
         wrapped = [(item, null) for item in a_list]
-        return cls(wrapped)
+        return cls.from_tuples(wrapped)
 
     @classmethod
     def n_tuple(cls, a_list) -> Self:
         wrapped = [(item, index+1) for index, item in enumerate(a_list)]
-        return cls(wrapped)
+        return cls.from_tuples(wrapped)
 
     @classmethod
     def from_tuples(cls, tuples):
-        return cls(tuples)
-
-    def __init__(self, a_list):
         def is_2_tuple(a):
             return isinstance(a, tuple) and len(a) == 2
 
-        self.implementation = XFrozen(frozenset(a_list))
-        if not all(is_2_tuple(a) for a in self.implementation):
+        concrete = list(tuples)  # ensure we didn't get passed a generator
+        if not all(is_2_tuple(a) for a in concrete):
             raise AttributeError
+        return cls(XFrozen(frozenset(concrete)))
+
+    def __init__(self, an_implementation):
+        assert isinstance(an_implementation, XImplementation)
+        self.implementation = an_implementation
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -102,7 +100,8 @@ class XSet:
         return self.select(other_has_match)
 
     def select(self, cond) -> Self:
-        return XSet(((e, s) for e, s in self if cond(e, s)))
+        tuples = list((e, s) for e, s in self if cond(e, s))
+        return XSet.from_tuples(tuples)
 
 
 XSet.null = XSet.from_tuples([])

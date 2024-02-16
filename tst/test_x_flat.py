@@ -78,7 +78,7 @@ class TestXFlat:
 
     def test_unpack(self):
         def field_set(record, symbols):
-            result = ((record[start:finish].strip(), name) for name, start, finish in symbols)
+            result = [(record[start:finish].strip(), name) for name, start, finish in symbols]
             return XSet.from_tuples(result)
         record = 'Jeffries    Ronald      Boss        '
         symbols = (("last", 0, 12), ("first", 12, 24), ("job", 24, 36))

@@ -1,4 +1,7 @@
 import pytest
+
+from x_frozen import XFrozen
+from x_impl import XImplementation
 from xset import XSet, X_tuple
 
 
@@ -86,7 +89,7 @@ class TestXST:
 
     def test_select(self):
         def sel(e, s):
-            print("checking", e, s)
+            print("checking", e, s, e > 3)
             return e > 3
         s1 = XSet.n_tuple((0, 1, 2, 3, 4, 5, 6))
         selected = s1.select(sel)
@@ -131,6 +134,27 @@ class TestXST:
     def test_invalid_xset(self):
         with pytest.raises(AttributeError):
             bad = XSet.from_tuples([1, 2, 3])
+
+    def test_isinstance(self):
+        xf = XFrozen(frozenset())
+        assert isinstance(xf, XFrozen)
+        the_set = XSet.from_tuples([('joe', 'first'), ('smith', 'last')])
+        assert isinstance(the_set.implementation, XFrozen)
+        assert isinstance(the_set.implementation, XImplementation)
+
+    def test_list_is_implementation(self):
+        # this is why we require an XImplementation
+        # ramifications of this are not at all clear.
+        rec = [('smith', 'last'), ('sinjin', 'first')]
+        seq_set = XSet.from_tuples(rec)
+        seq_set.implementation = rec  #  just jam it in there
+        assert seq_set.includes('smith', 'last')
+        assert seq_set.excludes('st. john', 'first')
+
+    def test_list_not_allowed(self):
+        rec = [('smith', 'last'), ('sinjin', 'first')]
+        with pytest.raises(AssertionError):
+            seq_set = XSet(rec)
 
     def test_hacked_n_tuple(self):
         n_tuple = ("a", "b", "c")
