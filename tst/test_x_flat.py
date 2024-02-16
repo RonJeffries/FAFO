@@ -25,8 +25,8 @@ class XFlatFileIterator:
 
 
 class XFlatFile(XImplementation):
-    def __init__(self, file, fields):
-        self.file = file
+    def __init__(self, file_path, fields):
+        self.file = expanduser(file_path)
         self.fields = fields
         field_def = self.fields[-1]
         self.record_length = field_def[-1]
@@ -137,7 +137,7 @@ class TestXFlat:
                 db.write(f'{l:12s}{f:12s}{j:12s}{p:8d}')
 
     def test_x_flatfile(self):
-        path = expanduser('~/Desktop/job_db')
+        path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
         assert ff.record_length == 44
