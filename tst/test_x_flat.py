@@ -32,13 +32,17 @@ class XFlatFile(XImplementation):
         self.record_length = field_def[-1]
 
     def __contains__(self, item):
-        pass
+        de, ds = item
+        for e,s in self:
+            if de == e and ds == s:
+                return True
+        return False
 
     def __iter__(self):
         return XFlatFileIterator(self)
 
     def __hash__(self):
-        pass
+        return hash((self.file_path, self.fields))
 
     def __repr__(self):
         return f'XFlatFile({self.file_path})'
@@ -155,6 +159,18 @@ class TestXFlat:
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
         assert repr(ff) == 'XFlatFile(~/Desktop/job_db)'
+
+    def test_ff_contains(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        flat_set = XSet(ff)
+        flat_iter = iter(flat_set)
+        flat_rec, index = next(flat_iter)
+        assert flat_rec.includes('jeffries', 'last')
+        # result = flat_set.includes(flat_set, index)
+        # assert result
+
 
 
 
