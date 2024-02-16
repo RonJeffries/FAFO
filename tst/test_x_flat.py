@@ -20,10 +20,8 @@ class XFlatFileIterator:
             raise StopIteration
         else:
             self.index += 1
-            flat = XFlat(self.file.fields, rec)
-            flat_set = XSet.from_tuples(())
-            flat_set.implementation = flat
-            return flat_set
+            flat_set = XSet(XFlat(self.file.fields, rec))
+            return flat_set, self.index
 
 
 class XFlatFile(XImplementation):
@@ -143,12 +141,14 @@ class TestXFlat:
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
         assert ff.record_length == 44
-        ff_set = XSet.from_tuples(())
-        ff_set.implementation = ff
+        ff_set = XSet(ff)
         count = 0
-        for record in ff_set:
+        record_number_sum = 0
+        for record, record_number in ff_set:
             count += 1
+            record_number_sum += record_number
         assert count == 1000
+        assert record_number_sum == 500500
 
 
 

@@ -53,3 +53,13 @@ class TestMisc:
         # x = "last": "hill" unfortunately can't say this.
         m = max((1, 2, 3, 4))
         assert m == 4
+
+    def test_slice(self):
+        a = 'abcdefghi'
+        d = a[3:6]
+        assert d == "def"
+        assert isinstance(d, str)
+        s = slice(3, 6)
+        d2 = a[s]
+        assert d2 == 'def'
+
