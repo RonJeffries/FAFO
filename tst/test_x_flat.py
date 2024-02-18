@@ -14,12 +14,12 @@ class XFlatFileIterator:
         return self
 
     def __next__(self):
-        result = (rec := self.file.element_at(self.scope), self.scope)
+        element_tuple = (rec := self.file.element_at(self.scope), self.scope)
         self.scope += 1
         if rec is None:
             raise StopIteration
         else:
-            return result
+            return element_tuple
 
 
 class XFlatFile(XImplementation):
