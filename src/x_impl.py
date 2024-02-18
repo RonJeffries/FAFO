@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class XImplementation(ABC):
-    @abstractmethod
+    # @abstractmethod  no longer required, can be implemented optionally
     def __contains__(self, item):
         raise NotImplemented
 
