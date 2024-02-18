@@ -9,18 +9,18 @@ from xset import XSet
 class XFlatFileIterator:
     def __init__(self, flat_file):
         self.file = flat_file
-        self.index = 0
+        self.scope = 1
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        self.index += 1
-        rec = self.file.element_at(self.index)
+        result = (rec := self.file.element_at(self.scope), self.scope)
+        self.scope += 1
         if rec is None:
             raise StopIteration
         else:
-            return rec, self.index
+            return result
 
 
 class XFlatFile(XImplementation):
