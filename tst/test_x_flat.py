@@ -15,13 +15,12 @@ class XFlatFileIterator:
         return self
 
     def __next__(self):
-        rec = self.file.get_record(self.index)
-        if rec == '':
+        self.index += 1
+        rec = self.file.element_at(self.index)
+        if rec is None:
             raise StopIteration
         else:
-            self.index += 1
-            flat_set = XSet(XFlat(self.file.fields, rec))
-            return flat_set, self.index
+            return rec, self.index
 
 
 class XFlatFile(XImplementation):
