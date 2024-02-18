@@ -200,6 +200,18 @@ class TestXFlat:
             count += 1
         assert count == 4
 
+    def test_project(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        flat_set = XSet(ff)
+        fields = XSet.classical_set(["last"])
+        projected = flat_set.project(fields)
+        count = 0
+        for person, s in projected:
+            count += 1
+        assert count == 5
+
 
 
 

@@ -1,4 +1,3 @@
-from collections import namedtuple
 from typing import Self
 
 from xfrozen import XFrozen
@@ -57,10 +56,10 @@ class XSet:
         def is_2_tuple(a):
             return isinstance(a, tuple) and len(a) == 2
 
-        concrete = list(tuples)  # ensure we didn't get passed a generator
-        if not all(is_2_tuple(a) for a in concrete):
+        frozen = frozenset(tuples)  # ensure we didn't get passed a generator
+        if not all(is_2_tuple(a) for a in frozen):
             raise AttributeError
-        return cls(XFrozen(frozenset(concrete)))
+        return cls(XFrozen(frozen))
 
     def __init__(self, an_implementation):
         assert isinstance(an_implementation, XImplementation)
@@ -102,18 +101,12 @@ class XSet:
             return NotImplemented
 
     def project(self, field_selector: Self) -> Self:
-        projected = [self.project_one_record(record_element, field_selector)
+        projector = XSet.from_tuples([(e, e) for e, _ignored in field_selector])
+        projected = [record_element.re_scope(projector)
                      for record_element, record_scope in self]
         return XSet.classical_set(projected)
 
-    def project_one_record(self, record_element, field_selector):
-        new_atoms = [(field, field_name)
-                     for field, field_name in record_element
-                     for desired_field_name, _ in field_selector
-                     if desired_field_name == field_name]
-        return XSet.from_tuples(new_atoms)
-
-    def re_scope(self, other):
+    def re_scope(self, other) -> Self:
         new_tuples = []
         for e, s in self:
             for old, new in other:

@@ -40,6 +40,10 @@ class TestMisc:
         assert r2rev in personnel  # <======
         assert r3 not in personnel
 
+    def test_frozen_removes_dups(self):
+        s = frozenset([1, 2, 1, 2])
+        assert len(s) == 2
+
     def test_frozen_operators(self):
         s1 = frozenset(("a", "b", "c"))
         s2 = frozenset(("x", "y"))
