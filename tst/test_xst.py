@@ -178,4 +178,15 @@ class TestXST:
             tally += s
         assert tally == 6
 
+    def test_re_scope(self):
+        s = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        z = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
+        r = z.re_scope(s)
+        assert r.includes('jeffries', 'last_name')
+        assert r.includes('ron', 'first_name')
+        count = 0
+        for _e, _s in r:
+            count += 1
+        assert count == 2
+
 

@@ -113,6 +113,14 @@ class XSet:
                      if desired_field_name == field_name]
         return XSet.from_tuples(new_atoms)
 
+    def re_scope(self, other):
+        new_tuples = []
+        for e, s in self:
+            for old, new in other:
+                if old == s:
+                    new_tuples.append((e,  new))
+        return XSet.from_tuples(new_tuples)
+
     def restrict(self, restrictor) -> Self:
         def other_has_match(e, s):
             return any((e_r.is_subset(e) for e_r, s_r in restrictor))
