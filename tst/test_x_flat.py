@@ -170,6 +170,10 @@ class TestXFlat:
         ff = XFlatFile(path, fields)
         e1 = ff.element_at(1)
         assert e1.includes('jeffries', 'last')
+        assert e1.includes('9000', 'pay')
+        assert ff.element_at(0) is None
+        assert ff.element_at(1001) is None
+        assert ff.element_at('three') is None
 
     def test_ff_contains(self):
         path = '~/Desktop/job_db'
