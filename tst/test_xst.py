@@ -2,7 +2,7 @@ import pytest
 
 from x_frozen import XFrozen
 from x_impl import XImplementation
-from xset import XSet, X_tuple
+from xset import XSet, XTuple
 
 
 class TestXST:
@@ -159,7 +159,7 @@ class TestXST:
     def test_hacked_n_tuple(self):
         n_tuple = ("a", "b", "c")
         test_set = XSet.n_tuple(n_tuple)
-        impl = X_tuple(n_tuple)
+        impl = XTuple(n_tuple)
         test_set.implementation = impl  # Jam it in there
         assert test_set.includes("a", 1)
         assert test_set.includes("c", 3)
@@ -172,5 +172,10 @@ class TestXST:
         assert test_set.excludes("c", -1)
         assert test_set.excludes("b", -1)
         assert test_set.excludes("a", -1)
+        tally = 0
+        for e,s in test_set:
+            assert e in ['a', 'b', 'c']
+            tally += s
+        assert tally == 6
 
 

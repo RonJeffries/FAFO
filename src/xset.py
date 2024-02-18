@@ -8,7 +8,23 @@ from x_impl import XImplementation
 # Atom = namedtuple("Atom", ["element", "scope"])
 
 
-class X_tuple:
+class XTupleIterator:
+    def __init__(self, x_tuple):
+        self.data = x_tuple.data
+        self.record = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.record < len(self.data):
+            self.record += 1
+            return self.data[self.record-1], self.record
+        else:
+            raise StopIteration
+
+
+class XTuple:
     def __init__(self, data):
         self.data = data
 
@@ -17,6 +33,9 @@ class X_tuple:
             return False  # should raise?
         e, s = t
         return isinstance(s, int) and 0 < s <= len(self.data) and self.data[s-1] == e
+
+    def __iter__(self):
+        return XTupleIterator(self)
 
 
 class XSet:
@@ -71,7 +90,7 @@ class XSet:
     def includes(self, element, scope) -> bool:
         if scope is None:
             scope = self.null
-        return (element, scope) in self.implementation
+        return any(e == element and s == scope for e, s in self)
 
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):

@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class XImplementation(ABC):
     @abstractmethod
     def __contains__(self, item):
-        return False
+        raise NotImplemented
 
     @abstractmethod
     def __iter__(self):

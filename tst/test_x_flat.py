@@ -168,9 +168,23 @@ class TestXFlat:
         flat_iter = iter(flat_set)
         flat_rec, index = next(flat_iter)
         assert flat_rec.includes('jeffries', 'last')
-        # result = flat_set.includes(flat_set, index)
-        # assert result
+        assert flat_set.includes(flat_rec, index)
 
+    def test_ff_select(self):
+        def sel(person, s):
+            return (person.includes('iam', 'last') and
+                    person.includes('taylor', 'first') and
+                    person.includes('serf', 'job'))
+
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        flat_set = XSet(ff)
+        result = flat_set.select(sel)
+        count = 0
+        for person, s in result:
+            count += 1
+        assert count == 4
 
 
 
