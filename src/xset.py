@@ -1,8 +1,8 @@
 from collections import namedtuple
 from typing import Self
 
-from x_frozen import XFrozen
-from x_impl import XImplementation
+from xfrozen import XFrozen
+from ximpl import XImplementation
 
 
 # Atom = namedtuple("Atom", ["element", "scope"])

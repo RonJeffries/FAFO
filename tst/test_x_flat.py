@@ -1,8 +1,7 @@
 from itertools import product
 from os.path import expanduser, isfile
-
-from x_impl import XImplementation
 from xflat import XFlat
+from ximpl import XImplementation
 from xset import XSet
 
 

@@ -1,4 +1,4 @@
-from x_frozen import XFrozen
+from xfrozen import XFrozen
 from xset import XSet
 
 

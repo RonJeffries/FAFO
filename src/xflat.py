@@ -1,4 +1,4 @@
-from x_impl import XImplementation
+from ximpl import XImplementation
 
 
 class XFlat(XImplementation):

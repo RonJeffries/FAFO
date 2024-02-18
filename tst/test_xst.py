@@ -1,7 +1,7 @@
 import pytest
 
-from x_frozen import XFrozen
-from x_impl import XImplementation
+from xfrozen import XFrozen
+from ximpl import XImplementation
 from xset import XSet, XTuple
 
 
