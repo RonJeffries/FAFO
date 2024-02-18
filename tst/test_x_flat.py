@@ -33,10 +33,13 @@ class XFlatFile(XImplementation):
 
     def __contains__(self, item):
         de, ds = item
-        for e,s in self:
-            if de == e and ds == s:
-                return True
-        return False
+        if not isinstance(ds, int):
+            return False
+        rec = self.get_record(ds - 1)
+        if rec == '':
+            return False
+        flat_set = XSet(XFlat(self.fields, rec))
+        return flat_set == de
 
     def __iter__(self):
         return XFlatFileIterator(self)
