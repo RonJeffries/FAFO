@@ -90,7 +90,10 @@ class XSet:
     def includes(self, element, scope) -> bool:
         if scope is None:
             scope = self.null
-        return any(e == element and s == scope for e, s in self)
+        try:
+            return (element, scope) in self.implementation
+        except NotImplemented:
+            return any(e == element and s == scope for e, s in self)
 
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):
