@@ -33,13 +33,7 @@ class XFlatFile(XImplementation):
 
     def __contains__(self, item):
         de, ds = item
-        if not isinstance(ds, int):
-            return False
-        rec = self.get_record(ds - 1)
-        if rec == '':
-            return False
-        flat_set = XSet(XFlat(self.fields, rec))
-        return flat_set == de
+        return de == self.element_at(ds)
 
     def __iter__(self):
         return XFlatFileIterator(self)
@@ -56,6 +50,14 @@ class XFlatFile(XImplementation):
             f.seek(seek_address)
             rec = f.read(self.record_length)
         return rec
+
+    def element_at(self, scope):
+        if not isinstance(scope, int) or scope < 1:
+            return None
+        rec = self.get_record(scope - 1)
+        if rec == '':
+            return None
+        return XSet(XFlat(self.fields, rec))
 
 
 class TestXFlat:
@@ -162,6 +164,13 @@ class TestXFlat:
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
         assert repr(ff) == 'XFlatFile(~/Desktop/job_db)'
+
+    def test_ff_element_at(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        e1 = ff.element_at(1)
+        assert e1.includes('jeffries', 'last')
 
     def test_ff_contains(self):
         path = '~/Desktop/job_db'
