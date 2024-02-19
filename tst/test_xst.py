@@ -205,5 +205,12 @@ class TestXST:
         assert scopes.includes('last', 'last')
         assert scopes.includes('job', 'job')
 
+    def test_element_set(self):
+        new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        old_names = new_names.element_set()
+        assert old_names.includes('first', 'first')
+        assert old_names.includes('last', 'last')
+
+
 
 

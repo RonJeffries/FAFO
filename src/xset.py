@@ -83,6 +83,9 @@ class XSet:
     def __iter__(self):
         return self.implementation.__iter__()
 
+    def element_set(self):
+        return XSet.from_tuples((e, e) for e, s in self)
+
     def excludes(self, element, scope) -> bool:
         return not self.includes(element, scope)
 
