@@ -116,6 +116,13 @@ class XSet:
                      for record_element, record_scope in self]
         return XSet.classical_set(projected)
 
+    def rename(self, re_scoping_set: Self):
+        old_names = self.scope_set()
+        replaced_names = re_scoping_set.element_set()
+        update = replaced_names.union(re_scoping_set)
+        renames = old_names.sym_diff(update)
+        return self.re_scope(renames)
+
     def re_scope(self, other) -> Self:
         new_tuples = []
         for e, s in self:

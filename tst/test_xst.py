@@ -189,15 +189,6 @@ class TestXST:
             count += 1
         assert count == 2
 
-    @pytest.mark.skip("waiting for set operation")
-    def test_rename(self):
-        new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
-        person = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
-        renamed = person.rename(new_names)
-        assert renamed.includes('jeffries', 'last_name')
-        assert renamed.includes('ron', 'first_name')
-        assert renamed.includes('serf', 'job')
-
     def test_scope_set(self):
         person = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
         scopes = person.scope_set()
@@ -233,6 +224,23 @@ class TestXST:
         sym = first.sym_diff(second)
         expected = XSet.classical_set(('a', 'b', 'd'))
         assert sym == expected
+
+    def test_sym_diff_names(self):
+        old_names = XSet.from_tuples((('first', 'first'), ('last', 'last'), ('job', 'job')))
+        new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        replaced = new_names.element_set()
+        update = new_names.union(replaced)
+        renames = old_names.sym_diff(update)
+        expected = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name'), ('job', 'job')))
+        assert renames == expected
+
+    def test_rename(self):
+        new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        person = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
+        renamed = person.rename(new_names)
+        assert renamed.includes('jeffries', 'last_name')
+        assert renamed.includes('ron', 'first_name')
+        assert renamed.includes('serf', 'job')
 
 
 
