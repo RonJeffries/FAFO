@@ -122,6 +122,9 @@ class XSet:
             return NotImplemented
         return self.select(other_has_match)
 
+    def scope_set(self):
+        return XSet.from_tuples((s, s) for e, s in self)
+
     def select(self, cond) -> Self:
         tuples = list((e, s) for e, s in self if cond(e, s))
         return XSet.from_tuples(tuples)

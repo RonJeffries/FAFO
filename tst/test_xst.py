@@ -189,4 +189,21 @@ class TestXST:
             count += 1
         assert count == 2
 
+    @pytest.mark.skip("waiting for set operation")
+    def test_rename(self):
+        new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        person = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
+        renamed = person.rename(new_names)
+        assert renamed.includes('jeffries', 'last_name')
+        assert renamed.includes('ron', 'first_name')
+        assert renamed.includes('serf', 'job')
+
+    def test_scope_set(self):
+        person = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
+        scopes = person.scope_set()
+        assert scopes.includes('first', 'first')
+        assert scopes.includes('last', 'last')
+        assert scopes.includes('job', 'job')
+
+
 
