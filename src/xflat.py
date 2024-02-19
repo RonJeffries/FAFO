@@ -11,7 +11,8 @@ class XFlat(XImplementation):
         for symbol, start, end in self.fields:
             if symbol == scope:
                 field = self.record[start:end].strip()
-                return field == element
+                if field == element:
+                    return True
         return False
 
     def __iter__(self):

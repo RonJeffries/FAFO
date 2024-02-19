@@ -242,6 +242,16 @@ class TestXST:
         assert renamed.includes('ron', 'first_name')
         assert renamed.includes('serf', 'job')
 
+    def test_rename_duplicates(self):
+        new_names = XSet.from_tuples((('a','x'), ('a', 'y')))
+        to_rename = XSet.from_tuples((('hello', 'a'), ('hi', 'b')))
+        as_renamed = to_rename.rename(new_names)
+        assert as_renamed == XSet.from_tuples((('hello', 'x'), ('hello', 'y'), ('hi', 'b')))
+        back_to_old = XSet.from_tuples((('x', 'a'), ('y', 'a')))
+        original = as_renamed.rename(back_to_old)
+        assert original == to_rename
+
+
 
 
 

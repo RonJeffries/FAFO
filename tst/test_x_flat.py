@@ -111,6 +111,16 @@ class TestXFlat:
         assert ('Ron', 'first') not in flat
         assert ('Wizard', 'job') in flat
 
+    def test_multiple_same_name(self):
+        fields = XFlat.fields(('pay', 4, 'pay', 4))
+        record = 'abcdefgh'
+        flat = XFlat(fields, record)
+        flat_set = XSet(flat)
+        for e,s, in flat_set:
+            print(e, s)
+        assert flat_set.includes('abcd', 'pay')
+        assert flat_set.includes('efgh', 'pay')
+
     def test_iteration(self):
         fields = XFlat.fields(("last", 12, "first", 10, "job", 20))
         record = 'Jeffries    Ronald    Wizard              '
