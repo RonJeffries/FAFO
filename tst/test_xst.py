@@ -211,6 +211,30 @@ class TestXST:
         assert old_names.includes('first', 'first')
         assert old_names.includes('last', 'last')
 
+    def test_union(self):
+        a = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        b = XSet.from_tuples((('first', 'first'), ('last', 'last')))
+        u = a.union(b)
+        assert u.includes('first', 'first')
+        assert u.includes('first', 'first_name')
+        assert u.includes('last', 'last')
+        assert u.includes('last', 'last_name')
+
+    def test_diff(self):
+        a = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        b = XSet.from_tuples((('last', 'last_name'), ))
+        diff = a.diff(b)
+        assert diff.includes('first', 'first_name')
+        assert diff.excludes('last', 'last_name')
+
+    def test_sym_diff(self):
+        first = XSet.classical_set(('a', 'b', 'c'))
+        second = XSet.classical_set(('c', 'd'))
+        sym = first.sym_diff(second)
+        expected = XSet.classical_set(('a', 'b', 'd'))
+        assert sym == expected
+
+
 
 
 

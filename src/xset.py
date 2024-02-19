@@ -83,6 +83,13 @@ class XSet:
     def __iter__(self):
         return self.implementation.__iter__()
 
+    def diff(self, other):
+        mine = set((e, s) for e, s in self)
+        others = set((e, s) for e, s in other)
+        remaining = mine.difference(others)
+        return XSet.from_tuples(remaining)
+
+
     def element_set(self):
         return XSet.from_tuples((e, e) for e, s in self)
 
@@ -131,6 +138,18 @@ class XSet:
     def select(self, cond) -> Self:
         tuples = list((e, s) for e, s in self if cond(e, s))
         return XSet.from_tuples(tuples)
+
+    def sym_diff(self, other):
+        d1 = self.diff(other)
+        d2 = other.diff(self)
+        result = d1.union(d2)
+        return result
+
+    def union(self, other):
+        mine = set((e, s) for e, s in self)
+        others = set((e, s) for e, s in other)
+        both = mine.union(others)
+        return XSet.from_tuples(both)
 
 
 XSet.null = XSet.from_tuples([])
