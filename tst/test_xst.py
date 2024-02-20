@@ -260,7 +260,7 @@ class TestXST:
     def test_subscripting(self):
         x = XSet.from_tuples((("a", 1), ("b", 2)))
         with pytest.raises(TypeError):
-            e, s = XSet[0]  # must implement getitem for this to work
+            e, s = x[0]  # must implement getitem for this to work
 
 
 
