@@ -269,6 +269,24 @@ class TestXST:
         with pytest.raises(TypeError):
             e, s = x[0]  # must implement getitem for this to work
 
+    def test_list(self):
+        x = XSet.from_tuples((("a", 1),))
+        x_list = list(x)
+        e,s = x_list.pop()
+        assert e == 'a' and s == 1
+
+    def test_pop(self):
+        x = XSet.from_tuples((("a", 1),))
+        e, s = x.pop()
+        assert e == 'a' and s == 1
+
+    def test_pop_null(self):
+        e, s = XSet.null.pop()
+        assert e is None and s is None
+
+
+
+
 
 
 

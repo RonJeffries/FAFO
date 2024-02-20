@@ -124,6 +124,12 @@ class XSet:
         else:
             return NotImplemented
 
+    def pop(self):
+        try:
+            return list(self).pop()
+        except IndexError:
+            return None, None
+
     def project(self, field_selector: Self) -> Self:
         projector = XSet.from_tuples([(e, e) for e, _ignored in field_selector])
         projected = [record_element.re_scope(projector)
