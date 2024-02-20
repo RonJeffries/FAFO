@@ -1,3 +1,6 @@
+import pytest
+
+
 class TestMisc:
     def test_hookup(self):
         assert 3 == 2 + 1
@@ -66,4 +69,13 @@ class TestMisc:
         s = slice(3, 6)
         d2 = a[s]
         assert d2 == 'def'
+
+    def test_too_many_next(self):
+        things = [1, 2, 3]
+        it = iter(things)
+        thing1 = next(it)
+        thing1 = next(it)
+        thing1 = next(it)
+        with pytest.raises(StopIteration):
+            thing1 = next(it)
 
