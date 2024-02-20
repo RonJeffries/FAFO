@@ -257,6 +257,10 @@ class TestXST:
         original = as_renamed.rename(back_to_old)
         assert original == to_rename
 
+    def test_subscripting(self):
+        x = XSet.from_tuples((("a", 1), "b", 2))
+        # e, s = XSet[0]  # must implement getitem for this to work
+
 
 
 
