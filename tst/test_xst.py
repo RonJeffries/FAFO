@@ -11,7 +11,13 @@ class TestXST:
         c2 = XSet.classical_set((2, 4))
         c3 = XSet.classical_set((1, 6))
         assert c2.is_subset(c1)
+        assert c2 <= c1
+        assert c2 < c1
+        assert not c1 < c1
         assert not c3.is_subset(c1)
+        assert c1 >= c2
+        assert c1 > c2
+        assert not c1 > c1
 
     def test_is_subset(self):
         r1 = XSet.from_tuples([("jeffries", "last"), ("ron", "first")])
@@ -216,6 +222,7 @@ class TestXST:
         assert u.includes('first', 'first_name')
         assert u.includes('last', 'last')
         assert u.includes('last', 'last_name')
+        assert a | b == u
 
     def test_diff(self):
         a = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
