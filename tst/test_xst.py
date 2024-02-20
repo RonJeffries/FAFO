@@ -284,6 +284,13 @@ class TestXST:
         e, s = XSet.null.pop()
         assert e is None and s is None
 
+    def test_pop_empty(self):
+        a = XSet.classical_set(['a'])
+        b = XSet.classical_set(['b'])
+        c = a & b
+        assert c == XSet.null
+        assert c.pop() == (None, None)
+
 
 
 

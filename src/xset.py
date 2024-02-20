@@ -65,6 +65,9 @@ class XSet:
         assert isinstance(an_implementation, XImplementation)
         self.implementation = an_implementation
 
+    def __and__(self, other):
+        return self.intersect(other)
+
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.is_subset(other) and other.is_subset(self)
@@ -117,6 +120,9 @@ class XSet:
             return (element, scope) in self.implementation
         except NotImplemented:
             return any(e == element and s == scope for e, s in self)
+
+    def intersect(self, other):
+        return XSet.from_tuples((e, s) for e, s in self if other.includes(e, s))
 
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):
