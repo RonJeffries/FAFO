@@ -189,6 +189,12 @@ class TestXST:
             count += 1
         assert count == 2
 
+    def test_re_scope_is_up_arrow(self):
+        ntup = XSet.n_tuple(["a", "b", "c", "d"])
+        sels = XSet.from_tuples(((1, 1), (3, 3)))
+        selected = ntup.re_scope(sels)
+        assert selected == XSet.from_tuples((("a", 1), ("c", 3)))
+
     def test_scope_set(self):
         person = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
         scopes = person.scope_set()
