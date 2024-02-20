@@ -79,3 +79,16 @@ class TestMisc:
         with pytest.raises(StopIteration):
             thing1 = next(it)
 
+    def test_generator(self):
+        def lots():
+            n = 0
+            while True:
+                yield n
+                n += 1
+
+        x = lots()
+        n = next(x)
+        n = next(x)
+        n = next(x)
+        assert n == 2
+

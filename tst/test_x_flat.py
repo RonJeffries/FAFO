@@ -7,15 +7,20 @@ from xset import XSet
 
 class XFlatFileIterator:
     def __init__(self, flat_file):
+        def lots():
+            n = 1
+            while True:
+                yield n
+                n += 1
         self.file = flat_file
-        self.scope = 1
+        self.scope_gen = lots()
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        element_tuple = (rec := self.file.element_at(self.scope), self.scope)
-        self.scope += 1
+        scope = next(self.scope_gen)
+        element_tuple = (rec := self.file.element_at(scope), scope)
         if rec is None:
             raise StopIteration
         else:
