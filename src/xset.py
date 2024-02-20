@@ -65,6 +65,10 @@ class XSet:
         assert isinstance(an_implementation, XImplementation)
         self.implementation = an_implementation
 
+    def __add__(self, other):
+        assert isinstance(other, self.__class__)
+        return self.union(other)
+
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.is_subset(other) and other.is_subset(self)
@@ -82,6 +86,10 @@ class XSet:
 
     def __iter__(self):
         return self.implementation.__iter__()
+
+    def __sub__(self, other):
+        assert isinstance(other, self.__class__)
+        return self.diff(other)
 
     def diff(self, other):
         mine = set((e, s) for e, s in self)
@@ -147,10 +155,7 @@ class XSet:
         return XSet.from_tuples(tuples)
 
     def sym_diff(self, other):
-        d1 = self.diff(other)
-        d2 = other.diff(self)
-        result = d1.union(d2)
-        return result
+        return (self - other) + (other - self)
 
     def union(self, other):
         mine = set((e, s) for e, s in self)

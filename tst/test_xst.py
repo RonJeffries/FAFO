@@ -67,12 +67,12 @@ class TestXST:
         ron = XSet.from_tuples([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
         chet = XSet.from_tuples([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
         hill = XSet.from_tuples([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
-        personnel = XSet.n_tuple([ron, chet, hill])
+        personnel = XSet.n_tuple([ron, hill, chet])
         boss_record = XSet.from_tuples([("boss", "job")])
         boss_set = XSet.n_tuple([boss_record])
         bosses = personnel.restrict(boss_set)
         assert bosses.includes(ron, 1)
-        assert bosses.includes(chet, 2)
+        assert bosses.includes(chet, 3)
         assert bosses.excludes(hill, 3)
 
     def test_xset_restrict_again(self):
