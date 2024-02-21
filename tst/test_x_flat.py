@@ -127,20 +127,16 @@ class TestXFlat:
             count += 1
         assert count == 1000
 
-    def test_custom_iteration(self):
+    def test_uses_scope_set(self):
         path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
-        ff = XFlatFile(path, fields)
+        scopes = XSet.from_tuples(((1, 1), (2,2)))
+        ff = XFlatFile(path, fields, scopes)
         ff_set = XSet(ff)
-        it = iter(ff_set)
         count = 0
-        try:
-            while (next(it)):
-                count += 1
-        except StopIteration:
-            pass
-        assert count == 1000
-
+        for _e, _s in ff_set:
+            count += 1
+        assert count == 2
 
     def test_repr(self):
         path = '~/Desktop/job_db'

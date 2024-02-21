@@ -39,13 +39,13 @@ class XFlat(XImplementation):
 class XFlatFileIterator:
     def __init__(self, flat_file, generator):
         self.file = flat_file
-        self.scope_gen = generator()
+        self.scope_gen = generator
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        scope = next(self.scope_gen)
+        _element, scope = next(self.scope_gen)
         element_tuple = (rec := self.file.element_at(scope), scope)
         if rec is None:
             raise StopIteration
@@ -54,11 +54,12 @@ class XFlatFileIterator:
 
 
 class XFlatFile(XImplementation):
-    def __init__(self, file_path, fields):
+    def __init__(self, file_path, fields, scope_set=None):
         self.file_path = file_path
         self.fields = fields
         field_def = self.fields[-1]
         self.record_length = field_def[-1]
+        self.scope_set = scope_set
 
     def __contains__(self, item):
         de, ds = item
@@ -68,9 +69,12 @@ class XFlatFile(XImplementation):
         def lots():
             n = 1
             while True:
-                yield n
+                yield n, n
                 n += 1
-        return XFlatFileIterator(self, lots)
+        if self.scope_set:
+            return XFlatFileIterator(self, iter(self.scope_set))
+        else:
+            return XFlatFileIterator(self, lots())
 
     def __hash__(self):
         return hash((self.file_path, self.fields))
