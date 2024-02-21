@@ -150,6 +150,7 @@ class XSet:
         return XSet.classical_set(projected)
 
     def rename(self, re_scoping_set: Self):
+        # renames this set, not its contents sets
         old_names = self.scope_set()
         replaced_names = re_scoping_set.element_set()
         update = replaced_names | re_scoping_set
