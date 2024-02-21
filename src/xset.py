@@ -111,7 +111,7 @@ class XSet:
     def diff(self, other):
         mine = set((e, s) for e, s in self)
         others = set((e, s) for e, s in other)
-        remaining = mine.difference(others)
+        remaining = mine - others
         return XSet.from_tuples(remaining)
 
     def element_set(self):
