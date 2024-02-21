@@ -37,6 +37,7 @@ class XFlat(XImplementation):
         return field_definitions
 
 
+# unused
 class XFlatFileIterator:
     def __init__(self, flat_file, generator):
         self.file = flat_file

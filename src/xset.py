@@ -104,12 +104,15 @@ class XSet:
         assert isinstance(other, self.__class__)
         return self.diff(other)
 
+    def __xor__(self, other):
+        assert isinstance(other, self.__class__)
+        return self.sym_diff(other)
+
     def diff(self, other):
         mine = set((e, s) for e, s in self)
         others = set((e, s) for e, s in other)
         remaining = mine.difference(others)
         return XSet.from_tuples(remaining)
-
 
     def element_set(self):
         return XSet.from_tuples((e, e) for e, s in self)
@@ -149,8 +152,8 @@ class XSet:
     def rename(self, re_scoping_set: Self):
         old_names = self.scope_set()
         replaced_names = re_scoping_set.element_set()
-        update = replaced_names.union(re_scoping_set)
-        renames = old_names.sym_diff(update)
+        update = replaced_names | re_scoping_set
+        renames = old_names ^ update
         return self.re_scope(renames)
 
     def re_scope(self, other) -> Self:
@@ -182,7 +185,7 @@ class XSet:
     def union(self, other):
         mine = set((e, s) for e, s in self)
         others = set((e, s) for e, s in other)
-        both = mine.union(others)
+        both = mine | others
         return XSet.from_tuples(both)
 
 
