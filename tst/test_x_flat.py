@@ -172,6 +172,21 @@ class TestXFlat:
         assert count == 1000
         assert record_number_sum == 500500
 
+    def test_iterate_twice(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        assert ff.record_length == 44
+        ff_set = XSet(ff)
+        count = 0
+        for _e, _s in ff_set:
+            count += 1
+        assert count == 1000
+        count = 0
+        for _e, _s in ff_set:
+            count += 1
+        assert count == 1000
+
     def test_repr(self):
         path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
