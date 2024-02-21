@@ -1,66 +1,7 @@
 from itertools import product
 from os.path import expanduser, isfile
-from xflat import XFlat
-from ximpl import XImplementation
+from xflat import XFlat, XFlatFile
 from xset import XSet
-
-
-class XFlatFileIterator:
-    def __init__(self, flat_file, generator):
-        self.file = flat_file
-        self.scope_gen = generator()
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        scope = next(self.scope_gen)
-        element_tuple = (rec := self.file.element_at(scope), scope)
-        if rec is None:
-            raise StopIteration
-        else:
-            return element_tuple
-
-
-class XFlatFile(XImplementation):
-    def __init__(self, file_path, fields):
-        self.file_path = file_path
-        self.fields = fields
-        field_def = self.fields[-1]
-        self.record_length = field_def[-1]
-
-    def __contains__(self, item):
-        de, ds = item
-        return de == self.element_at(ds)
-
-    def __iter__(self):
-        def lots():
-            n = 1
-            while True:
-                yield n
-                n += 1
-        return XFlatFileIterator(self, lots)
-
-    def __hash__(self):
-        return hash((self.file_path, self.fields))
-
-    def __repr__(self):
-        return f'XFlatFile({self.file_path})'
-
-    def get_record(self, index):
-        seek_address = index*self.record_length
-        with open(expanduser(self.file_path), "r") as f:
-            f.seek(seek_address)
-            rec = f.read(self.record_length)
-        return rec
-
-    def element_at(self, scope):
-        if not isinstance(scope, int) or scope < 1:
-            return None
-        rec = self.get_record(scope - 1)
-        if rec == '':
-            return None
-        return XSet(XFlat(self.fields, rec))
 
 
 class TestXFlat:
