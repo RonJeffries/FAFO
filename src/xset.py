@@ -34,7 +34,10 @@ class XTuple:
         return isinstance(s, int) and 0 < s <= len(self.data) and self.data[s-1] == e
 
     def __iter__(self):
-        return XTupleIterator(self)
+        scope = 1
+        for e in self.data:
+            yield e, scope
+            scope += 1
 
 
 class XSet:
@@ -78,7 +81,8 @@ class XSet:
         return hash(self.implementation)
 
     def __iter__(self):
-        return self.implementation.__iter__()
+        for e, s in self.implementation:
+            yield e,s
 
     def __le__(self, other):
         return self.is_subset(other)

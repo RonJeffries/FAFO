@@ -9,7 +9,8 @@ class XFrozen(XImplementation):
         return item in self.data
 
     def __iter__(self):
-        return iter(self.data)
+        for e, s in self.data:
+            yield e, s
 
     def __hash__(self):
         return hash(self.data)

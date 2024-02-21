@@ -19,7 +19,8 @@ class XFlat(XImplementation):
         return False
 
     def __iter__(self):
-        return ((self.record[start:end].strip(), symbol) for symbol, start, end in self.fields)
+        for symbol, start, end in self.fields:
+            yield self.record[start:end].strip(), symbol
 
     def __hash__(self):
         return -1
@@ -71,10 +72,13 @@ class XFlatFile(XImplementation):
             while True:
                 yield n, n
                 n += 1
-        if self.scope_set:
-            return XFlatFileIterator(self, iter(self.scope_set))
-        else:
-            return XFlatFileIterator(self, lots())
+
+        it = iter(self.scope_set) if self.scope_set else lots()
+        for _e, scope in it:
+            rec = self.element_at(scope)
+            if rec is None:
+                return
+            yield rec, scope
 
     def __hash__(self):
         return hash((self.file_path, self.fields))
