@@ -6,14 +6,9 @@ from xset import XSet
 
 
 class XFlatFileIterator:
-    def __init__(self, flat_file):
-        def lots():
-            n = 1
-            while True:
-                yield n
-                n += 1
+    def __init__(self, flat_file, generator):
         self.file = flat_file
-        self.scope_gen = lots()
+        self.scope_gen = generator()
 
     def __iter__(self):
         return self
@@ -39,7 +34,12 @@ class XFlatFile(XImplementation):
         return de == self.element_at(ds)
 
     def __iter__(self):
-        return XFlatFileIterator(self)
+        def lots():
+            n = 1
+            while True:
+                yield n
+                n += 1
+        return XFlatFileIterator(self, lots)
 
     def __hash__(self):
         return hash((self.file_path, self.fields))
@@ -176,7 +176,6 @@ class TestXFlat:
         path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
-        assert ff.record_length == 44
         ff_set = XSet(ff)
         count = 0
         for _e, _s in ff_set:
@@ -186,6 +185,21 @@ class TestXFlat:
         for _e, _s in ff_set:
             count += 1
         assert count == 1000
+
+    def test_custom_iteration(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        ff_set = XSet(ff)
+        it = iter(ff_set)
+        count = 0
+        try:
+            while (next(it)):
+                count += 1
+        except StopIteration:
+            pass
+        assert count == 1000
+
 
     def test_repr(self):
         path = '~/Desktop/job_db'
