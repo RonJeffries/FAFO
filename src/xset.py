@@ -144,10 +144,8 @@ class XSet:
             return NotImplemented
 
     def pop(self):
-        try:
-            return list(self).pop()
-        except IndexError:
-            return None, None
+        it = iter(self)
+        return next(it, (None, None))
 
     def project(self, field_selector: Self) -> Self:
         projector = XSet.from_tuples([(e, e) for e, _ignored in field_selector])
