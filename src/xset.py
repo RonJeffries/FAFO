@@ -108,6 +108,12 @@ class XSet:
         assert isinstance(other, self.__class__)
         return self.sym_diff(other)
 
+    def cardinality(self):
+        count = 0
+        for _ignored in self:
+            count += 1
+        return count
+
     def diff(self, other):
         mine = set((e, s) for e, s in self)
         others = set((e, s) for e, s in other)

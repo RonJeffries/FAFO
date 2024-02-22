@@ -1,3 +1,4 @@
+from datetime import datetime
 from itertools import product
 from os.path import expanduser, isfile
 from xflat import XFlat, XFlatFile
@@ -57,13 +58,19 @@ class TestXFlat:
         assert ('Ron', 'first') not in flat
         assert ('Wizard', 'job') in flat
 
+    def test_flat_set(self):
+        fields = XFlat.fields(("last", 12, "first", 10, "job", 20))
+        record = 'Jeffries    Ronald    Wizard              '
+        flat = XFlat(fields, record)
+        flat_record = XSet(flat)
+        assert flat_record.includes('Jeffries', 'last')
+
+
     def test_multiple_same_name(self):
         fields = XFlat.fields(('pay', 4, 'pay', 4))
         record = 'abcdefgh'
         flat = XFlat(fields, record)
         flat_set = XSet(flat)
-        for e,s, in flat_set:
-            print(e, s)
         assert flat_set.includes('abcd', 'pay')
         assert flat_set.includes('efgh', 'pay')
 
@@ -192,6 +199,65 @@ class TestXFlat:
         for person, s in projected:
             count += 1
         assert count == 5
+
+    def test_waste_memory(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        ee = XSet(ff)
+        assert ee.cardinality() == 1000
+        jeffries = ee.select(lambda e, s: e.includes('jeffries', 'last'))
+        assert jeffries.cardinality() == 200
+        ron = ee.select(lambda e, s: e.includes('ron', 'first'))
+        assert ron.cardinality() == 100
+        coder = ee.select(lambda e, s: e.includes('coder', 'job'))
+        assert coder.cardinality() == 200
+        high = ee.select(lambda e, s: e.includes('12000', 'pay'))
+        assert high.cardinality() == 250
+        ron_jeffries = ron.intersect(jeffries)
+        assert ron_jeffries.cardinality() == 20
+        high_coder = coder & high
+        assert high_coder.cardinality() == 50
+        final = ron_jeffries & high_coder
+        assert final.cardinality() == 1
+        employee, scope = final.pop()
+        assert employee.includes('jeffries', 'last')
+        assert employee.includes('ron', 'first')
+        assert employee.includes('coder', 'job')
+        assert employee.includes('12000', 'pay')
+
+    def test_do_not_waste_memory(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        ee = XSet(ff)
+
+        def sel(e, s):
+            return (e.includes('jeffries', 'last') and
+                    e.includes('ron', 'first') and
+                    e.includes('coder', 'job') and
+                    e.includes('12000', 'pay'))
+
+        final = ee.select(sel)
+        assert final.cardinality() == 1
+        employee, scope = final.pop()
+        assert employee.includes('jeffries', 'last')
+        assert employee.includes('ron', 'first')
+        assert employee.includes('coder', 'job')
+        assert employee.includes('12000', 'pay')
+
+    # def test_100_thousand(self):
+    #     path = '~/Desktop/job_db'
+    #     fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+    #     ff = XFlatFile(path, fields)
+    #     ee = XSet(ff)
+    #     start = datetime.now()
+    #     for i in range(100):
+    #         ron = ee.select(lambda e, s: e.includes('jeffries', 'last'))
+    #     elapsed = datetime.now() - start
+    #     print(elapsed.total_seconds())
+    #     assert elapsed.total_seconds() < 1.5
+
 
 
 

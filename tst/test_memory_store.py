@@ -74,10 +74,7 @@ class TestMemoryStore():
         # assert False
         start = datetime.now()
         database = expanduser("~/programming/database")
-        if exists(database):
-            print("not writing")
-        else:
-            print("writing")
+        if not exists(database):
             names = self.make_filenames()
             os.mkdir(database)
             for name in names:
@@ -90,8 +87,7 @@ class TestMemoryStore():
                 with open(full_name, "w") as db_file:
                     db_file.writelines(doc)
         elapsed = datetime.now() - start
-        print(elapsed)
-        # assert False
+        assert exists(database)
 
 
 

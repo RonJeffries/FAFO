@@ -95,7 +95,6 @@ class TestXST:
 
     def test_select(self):
         def sel(e, s):
-            print("checking", e, s, e > 3)
             return e > 3
         s1 = XSet.n_tuple((0, 1, 2, 3, 4, 5, 6))
         selected = s1.select(sel)
@@ -130,10 +129,8 @@ class TestXST:
         chet_name = XSet.from_tuples([("chet", "first"), ("hendrickson", "last")])
         hill = XSet.from_tuples([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
         personnel = XSet.classical_set([ron, chet, hill])
-        print(personnel)
         fields = XSet.classical_set(("first", "last"))
         result = personnel.project(fields)
-        print(result)
         assert result.includes(ron_name, None)
         assert result.includes(chet_name, None)
 
