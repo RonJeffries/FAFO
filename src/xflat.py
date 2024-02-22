@@ -101,3 +101,14 @@ class XFlatFile(XImplementation):
         if rec == '':
             return None
         return XSet(XFlat(self.fields, rec))
+
+    def rename_contents(self, re_scoping_set):
+        new_names = []
+        for name, start, len in self.fields:
+            changed_name = name
+            for old, new in re_scoping_set:
+                if name == old:
+                    changed_name = new
+            new_names.append((changed_name, start, len))
+        new_impl = self.__class__(self.file_path, new_names, self.scope_set)
+        return XSet(new_impl)

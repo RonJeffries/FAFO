@@ -246,6 +246,20 @@ class TestXFlat:
         assert employee.includes('coder', 'job')
         assert employee.includes('12000', 'pay')
 
+    def test_rename(self):
+        new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        ee = XSet(ff)
+        renamed = ee.rename_contents(new_names)
+        impl = renamed.implementation
+        assert isinstance(impl, XFlatFile)
+        for person, scope in renamed:
+            assert person.includes('jeffries', 'last_name')
+            break
+
+
     # def test_100_thousand(self):
     #     path = '~/Desktop/job_db'
     #     fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
