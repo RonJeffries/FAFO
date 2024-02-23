@@ -153,14 +153,13 @@ class XSet:
                      for record_element, record_scope in self]
         return XSet.classical_set(projected)
 
-    def rename(self, re_scoping_set: Self):
+    def rename(self, old_to_new_re_scope_set: Self):
         # renames this set, not its contents sets
-        old_names = self.scope_set()
-        re_scoping_set = re_scoping_set - old_names
-        replaced_names = re_scoping_set.element_set()
-        update = replaced_names | re_scoping_set
-        renames = old_names ^ update
-        return self.re_scope(renames)
+        original_names = self.scope_set()
+        originals_renamed = old_to_new_re_scope_set.element_set()
+        names_to_preserve = original_names - originals_renamed
+        complete_re_scope = old_to_new_re_scope_set | names_to_preserve
+        return self.re_scope(complete_re_scope)
 
     def rename_contents(self, re_scoping_set: Self):
         try:
