@@ -87,6 +87,9 @@ class XSet:
     def __le__(self, other):
         return self.is_subset(other)
 
+    def __len__(self):
+        return self.cardinality()
+
     def __lt__(self, other):
         return self.is_subset(other) and self != other
 

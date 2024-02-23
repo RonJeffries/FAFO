@@ -222,6 +222,7 @@ class TestXFlat:
         assert high_coder.cardinality() == 50
         final = ron_jeffries & high_coder
         assert final.cardinality() == 1
+        assert len(final) == 1
         employee, scope = final.pop()
         assert employee.includes('jeffries', 'last')
         assert employee.includes('ron', 'first')
