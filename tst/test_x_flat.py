@@ -75,6 +75,8 @@ class TestXFlat:
         assert flat_set.includes('efgh', 'pay')
 
     def test_iteration(self):
+        # this test assumes that the XFlat will produce fields in the order defined.
+        # this is perhaps set-theoretically weird.
         fields = XFlat.fields(("last", 12, "first", 10, "job", 20))
         record = 'Jeffries    Ronald    Wizard              '
         flat = XFlat(fields, record)
