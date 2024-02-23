@@ -192,6 +192,14 @@ class TestXST:
             count += 1
         assert count == 2
 
+    def test_re_scope_per_laurent(self):
+        s = XSet.from_tuples((('first', 'first_name'), ('last', 'last')))
+        z = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
+        r = z.re_scope(s)
+        assert r.includes('jeffries', 'last')
+        assert r.includes('ron', 'first_name')
+        assert r.cardinality() == 2
+
     def test_re_scope_is_up_arrow(self):
         ntup = XSet.n_tuple(["a", "b", "c", "d"])
         sels = XSet.from_tuples(((1, 1), (3, 3)))
@@ -249,6 +257,14 @@ class TestXST:
         person = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
         renamed = person.rename(new_names)
         assert renamed.includes('jeffries', 'last_name')
+        assert renamed.includes('ron', 'first_name')
+        assert renamed.includes('serf', 'job')
+
+    def test_rename_per_laurent(self):
+        new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last')))
+        person = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
+        renamed = person.rename(new_names)
+        assert renamed.includes('jeffries', 'last')
         assert renamed.includes('ron', 'first_name')
         assert renamed.includes('serf', 'job')
 

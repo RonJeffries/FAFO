@@ -156,6 +156,7 @@ class XSet:
     def rename(self, re_scoping_set: Self):
         # renames this set, not its contents sets
         old_names = self.scope_set()
+        re_scoping_set = re_scoping_set - old_names
         replaced_names = re_scoping_set.element_set()
         update = replaced_names | re_scoping_set
         renames = old_names ^ update
