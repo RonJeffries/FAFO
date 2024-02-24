@@ -92,3 +92,14 @@ class TestMisc:
         n = next(x)
         assert n == 2
 
+    def test_bound_method_pytest_message(self):
+        class Foo:
+            def __init__(self, arg):
+                self.arg = arg
+
+            def includes(self, arg):
+                return arg == self.arg
+
+        foo = Foo(3)
+        assert not foo.includes(5), "did not include 5"
+

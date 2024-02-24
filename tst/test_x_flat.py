@@ -244,7 +244,8 @@ class TestXFlat:
         final = ee.select(sel)
         assert final.cardinality() == 1
         employee, scope = final.pop()
-        assert employee.includes('jeffries', 'last')
+        has_jeffries = employee.includes('jeffries', 'last')
+        assert has_jeffries
         assert employee.includes('ron', 'first')
         assert employee.includes('coder', 'job')
         assert employee.includes('12000', 'pay')
