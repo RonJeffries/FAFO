@@ -2,7 +2,8 @@ import pytest
 
 from xfrozen import XFrozen
 from ximpl import XImplementation
-from xset import XSet, XTuple
+from xset import XSet
+from xtuple import XTuple
 
 
 class TestXST:
@@ -180,6 +181,9 @@ class TestXST:
             assert e in ['a', 'b', 'c']
             tally += s
         assert tally == 6
+        output = [f'{e}^{s}' for e, s in test_set]
+        result = ', '.join(output)
+        assert result == 'a^1, b^2, c^3'
 
     def test_re_scope(self):
         s = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
@@ -314,6 +318,39 @@ class TestXST:
         c = a & b
         assert c == XSet.null
         assert c.pop() == (None, None)
+
+    def test_tuples_from_set(self):
+        s = XSet.n_tuple(['a', 'b', 'c'])
+        try:
+            a, b, c, d = s
+        except ValueError:
+            pass
+        try:
+            a, b = s
+        except ValueError:
+            pass
+        a, b, c = s
+        a_e, a_s = a
+        assert a_e in ['a', 'b', 'c']
+        assert a_s in [1, 2, 3]
+
+    def test_tuple_split(self):
+        s = XSet.n_tuple(['a', 'b', 'c'])
+        (a0, a1), (b0, b1), (c0, c1) = s
+        assert a0 in ['a', 'b', 'c']
+        assert b0 in ['a', 'b', 'c']
+        assert c0 in ['a', 'b', 'c']
+
+    def test_n_tuple_string(self):
+        n = XSet.n_tuple(['a', 'b', 'c'])
+        output = [f'{e}^{s}' for e, s in n]
+        result = ', '.join(output)
+        assert result == 'a^1, b^2, c^3'
+
+
+
+
+
 
 
 

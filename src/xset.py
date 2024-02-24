@@ -2,42 +2,7 @@ from typing import Self
 
 from xfrozen import XFrozen
 from ximpl import XImplementation
-
-
-# Atom = namedtuple("Atom", ["element", "scope"])
-
-
-class XTupleIterator:
-    def __init__(self, x_tuple):
-        self.data = x_tuple.data
-        self.record = 0
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.record < len(self.data):
-            self.record += 1
-            return self.data[self.record-1], self.record
-        else:
-            raise StopIteration
-
-
-class XTuple:
-    def __init__(self, data):
-        self.data = data
-
-    def __contains__(self, t):
-        if not isinstance(t, tuple):
-            return False  # should raise?
-        e, s = t
-        return isinstance(s, int) and 0 < s <= len(self.data) and self.data[s-1] == e
-
-    def __iter__(self):
-        scope = 1
-        for e in self.data:
-            yield e, scope
-            scope += 1
+from xtuple import XTuple
 
 
 class XSet:
@@ -51,8 +16,7 @@ class XSet:
 
     @classmethod
     def n_tuple(cls, a_list) -> Self:
-        wrapped = [(item, index+1) for index, item in enumerate(a_list)]
-        return cls.from_tuples(wrapped)
+        return cls(XTuple(a_list))
 
     @classmethod
     def from_tuples(cls, tuples):
