@@ -52,7 +52,7 @@ class XSet:
         return self.is_subset(other)
 
     def __len__(self):
-        return self.cardinality()
+        return len(self.implementation)
 
     def __lt__(self, other):
         return self.is_subset(other) and self != other
@@ -76,10 +76,7 @@ class XSet:
         return self.sym_diff(other)
 
     def cardinality(self):
-        count = 0
-        for _ignored in self:
-            count += 1
-        return count
+        return len(self)
 
     def diff(self, other):
         mine = set((e, s) for e, s in self)

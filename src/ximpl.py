@@ -15,5 +15,9 @@ class XImplementation(ABC):
         raise NotImplemented
 
     @abstractmethod
+    def __len__(self):
+        raise NotImplemented
+
+    @abstractmethod
     def __repr__(self):
         raise NotImplemented

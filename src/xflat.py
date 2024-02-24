@@ -25,6 +25,9 @@ class XFlat(XImplementation):
     def __hash__(self):
         return -1
 
+    def __len__(self):
+        return len(self.fields)
+
     def __repr__(self):
         return f"XFlat('{self.record}')"
 
@@ -83,6 +86,12 @@ class XFlatFile(XImplementation):
 
     def __hash__(self):
         return hash((self.file_path, self.fields))
+
+    def __len__(self):
+        count = 0
+        for _i in self:
+            count += 1
+        return count
 
     def __repr__(self):
         return f'XFlatFile({self.file_path})'
