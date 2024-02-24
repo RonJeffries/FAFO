@@ -62,6 +62,7 @@ class XFlatFileIterator:
 class XFlatFile(XImplementation):
     def __init__(self, file_path, fields, scope_set=None):
         self.file_path = file_path
+        self.full_file_path = expanduser(file_path)
         self.fields = fields
         field_def = self.fields[-1]
         self.record_length = field_def[-1]
@@ -86,10 +87,10 @@ class XFlatFile(XImplementation):
             yield rec, scope
 
     def __hash__(self):
-        return hash((self.file_path, self.fields))
+        return hash((self.full_file_path, self.fields))
 
     def __len__(self):
-        file_length = stat(expanduser(self.file_path)).st_size
+        file_length = stat(self.full_file_path).st_size
         return int(file_length / self.record_length)
 
     def __repr__(self):
@@ -97,7 +98,7 @@ class XFlatFile(XImplementation):
 
     def get_record(self, index):
         seek_address = index*self.record_length
-        with open(expanduser(self.file_path), "r") as f:
+        with open(self.full_file_path, "r") as f:
             f.seek(seek_address)
             rec = f.read(self.record_length)
         return rec
@@ -118,5 +119,5 @@ class XFlatFile(XImplementation):
                 if name == old:
                     changed_name = new
             new_names.append((changed_name, start, len))
-        new_impl = self.__class__(self.file_path, new_names, self.scope_set)
+        new_impl = self.__class__(self.full_file_path, new_names, self.scope_set)
         return XSet(new_impl)
