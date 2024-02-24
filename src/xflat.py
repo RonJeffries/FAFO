@@ -1,4 +1,5 @@
 from os.path import expanduser
+from os import stat
 
 from ximpl import XImplementation
 from xset import XSet
@@ -88,10 +89,8 @@ class XFlatFile(XImplementation):
         return hash((self.file_path, self.fields))
 
     def __len__(self):
-        count = 0
-        for _i in self:
-            count += 1
-        return count
+        file_length = stat(expanduser(self.file_path)).st_size
+        return int(file_length / self.record_length)
 
     def __repr__(self):
         return f'XFlatFile({self.file_path})'
