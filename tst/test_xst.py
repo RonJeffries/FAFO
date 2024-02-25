@@ -264,6 +264,37 @@ class TestXST:
         assert renamed.includes('ron', 'first_name')
         assert renamed.includes('serf', 'job')
 
+    def test_new_rename(self):
+        s = XSet.from_tuples((('a','x'), ('b','y'), ('c','z')))
+        r = XSet.from_tuples((('y', 'y'), ('z', 'w')))
+        sss = s.scope_set()
+        assert sss == XSet.from_tuples((('x', 'x'), ('y','y'),('z','z')))
+        res = r.element_set()
+        assert res == XSet.from_tuples((('y', 'y'), ('z', 'z')))
+        r_clean = r ^ res
+        assert r_clean == XSet.from_tuples((('z','w'),('z', 'z')))
+        scoper = sss ^ r_clean
+        assert scoper == XSet.from_tuples((('x', 'x'), ('y','y'), ('z', 'w')))
+
+    def test_new_rename_compact(self):
+        s = XSet.from_tuples((('a','x'), ('b','y'), ('c','z')))
+        r = XSet.from_tuples((('y', 'y'), ('z', 'w')))
+        scoper = s.scope_set() ^ r ^ r.element_set()
+        assert scoper == XSet.from_tuples((('x', 'x'), ('y','y'), ('z', 'w')))
+
+    def test_new_rename_2(self):
+        s = XSet.from_tuples((('a','x'), ('b','y'), ('c','z')))
+        r = XSet.from_tuples((('z', 'w'),))
+        sss = s.scope_set()
+        assert sss == XSet.from_tuples((('x', 'x'), ('y','y'),('z','z')))
+        res = r.element_set()
+        assert res == XSet.from_tuples((('z', 'z'),))
+        r_clean = r ^ res
+        assert r_clean == XSet.from_tuples((('z','w'),('z', 'z')))
+        scoper = sss ^ r_clean
+        assert scoper == XSet.from_tuples((('x', 'x'), ('y','y'), ('z', 'w')))
+
+
     def test_rename_per_laurent(self):
         new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last')))
         person = XSet.from_tuples((('ron', 'first'), ('jeffries', 'last'), ('serf', 'job')))
