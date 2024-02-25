@@ -119,10 +119,10 @@ class XSet:
 
     def rename(self, old_to_new_re_scope_set: Self):
         # renames this set, not its contents sets
-        complete_re_scope = self.rename_to_re_scope(old_to_new_re_scope_set)
+        complete_re_scope = self.convert_rename_to_re_scope(old_to_new_re_scope_set)
         return self.re_scope(complete_re_scope)
 
-    def rename_to_re_scope(self, r):
+    def convert_rename_to_re_scope(self, r):
         return self.scope_set() ^ r ^ r.element_set()
 
     def rename_contents(self, re_scoping_set: Self):

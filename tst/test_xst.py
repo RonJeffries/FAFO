@@ -279,13 +279,13 @@ class TestXST:
     def test_new_rename_method(self):
         s = XSet.from_tuples((('a','x'), ('b','y'), ('c','z')))
         r = XSet.from_tuples((('y', 'y'), ('z', 'w')))
-        scoper = s.rename_to_re_scope(r)
+        scoper = s.convert_rename_to_re_scope(r)
         assert scoper == XSet.from_tuples((('x', 'x'), ('y','y'), ('z', 'w')))
 
     def test_new_rename_with_all_duplicates(self):
         s = XSet.from_tuples((('a','x'), ('b','y'), ('c','z')))
         r = XSet.from_tuples((('x', 'x'), ('y', 'y'), ('z', 'z'), ('z', 'w')))
-        scoper = s.rename_to_re_scope(r)
+        scoper = s.convert_rename_to_re_scope(r)
         expected = XSet.from_tuples((('x', 'x'), ('y', 'y'), ('z', 'z'), ('z', 'w')))
         # note that this will duplicate (z, z) and (z, w) AS INTENDED
         assert scoper == expected
