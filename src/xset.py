@@ -95,7 +95,7 @@ class XSet:
             scope = self.null
         try:
             return (element, scope) in self.implementation
-        except NotImplemented:
+        except NotImplementedError:
             return any(e == element and s == scope for e, s in self)
 
     def intersect(self, other):
