@@ -146,6 +146,7 @@ class TestXFlat:
         for _e, _s in ff_set:
             count += 1
         assert count == 2
+        assert len(ff_set) == 2
 
     def test_repr(self):
         path = '~/Desktop/job_db'

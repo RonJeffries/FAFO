@@ -90,6 +90,8 @@ class XFlatFile(XImplementation):
         return hash((self.full_file_path, self.fields))
 
     def __len__(self):
+        if self.scope_set is not None:
+            return len(self.scope_set)
         file_length = stat(self.full_file_path).st_size
         return int(file_length / self.record_length)
 
