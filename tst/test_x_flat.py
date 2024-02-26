@@ -154,11 +154,16 @@ class TestXFlat:
         ff = XFlatFile(path, fields)
         r100 = ff.element_at(100)
         r900 = ff.element_at(900)
+        print()
+        print(r100, 100)
+        print(r900, 900)
         ff_set = XSet(ff)
         assert ff_set.includes(r100, 100)
         assert ff_set.includes(r900, 900)
         scopes = XSet.from_tuples(((100, 1), (900, 2)))
         re_scoped = ff_set.re_scope(scopes)
+        for e,s in re_scoped:
+            print(e, s)
         assert len(re_scoped) == 2
         assert re_scoped.includes(r100, 1)
         assert re_scoped.includes(r900, 2)

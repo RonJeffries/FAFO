@@ -69,6 +69,8 @@ class XFlatFile(XImplementation):
         self.scope_set = scope_set
 
     def __contains__(self, item):
+        if self.scope_set is not None:
+            raise NotImplementedError
         de, ds = item
         return de == self.element_at(ds)
 
@@ -122,4 +124,8 @@ class XFlatFile(XImplementation):
                     changed_name = new
             new_names.append((changed_name, start, len))
         new_impl = self.__class__(self.full_file_path, new_names, self.scope_set)
+        return XSet(new_impl)
+
+    def re_scope(self, re_scoping_set):
+        new_impl = self.__class__(self.full_file_path, self.fields, re_scoping_set)
         return XSet(new_impl)
