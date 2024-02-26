@@ -148,6 +148,25 @@ class TestXFlat:
         assert count == 2
         assert len(ff_set) == 2
 
+    def test_re_scope(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        r100 = ff.element_at(100)
+        r900 = ff.element_at(900)
+        ff_set = XSet(ff)
+        assert ff_set.includes(r100, 100)
+        assert ff_set.includes(r900, 900)
+        scopes = XSet.from_tuples(((100, 1), (900, 2)))
+        re_scoped = ff_set.re_scope(scopes)
+        assert len(re_scoped) == 2
+        assert re_scoped.includes(r100, 1)
+        assert re_scoped.includes(r900, 2)
+
+
+
+
+
     def test_repr(self):
         path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
