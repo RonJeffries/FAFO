@@ -142,11 +142,15 @@ class TestXFlat:
         scopes = XSet.from_tuples(((107, 1), (932, 2)))
         ff = XFlatFile(path, fields, scopes)
         ff_set = XSet(ff)
+        assert len(ff_set) == 2
         e, s = ff_set.select(lambda e, s: s == 1).pop()
         assert e.includes('amy', 'first')
-        e, s = ff_set.select(lambda e, s: s == 2).pop()
-        assert e.includes('janet', 'first')
-        assert len(ff_set) == 2
+        assert any(s == 1 and e.includes('amy', 'first') for e,s in ff_set)
+        assert any(s == 2 and e.includes('janet', 'first') for e,s in ff_set)
+        assert all(e.includes('amy', 'first') for e,s in ff_set if s == 1)
+        assert all(e.includes('janet', 'first') for e,s in ff_set if s == 2)
+        amy = ff_set.select(lambda e, s: s == 1 and e.includes('amy', 'first'))
+        assert len(amy) == 1
 
     def test_re_scope(self):
         path = '~/Desktop/job_db'
