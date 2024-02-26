@@ -196,7 +196,7 @@ class TestXFlat:
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
         ff_set = XSet(ff)
-        scopes = XSet.from_tuples((("hello", "fred"), (13.5, "ethel")))
+        scopes = XSet.from_tuples((("hello", "fred"), (13.5, "ethel"), (-1, "neg"), (10000, "big")))
         re_scoped = ff_set.re_scope(scopes)
         assert len(re_scoped) == 0
         assert re_scoped == XSet.null
