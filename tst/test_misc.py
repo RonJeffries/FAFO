@@ -103,3 +103,6 @@ class TestMisc:
         foo = Foo(3)
         assert not foo.includes(5), "did not include 5"
 
+    def test_type_string(self):
+        assert type("ethel") is not int
+

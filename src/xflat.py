@@ -94,6 +94,9 @@ class XFlatFile(XImplementation):
     def __len__(self):
         if self.scope_set is not None:
             return len(self.scope_set)
+        return self.file_length_in_records()
+
+    def file_length_in_records(self):
         file_length = stat(self.full_file_path).st_size
         return int(file_length / self.record_length)
 
@@ -127,5 +130,15 @@ class XFlatFile(XImplementation):
         return XSet(new_impl)
 
     def re_scope(self, re_scoping_set):
+        if self.scope_set is not None:
+            re_scoping_set = self.scope_set.re_scope(re_scoping_set)
+        re_scoping_set = self.validate_scope_set(re_scoping_set)
+        if len(re_scoping_set) == 0:
+            return XSet.null
         new_impl = self.__class__(self.full_file_path, self.fields, re_scoping_set)
         return XSet(new_impl)
+
+    def validate_scope_set(self, re_scoping_set):
+        maximum = self.file_length_in_records()
+        return re_scoping_set.select(lambda e, s: type(e) is int and 0 < e <= maximum)
+

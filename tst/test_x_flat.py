@@ -167,6 +167,40 @@ class TestXFlat:
         assert re_scoped.includes(r100, 1)
         assert re_scoped.includes(r900, 2)
 
+    def test_double_re_scope(self):
+        scopes = XSet.from_tuples(((100, "fred"), (900, "ethel")))
+        new_scopes = XSet.from_tuples((('fred', 'frank'), ('ethel', 'premium')))
+        net_scopes = scopes.re_scope(new_scopes)
+        expected = XSet.from_tuples(((100, 'frank'), (900, 'premium')))
+        assert net_scopes == expected
+
+    def test_scope_set_to_string(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        r100 = ff.element_at(100)
+        r900 = ff.element_at(900)
+        ff_set = XSet(ff)
+        scopes = XSet.from_tuples(((100, "fred"), (900, "ethel")))
+        re_scoped = ff_set.re_scope(scopes)
+        assert len(re_scoped) == 2
+        assert re_scoped.includes(r100, "fred")
+        assert re_scoped.includes(r900, "ethel")
+        new_scopes = XSet.from_tuples((('fred', 'frank'), ('ethel', 'premium')))
+        re_re_scoped = re_scoped.re_scope(new_scopes)
+        assert re_re_scoped.includes(r100, "frank")
+        assert re_re_scoped.includes(r900, "premium")
+
+    def test_non_integer_re_scope(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        ff_set = XSet(ff)
+        scopes = XSet.from_tuples((("hello", "fred"), (13.5, "ethel")))
+        re_scoped = ff_set.re_scope(scopes)
+        assert len(re_scoped) == 0
+        assert re_scoped == XSet.null
+
     def test_repr(self):
         path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
