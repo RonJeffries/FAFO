@@ -139,13 +139,13 @@ class TestXFlat:
     def test_uses_scope_set(self):
         path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
-        scopes = XSet.from_tuples(((1, 1), (2,2)))
+        scopes = XSet.from_tuples(((107, 1), (932, 2)))
         ff = XFlatFile(path, fields, scopes)
         ff_set = XSet(ff)
-        count = 0
-        for _e, _s in ff_set:
-            count += 1
-        assert count == 2
+        e, s = ff_set.select(lambda e, s: s == 1).pop()
+        assert e.includes('amy', 'first')
+        e, s = ff_set.select(lambda e, s: s == 2).pop()
+        assert e.includes('janet', 'first')
         assert len(ff_set) == 2
 
     def test_re_scope(self):
