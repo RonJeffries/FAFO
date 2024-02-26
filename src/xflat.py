@@ -80,11 +80,11 @@ class XFlatFile(XImplementation):
                 n += 1
 
         it = iter(self.scope_set) if self.scope_set else lots()
-        for _e, scope in it:
-            rec = self.element_at(scope)
+        for old_scope, new_scope in it:
+            rec = self.element_at(old_scope)
             if rec is None:
                 return
-            yield rec, scope
+            yield rec, new_scope
 
     def __hash__(self):
         return hash((self.full_file_path, self.fields))
