@@ -133,7 +133,10 @@ class XSet:
             return XSet.from_tuples(new_tuples)
 
     def re_scope(self, other) -> Self:
-        return self.generic_re_scope(other)
+        try:
+            return self.implementation.re_scope(other)
+        except AttributeError:
+            return self.generic_re_scope(other)
 
     def generic_re_scope(self, other):
         new_tuples = []
