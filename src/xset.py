@@ -133,11 +133,14 @@ class XSet:
             return XSet.from_tuples(new_tuples)
 
     def re_scope(self, other) -> Self:
+        return self.generic_re_scope(other)
+
+    def generic_re_scope(self, other):
         new_tuples = []
         for e, s in self:
             for old, new in other:
                 if old == s:
-                    new_tuples.append((e,  new))
+                    new_tuples.append((e, new))
         return XSet.from_tuples(new_tuples)
 
     def restrict(self, restrictor) -> Self:
