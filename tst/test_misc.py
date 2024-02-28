@@ -21,16 +21,17 @@ class TestMisc:
         assert a2 in s1
         assert a3 not in s1
 
-    def test_show_sets_insufficient_for_xst(self):
-        r1 = [("jeffries", "last"), ("ron", "first")]
-        r2 = [("chet", "first"), ("hendrickson", "last")]
-        r2rev = [("hendrickson", "last"), ("chet", "first")]
-        r3 = [("hill", "last"), ("geepaw", "first")]
-        personnel = [r1, r2]
-        assert r1 in personnel
-        assert r2 in personnel
-        assert r2rev not in personnel  # but we need it to be
-        assert r3 not in personnel
+    def test_show_sets_are_insufficient_for_xst(self):
+        r1 = {("jeffries", "last"), ("ron", "first")}
+        r2 = {("chet", "first"), ("hendrickson", "last")}
+        r2rev = {("hendrickson", "last"), ("chet", "first")}
+        r3 = {("hill", "last"), ("geepaw", "first")}
+        with pytest.raises(TypeError):
+            personnel = {r1, r2}
+        # assert r1 in personnel
+        # assert r2 in personnel
+        # assert r2rev in personnel  # but we need it to be
+        # assert r3 not in personnel
 
     def test_frozen_sets(self):
         r1 = frozenset([("jeffries", "last"), ("ron", "first")])
