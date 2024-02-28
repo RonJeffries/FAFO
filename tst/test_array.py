@@ -23,13 +23,13 @@ class TestArray:
     def test_slice(self):
         ary = array("B", b'abcd1234')
         xry = array("B", b'1234abcd')
-        bry = ary[5:8] + ary[0:4]
+        bry = ary[4:8] + ary[0:4]
+        assert bry == xry
 
     def test_get_string(self):
         ary = array("B", b'abcd1234')
         ss = "".join([chr(b) for b in ary])
-        print(ss)
-        assert True
+        assert ss == 'abcd1234'
 
     def test_init(self):
         def to_string(bytes):
