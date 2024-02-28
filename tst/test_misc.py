@@ -24,14 +24,8 @@ class TestMisc:
     def test_show_sets_are_insufficient_for_xst(self):
         r1 = {("jeffries", "last"), ("ron", "first")}
         r2 = {("chet", "first"), ("hendrickson", "last")}
-        r2rev = {("hendrickson", "last"), ("chet", "first")}
-        r3 = {("hill", "last"), ("geepaw", "first")}
         with pytest.raises(TypeError):
-            personnel = {r1, r2}
-        # assert r1 in personnel
-        # assert r2 in personnel
-        # assert r2rev in personnel  # but we need it to be
-        # assert r3 not in personnel
+            _personnel = {r1, r2}
 
     def test_frozen_sets(self):
         r1 = frozenset([("jeffries", "last"), ("ron", "first")])
@@ -44,7 +38,7 @@ class TestMisc:
         assert r2rev in personnel  # <======
         assert r3 not in personnel
 
-    def test_frozen_removes_dups(self):
+    def test_frozen_removes_duplicates(self):
         s = frozenset([1, 2, 1, 2])
         assert len(s) == 2
 
@@ -58,6 +52,7 @@ class TestMisc:
 
     def test_syntax(self):
         a = {"last": "hill"}
+        assert a["last"] == 'hill'
         # x = "last": "hill" unfortunately can't say this.
         m = max((1, 2, 3, 4))
         assert m == 4
@@ -74,11 +69,11 @@ class TestMisc:
     def test_too_many_next(self):
         things = [1, 2, 3]
         it = iter(things)
-        thing1 = next(it)
-        thing1 = next(it)
-        thing1 = next(it)
+        _thing1 = next(it)
+        _thing1 = next(it)
+        _thing1 = next(it)
         with pytest.raises(StopIteration):
-            thing1 = next(it)
+            _thing1 = next(it)
 
     def test_generator(self):
         def lots():
@@ -88,10 +83,10 @@ class TestMisc:
                 n += 1
 
         x = lots()
-        n = next(x)
-        n = next(x)
-        n = next(x)
-        assert n == 2
+        next(x)
+        next(x)
+        nxt = next(x)
+        assert nxt == 2
 
     def test_bound_method_pytest_message(self):
         class Foo:
@@ -106,4 +101,3 @@ class TestMisc:
 
     def test_type_string(self):
         assert type("ethel") is not int
-

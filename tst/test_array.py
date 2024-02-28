@@ -43,4 +43,3 @@ class TestArray:
         assert 'dave' in name_list
         assert 'robb' in name_list
         assert 'carl' in name_list
-
