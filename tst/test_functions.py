@@ -67,5 +67,7 @@ class TestFunctions:
     def test_int(self):
         with pytest.raises(ValueError):
             int('1.1')
+        with pytest.raises(ValueError):
+            int('123abc')
 
 
