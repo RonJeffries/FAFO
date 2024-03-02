@@ -60,6 +60,7 @@ class TestFunctions:
         assert rpn == ['a123', '37', '+']
 
     def test_dijkstra_2(self):
+        expr = 'a123 + 37*b17 - c*37.5'
         lexed = ['a123', '+', '37', '*', 'b17', '-', 'c', '*', '37.5']
         rpn = dij(lexed)
         assert rpn == ['a123', '37', 'b17', '*', 'c', '37.5', '*', '-', '+']
