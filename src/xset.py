@@ -41,6 +41,9 @@ class XSet:
         else:
             return NotImplemented
 
+    def __getitem__(self, scope):
+        return self.get(scope)
+
     def __hash__(self):
         return hash(self.implementation)
 
@@ -89,6 +92,12 @@ class XSet:
 
     def excludes(self, element, scope) -> bool:
         return not self.includes(element, scope)
+
+    def get(self, scope):
+        for e, s in self:
+            if s == scope:
+                return e
+        return None
 
     def includes(self, element, scope) -> bool:
         if scope is None:
