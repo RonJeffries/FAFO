@@ -1,5 +1,6 @@
 from typing import Self
 
+from set_builder import SetBuilder
 from xfrozen import XFrozen
 from ximpl import XImplementation
 from xtuple import XTuple
@@ -148,12 +149,12 @@ class XSet:
             return self.generic_re_scope(other)
 
     def generic_re_scope(self, other):
-        new_tuples = []
+        sb = SetBuilder()
         for e, s in self:
             for old, new in other:
                 if old == s:
-                    new_tuples.append((e, new))
-        return XSet.from_tuples(new_tuples)
+                    sb.put(e, new)
+        return sb.set()
 
     def restrict(self, restrictor) -> Self:
         def other_has_match(e, s):

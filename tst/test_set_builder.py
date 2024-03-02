@@ -1,15 +1,4 @@
-from xset import XSet
-
-
-class SetBuilder:
-    def __init__(self):
-        self.contents = []
-
-    def put(self, element, scope):
-        self.contents.append((element, scope))
-
-    def set(self):
-        return XSet.from_tuples(self.contents)
+from set_builder import SetBuilder
 
 
 class TestSetBuilder:
@@ -23,3 +12,27 @@ class TestSetBuilder:
         xset = sb.set()
         assert xset['A'] == 'a'
         assert xset['B'] == 'b'
+
+    def test_streamlined(self):
+        xset = SetBuilder()\
+            .put('a', 'A')\
+            .put('b','B')\
+            .set()
+        assert xset['A'] == 'a'
+        assert xset['B'] == 'b'
+
+    def test_set_of_records(self):
+        rb = SetBuilder()
+        r1 = SetBuilder()\
+            .put('a', 'A')\
+            .put('b', 'B')\
+            .set()
+        rb.put(r1, 1)
+        r2 = SetBuilder()\
+            .put('aa', 'A')\
+            .put('bb', 'B')\
+            .set()
+        rb.put(r2, 2)
+        records = rb.set()
+        assert records[2]['B'] == 'bb'
+
