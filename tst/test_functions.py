@@ -5,7 +5,7 @@ import re
 
 
 def dij(lexed: list):
-    priority = { '+':1, '-':1, '*': 2}
+    priority = {'+': 1, '-': 1, '*': 2}
     stack = []
     output = []
     expr = lexed[::-1]
@@ -98,6 +98,12 @@ class TestFunctions:
         with pytest.raises(ValueError):
             int('123abc')
 
+    def test_lambda(self):
+        v = 2
+        l1 = lambda: 2 * v
+        v = 3
+        assert l1() == 6  # surprised me
+
     def test_interpret(self):
         rpn = ['37', '5', '+']
         result = interpret(rpn)
@@ -111,5 +117,3 @@ class TestFunctions:
         assert rpn == ['10', '2', '*', '10', '2', '*', '2', '+', '+']
         result = interpret(rpn)
         assert result == 42
-
-
