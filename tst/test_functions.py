@@ -27,6 +27,33 @@ def dij(lexed: list):
     return output
 
 
+def to_number(string):
+    try:
+        return int(string)
+    except ValueError:
+        return float(string)
+
+
+def interpret(rpn):
+    stack = []
+    r = rpn[::-1]
+    while r:
+        item = r.pop()
+        if item == '+':
+            stack.append(to_number(stack.pop()) + to_number(stack.pop()))
+        elif item == '*':
+            stack.append(to_number(stack.pop()) * to_number(stack.pop()))
+        else:
+            stack.append(item)
+    return stack.pop()
+
+
+def lex(expr):
+    no_space = expr.replace(' ', '')
+    rx = '([^a-zA-Z0-9.])'
+    return re.split(rx, no_space)
+
+
 class TestFunctions:
     def test_hookup(self):
         assert 2 == 2
@@ -70,5 +97,19 @@ class TestFunctions:
             int('1.1')
         with pytest.raises(ValueError):
             int('123abc')
+
+    def test_interpret(self):
+        rpn = ['37', '5', '+']
+        result = interpret(rpn)
+        assert result == 42
+
+    def test_interpret_2(self):
+        expr = '10 * 2 + 10 * 2 + 2'
+        lexed = lex(expr)
+        assert lexed == ['10', '*', '2', '+', '10', '*', '2', '+', '2']
+        rpn = dij(lexed)
+        assert rpn == ['10', '2', '*', '10', '2', '*', '2', '+', '+']
+        result = interpret(rpn)
+        assert result == 42
 
 
