@@ -1,3 +1,5 @@
+from functools import partial
+
 import pytest
 
 from xset import XSet
@@ -34,17 +36,29 @@ def to_number(string):
         return float(string)
 
 
+def make_executable(rpn):
+    def stack_value(value, stack):
+        stack.append(to_number(value))
+
+    exec = []
+    op = None
+    for r in rpn:
+        if r == '+':
+            exec.append(lambda stack: stack.append(stack.pop() + stack.pop()))
+        elif r == '*':
+            exec.append(lambda stack: stack.append(stack.pop() * stack.pop()))
+        else:
+            sv = partial(stack_value, r)
+            exec.append(sv)
+    return exec
+
+
 def interpret(rpn):
     stack = []
     r = rpn[::-1]
-    while r:
-        item = r.pop()
-        if item == '+':
-            stack.append(to_number(stack.pop()) + to_number(stack.pop()))
-        elif item == '*':
-            stack.append(to_number(stack.pop()) * to_number(stack.pop()))
-        else:
-            stack.append(item)
+    executable_r = make_executable(r)
+    while executable_r:
+        executable_r.pop()(stack)
     return stack.pop()
 
 
@@ -117,3 +131,14 @@ class TestFunctions:
         assert rpn == ['10', '2', '*', '10', '2', '*', '2', '+', '+']
         result = interpret(rpn)
         assert result == 42
+
+    def test_lambda_2(self):
+        def full(val, stack):
+            stack.append(val)
+
+        stack_6 = partial(full, 6)
+        stack = []
+        stack_6(stack)
+        assert stack[0] == 6
+
+
