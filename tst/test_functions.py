@@ -37,16 +37,19 @@ def to_number(string):
 
 
 def make_executable(rpn):
+    ops = {'+': '__add__', '*': '__mul__'}
+
     def stack_value(value, stack):
         stack.append(to_number(value))
 
+    def binary_op(op, stack):
+        stack.append(getattr(stack.pop(), op)(stack.pop()))
+
     exec = []
-    op = None
     for r in rpn:
-        if r == '+':
-            exec.append(lambda stack: stack.append(stack.pop() + stack.pop()))
-        elif r == '*':
-            exec.append(lambda stack: stack.append(stack.pop() * stack.pop()))
+        if r in ops:
+            do_op = partial(binary_op, ops[r])
+            exec.append(do_op)
         else:
             sv = partial(stack_value, r)
             exec.append(sv)
