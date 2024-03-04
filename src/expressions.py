@@ -34,13 +34,13 @@ class Parser:
 
     def make_token(self, string_item):
         if string_item in ['*', '/']:
-            return ('operator', string_item, 2)
+            return Token('operator', string_item, 2)
         elif string_item in ['+', '-']:
-            return ('operator', string_item, 1)
+            return Token('operator', string_item, 1)
         elif string_item[0].isalpha():
-            return ('scope', string_item, None)
+            return Token('scope', string_item, None)
         else:
-            return ('literal', string_item, None)
+            return Token('literal', string_item, None)
 
     def parse(self, forward_lexed):
         stack = []
@@ -49,8 +49,7 @@ class Parser:
         tokens = self.make_tokens(lexed)
         while tokens:
             item = tokens.pop()
-            kind, value, priority = item
-            if kind == 'operator':
+            if item.kind == 'operator':
                 stack.append(item)
             else:
                 result.append(item)
@@ -67,4 +66,11 @@ class Parser:
         no_space = self._expr.replace(' ', '')
         rx = '([^a-zA-Z0-9.])'
         return re.split(rx, no_space)
+
+
+class Token:
+    def __init__(self, kind, value, priority):
+        self.kind = kind
+        self.value = value
+        self.priority = priority
 

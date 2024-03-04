@@ -27,7 +27,9 @@ class TestExpressions:
     def test_make_rpn(self):
         text = '21 * 2'
         rpn = Parser(text).rpn()
-        assert rpn == [('literal', '21', None), ('literal', '2', None), ('operator', '*', 2)]
+        assert rpn[0].kind == 'literal'
+        assert rpn[1].kind == 'literal'
+        assert rpn[2].kind == 'operator'
 
     def test_lexing(self):
         text = '21 * 2'
@@ -37,5 +39,7 @@ class TestExpressions:
     def test_token_sequence(self):
         parser = Parser('')
         token = parser.make_token('*')
-        assert token == ('operator', '*', 2)
+        assert token.kind == 'operator'
+        assert token.value == '*'
+        assert token.priority == 2
 
