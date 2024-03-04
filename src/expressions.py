@@ -50,6 +50,8 @@ class Parser:
         while tokens:
             item = tokens.pop()
             if item.kind == 'operator':
+                while stack and stack[-1].priority > item.priority:
+                    result.append(stack.pop())
                 stack.append(item)
             else:
                 result.append(item)
@@ -73,4 +75,7 @@ class Token:
         self.kind = kind
         self.value = value
         self.priority = priority
+
+    def __repr__(self):
+        return f'Token({self.kind}, {self.value}, {self.priority})'
 

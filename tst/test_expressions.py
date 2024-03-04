@@ -31,6 +31,12 @@ class TestExpressions:
         assert rpn[1].kind == 'literal'
         assert rpn[2].kind == 'operator'
 
+    def test_make_harder_rpn(self):
+        text = 'pay * 1.1 + bonus'
+        rpn = Parser(text).rpn()
+        values = [t.value for t in rpn]
+        assert values == ['pay', '1.1', '*', 'bonus', '+' ]
+
     def test_lexing(self):
         text = '21 * 2'
         lex = Parser(text).lex()
