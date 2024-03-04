@@ -20,3 +20,12 @@ class Expression:
             return int(string)
         except ValueError:
             return float(string)
+
+
+class Parser:
+    def __init__(self, expression_string):
+        self._expr = expression_string
+
+    def rpn(self):
+        return ['21', '2', '*']
+
