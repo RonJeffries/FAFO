@@ -1,3 +1,6 @@
+import re
+
+
 class Expression:
     def __init__(self, scope, operations):
         self._scope = scope
@@ -26,6 +29,27 @@ class Parser:
     def __init__(self, expression_string):
         self._expr = expression_string
 
+    def parse(self, forward_lexed):
+        stack = []
+        result = []
+        lexed = forward_lexed[::-1]
+        while lexed:
+            item = lexed.pop()
+            if item in ['*']:
+                stack.append(item)
+            else:
+                result.append(item)
+        while stack:
+            result.append(stack.pop())
+        return result
+
     def rpn(self):
-        return ['21', '2', '*']
+        lexed = self.lex()
+        result = self.parse(lexed)
+        return result
+
+    def lex(self):
+        no_space = self._expr.replace(' ', '')
+        rx = '([^a-zA-Z0-9.])'
+        return re.split(rx, no_space)
 

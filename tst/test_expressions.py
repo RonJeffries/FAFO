@@ -28,3 +28,8 @@ class TestExpressions:
         text = '21 * 2'
         rpn = Parser(text).rpn()
         assert rpn == ['21', '2', '*']
+
+    def test_lexing(self):
+        text = '21 * 2'
+        lex = Parser(text).lex()
+        assert lex == [ '21', '*', '2']
