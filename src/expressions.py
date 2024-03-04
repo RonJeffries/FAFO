@@ -12,7 +12,25 @@ class Expression:
 
         stack = []
         while self._operations:
-            self._operations.pop()(self, stack, record)
+            op = self._operations.pop()
+            if op.kind == 'literal':
+                stack.append(op.value)
+            elif op.kind == 'operator':
+                op1 = self.to_number(stack.pop())
+                op2 = self.to_number(stack.pop())
+                match op.value:
+                    case '+':
+                        res = op1 + op2
+                    case '-':
+                        res = op1 - op2
+                    case '*':
+                        res = op1 * op2
+                    case '/':
+                        res = op1 / op2
+                    case _:
+                        res = f'Unknown operator{op.value}'
+
+                stack.append(str(res))
         return stack.pop()
 
     def scope(self):

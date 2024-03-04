@@ -1,4 +1,4 @@
-from expressions import Expression, Parser
+from expressions import Expression, Parser, Token
 
 
 class TestExpressions:
@@ -6,20 +6,16 @@ class TestExpressions:
         expr = Expression('gross_pay', [])
 
     def test_returns_constant(self):
-        op = lambda self, stack, record: stack.append('42')
+        op = Token('literal', '42', None)
         record = None
         expression = Expression('Answer', [op])
         assert expression.scope() == 'Answer'
         assert expression.result(record) == '42'
 
     def test_rpn(self):
-        op21 = lambda self, stack, record: stack.append('21')
-        op2 = lambda self, stack, record: stack.append('2')
-        def times(self, stack, number):
-            op1 = self.to_number(stack.pop())
-            op2 = self.to_number(stack.pop())
-            stack.append(str(op1 * op2))
-
+        op21 = Token('literal', '21', None)
+        op2 = Token('literal', '2', None)
+        times = Token('operator', '*', 2)
         operations = [op21, op2, times]
         expression = Expression('Answer', operations)
         assert expression.result(None) == '42'
@@ -48,4 +44,10 @@ class TestExpressions:
         assert token.kind == 'operator'
         assert token.value == '*'
         assert token.priority == 2
+
+    def test_round_trip(self):
+        text = '10 * 2 * 2 + 2'
+        rpn = Parser(text).rpn()
+        result = Expression('Ignored', rpn).result(None)
+        assert result == '42'
 
