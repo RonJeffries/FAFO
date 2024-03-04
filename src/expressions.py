@@ -29,13 +29,28 @@ class Parser:
     def __init__(self, expression_string):
         self._expr = expression_string
 
+    def make_tokens(self, lexed_list):
+        return [self.make_token(item) for item in lexed_list]
+
+    def make_token(self, string_item):
+        if string_item in ['*', '/']:
+            return ('operator', string_item, 2)
+        elif string_item in ['+', '-']:
+            return ('operator', string_item, 1)
+        elif string_item[0].isalpha():
+            return ('scope', string_item, None)
+        else:
+            return ('literal', string_item, None)
+
     def parse(self, forward_lexed):
         stack = []
         result = []
         lexed = forward_lexed[::-1]
-        while lexed:
-            item = lexed.pop()
-            if item in ['*']:
+        tokens = self.make_tokens(lexed)
+        while tokens:
+            item = tokens.pop()
+            kind, value, priority = item
+            if kind == 'operator':
                 stack.append(item)
             else:
                 result.append(item)
