@@ -6,7 +6,7 @@ from xset import XSet
 import re
 
 
-def dij(lexed: list):
+def dijkstra(lexed: list):
     priority = {'+': 1, '-': 1, '*': 2}
     stack = []
     output = []
@@ -100,13 +100,13 @@ class TestFunctions:
 
     def test_dijkstra_1(self):
         lexed = ['a123', '+', '37']
-        rpn = dij(lexed)
+        rpn = dijkstra(lexed)
         assert rpn == ['a123', '37', '+']
 
     def test_dijkstra_2(self):
         expr = 'a123 + 37*b17 - c*37.5'
         lexed = ['a123', '+', '37', '*', 'b17', '-', 'c', '*', '37.5']
-        rpn = dij(lexed)
+        rpn = dijkstra(lexed)
         assert rpn == ['a123', '37', 'b17', '*', 'c', '37.5', '*', '-', '+']
 
     def test_int(self):
@@ -114,6 +114,8 @@ class TestFunctions:
             int('1.1')
         with pytest.raises(ValueError):
             int('123abc')
+        assert int(42) == 42
+        assert float(42.42) == 42.42
 
     def test_lambda(self):
         v = 2
@@ -130,7 +132,7 @@ class TestFunctions:
         expr = '10 * 2 + 10 * 2 + 2'
         lexed = lex(expr)
         assert lexed == ['10', '*', '2', '+', '10', '*', '2', '+', '2']
-        rpn = dij(lexed)
+        rpn = dijkstra(lexed)
         assert rpn == ['10', '2', '*', '10', '2', '*', '2', '+', '+']
         result = interpret(rpn)
         assert result == 42
