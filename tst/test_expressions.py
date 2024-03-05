@@ -1,3 +1,5 @@
+import pytest
+
 from expressions import Expression, Parser, Token
 
 
@@ -68,4 +70,15 @@ class TestExpressions:
         rpn = Parser(text).rpn()
         result = Expression('Ignored', rpn).result(None)
         assert result == '42.0'
+
+    def test_too_many_operators(self):
+        text = '2 + - *'
+        rpn = Parser(text).rpn()
+        result = Expression('Ignored', rpn).result(None)
+        assert result == "Too many operators: ['2', '*', '-', '+']"
+
+    def test_lex(self):
+        text = '2 + - *'
+        lexed = Parser(text).lex()
+        assert lexed == ['2', '+', '-', '*']
 

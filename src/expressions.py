@@ -4,6 +4,7 @@ import re
 class Expression:
     def __init__(self, scope, tokens):
         self._scope = scope
+        self._cached_tokens = [t.value for t in tokens]
         self._tokens = tokens[::-1]
         self.handle_assignment()
 
@@ -22,8 +23,11 @@ class Expression:
             if op.kind == 'literal':
                 stack.append(op.value)
             elif op.kind == 'operator':
-                op1 = self.to_number(stack.pop())
-                op2 = self.to_number(stack.pop())
+                try:
+                    op1 = self.to_number(stack.pop())
+                    op2 = self.to_number(stack.pop())
+                except IndexError:
+                    return f'Too many operators: {self._cached_tokens}'
                 match op.value:
                     case '+':
                         res = op1 + op2
@@ -93,7 +97,8 @@ class Parser:
     def lex(self):
         no_space = self._expr.replace(' ', '')
         rx = '([^a-zA-Z0-9.])'
-        return re.split(rx, no_space)
+        split = re.split(rx, no_space)
+        return [item for item in split if item]
 
 
 class Token:
