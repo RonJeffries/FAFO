@@ -41,6 +41,8 @@ class Expression:
                         res = f'Unknown operator{op.value}'
 
                 stack.append(str(res))
+        if len(stack) != 1:
+            return f'operator/operand mismatch: {self._cached_tokens}'
         return stack.pop()
 
     def scope(self):
@@ -95,10 +97,9 @@ class Parser:
         return result
 
     def lex(self):
-        no_space = self._expr.replace(' ', '')
         rx = '([^a-zA-Z0-9.])'
-        split = re.split(rx, no_space)
-        return [item for item in split if item]
+        split = re.split(rx, self._expr)
+        return [item for item in split if item and item != ' ']
 
 
 class Token:

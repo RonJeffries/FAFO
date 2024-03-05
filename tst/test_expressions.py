@@ -77,8 +77,19 @@ class TestExpressions:
         result = Expression('Ignored', rpn).result(None)
         assert result == "Too many operators: ['2', '*', '-', '+']"
 
+    def test_malformed(self):
+        text = '6 7 + 5'
+        rpn = Parser(text).rpn()
+        result = Expression('Ignored', rpn).result(None)
+        assert result == "operator/operand mismatch: ['6', '7', '5', '+']"
+
     def test_lex(self):
         text = '2 + - *'
         lexed = Parser(text).lex()
         assert lexed == ['2', '+', '-', '*']
+
+    def test_lex_2(self):
+        text = 'abc   def  +    5'
+        lexed = Parser(text).lex()
+        assert lexed == ['abc', 'def', '+', '5']
 
