@@ -16,9 +16,6 @@ class Expression:
                 self._tokens = self._tokens[1:-2]
 
     def result(self, record):
-        def to_number(string):
-            return int(string)
-
         stack = []
         while self._tokens:
             op = self._tokens.pop()

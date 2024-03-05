@@ -63,3 +63,9 @@ class TestExpressions:
         result = Expression('Ignored', rpn).result(None)
         assert result == '42'
 
+    def test_float(self):
+        text = '20.5 * 2 + 1'
+        rpn = Parser(text).rpn()
+        result = Expression('Ignored', rpn).result(None)
+        assert result == '42.0'
+
