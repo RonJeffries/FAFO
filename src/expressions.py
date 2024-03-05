@@ -2,20 +2,26 @@ import re
 
 
 class Expression:
-    def __init__(self, scope, operations):
+    def __init__(self, scope, tokens):
         self._scope = scope
-        if operations and operations[-1].value == '=':
-            self._scope = operations[0].value
-            operations = operations[1:-2]
-        self._operations = operations[::-1]
+        self._tokens = tokens[::-1]
+        self.handle_assignment()
+
+    def handle_assignment(self):
+        if self._tokens:
+            initial_token = self._tokens[0]
+            if initial_token.is_assignment():
+                final_token = self._tokens[-1]
+                self._scope = final_token.value
+                self._tokens = self._tokens[1:-2]
 
     def result(self, record):
         def to_number(string):
             return int(string)
 
         stack = []
-        while self._operations:
-            op = self._operations.pop()
+        while self._tokens:
+            op = self._tokens.pop()
             if op.kind == 'literal':
                 stack.append(op.value)
             elif op.kind == 'operator':
@@ -101,4 +107,7 @@ class Token:
 
     def __repr__(self):
         return f'Token({self.kind}, {self.value}, {self.priority})'
+
+    def is_assignment(self):
+        return self.value == '='
 
