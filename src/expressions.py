@@ -4,6 +4,9 @@ import re
 class Expression:
     def __init__(self, scope, operations):
         self._scope = scope
+        if operations and operations[-1].value == '=':
+            self._scope = operations[0].value
+            operations = operations[1:-2]
         self._operations = operations[::-1]
 
     def result(self, record):
@@ -55,6 +58,8 @@ class Parser:
             return Token('operator', string_item, 2)
         elif string_item in ['+', '-']:
             return Token('operator', string_item, 1)
+        elif string_item == '=':
+            return Token('operator', string_item, 0)
         elif string_item[0].isalpha():
             return Token('scope', string_item, None)
         else:

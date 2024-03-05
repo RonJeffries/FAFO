@@ -31,7 +31,19 @@ class TestExpressions:
         text = 'pay * 1.1 + bonus'
         rpn = Parser(text).rpn()
         values = [t.value for t in rpn]
-        assert values == ['pay', '1.1', '*', 'bonus', '+' ]
+        assert values == ['pay', '1.1', '*', 'bonus', '+']
+
+    def test_assignment(self):
+        text = 'four = 3 + 1'
+        rpn = Parser(text).rpn()
+        values = [t.value for t in rpn]
+        assert values == ['four', '3', '1', '+', '=']
+
+    def test_expression_gets_scope(self):
+        text = 'four = 3 + 1'
+        rpn = Parser(text).rpn()
+        expr = Expression('wrong', rpn)
+        assert expr.scope() == 'four'
 
     def test_lexing(self):
         text = '21 * 2'
