@@ -19,31 +19,34 @@ class Expression:
     def result(self, record):
         stack = []
         while self._tokens:
-            op = self._tokens.pop()
-            if op.kind == 'literal':
-                stack.append(op.value)
-            elif op.kind == 'operator':
+            token = self._tokens.pop()
+            if token.kind == 'literal':
+                stack.append(token.value)
+            elif token.kind == 'operator':
                 try:
-                    op1 = self.to_number(stack.pop())
-                    op2 = self.to_number(stack.pop())
+                    arg_1 = self.to_number(stack.pop())
+                    arg_2 = self.to_number(stack.pop())
                 except IndexError:
                     return f'Too many operators: {self._cached_tokens}'
-                match op.value:
-                    case '+':
-                        res = op1 + op2
-                    case '-':
-                        res = op1 - op2
-                    case '*':
-                        res = op1 * op2
-                    case '/':
-                        res = op1 / op2
-                    case _:
-                        res = f'Unknown operator{op.value}'
+                res = self.execute_operation(token, arg_1, arg_2)
 
                 stack.append(str(res))
         if len(stack) != 1:
             return f'operator/operand mismatch: {self._cached_tokens}'
         return stack.pop()
+
+    def execute_operation(self, token, arg_1, arg_2):
+        match token.value:
+            case '+':
+                return arg_1 + arg_2
+            case '-':
+                return arg_1 - arg_2
+            case '*':
+                return arg_1 * arg_2
+            case '/':
+                return arg_1 / arg_2
+            case _:
+                return f'Unknown operator{token.value}'
 
     def scope(self):
         return self._scope
