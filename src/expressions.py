@@ -14,7 +14,7 @@ class Expression:
             if initial_token.is_assignment():
                 final_token = self._tokens[-1]
                 self._scope = final_token.value
-                self._tokens = self._tokens[1:-2]
+                self._tokens = self._tokens[1:-1]
 
     def result(self, record):
         stack = []
@@ -22,6 +22,10 @@ class Expression:
             token = self._tokens.pop()
             if token.kind == 'literal':
                 stack.append(token.value)
+            elif token.kind == 'scope':
+                scope = token.value
+                value = record.get(scope)
+                stack.append(value)
             elif token.kind == 'operator':
                 try:
                     arg_1 = self.to_number(stack.pop())
@@ -29,8 +33,9 @@ class Expression:
                 except IndexError:
                     return f'Too many operators: {self._cached_tokens}'
                 res = self.execute_operation(token, arg_1, arg_2)
-
                 stack.append(str(res))
+            else:
+                return f'Unrecognized token: {token}'
         if len(stack) != 1:
             return f'operator/operand mismatch: {self._cached_tokens}'
         return stack.pop()
@@ -56,7 +61,7 @@ class Expression:
     def to_number(string):
         try:
             return int(string)
-        except ValueError:
+        except (ValueError, TypeError):
             return float(string)
 
 
@@ -118,4 +123,3 @@ class Token:
 
     def is_assignment(self):
         return self.value == '='
-

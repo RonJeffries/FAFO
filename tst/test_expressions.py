@@ -1,6 +1,5 @@
-import pytest
-
 from expressions import Expression, Parser, Token
+from xset import XSet
 
 
 class TestExpressions:
@@ -44,8 +43,12 @@ class TestExpressions:
     def test_expression_gets_scope(self):
         text = 'four = 3 + 1'
         rpn = Parser(text).rpn()
+        tokens = [t.value for t in rpn]
+        assert tokens == ['four', '3', '1', '+', '=']
         expr = Expression('wrong', rpn)
         assert expr.scope() == 'four'
+        adjusted_tokens = [t.value for t in expr._tokens]
+        assert adjusted_tokens == ['+', '1', '3']
 
     def test_lexing(self):
         text = '21 * 2'
@@ -93,3 +96,14 @@ class TestExpressions:
         lexed = Parser(text).lex()
         assert lexed == ['abc', 'def', '+', '5']
 
+    def test_record(self):
+        text = 'pay = salary + bonus'
+        rpn = Parser(text).rpn()
+        print()
+        print("rpn", rpn)
+        record = XSet.from_tuples((('10000', 'salary'), ('2345', 'bonus')))
+        assert record.get('salary') == '10000'
+        expr = Expression('ignored', rpn)
+        assert expr.scope() == 'pay'
+        result = expr.result(record)
+        assert result == '12345'
