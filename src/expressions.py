@@ -25,6 +25,8 @@ class Expression:
             elif token.kind == 'scope':
                 scope = token.value
                 value = record.get(scope)
+                if not value:
+                    return f'Record has no scope: {scope}'
                 stack.append(value)
             elif token.kind == 'operator':
                 try:
@@ -62,7 +64,10 @@ class Expression:
         try:
             return int(string)
         except (ValueError, TypeError):
-            return float(string)
+            try:
+                return float(string)
+            except (ValueError, TypeError):
+                return 0
 
 
 class Parser:

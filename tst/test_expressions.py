@@ -107,3 +107,15 @@ class TestExpressions:
         assert expr.scope() == 'pay'
         result = expr.result(record)
         assert result == '12345'
+
+    def test_scope_not_in_record(self):
+        text = 'pay = salary + bogus'
+        rpn = Parser(text).rpn()
+        print()
+        print("rpn", rpn)
+        record = XSet.from_tuples((('10000', 'salary'), ('2345', 'bonus')))
+        assert record.get('salary') == '10000'
+        expr = Expression('ignored', rpn)
+        assert expr.scope() == 'pay'
+        result = expr.result(record)
+        assert result == 'Record has no scope: bogus'
