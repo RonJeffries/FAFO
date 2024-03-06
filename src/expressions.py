@@ -35,7 +35,8 @@ class Expression:
             return f'operator/operand mismatch: {self._cached_tokens}'
         return stack.pop()
 
-    def execute_operation(self, token, arg_1, arg_2):
+    @staticmethod
+    def execute_operation(token, arg_1, arg_2):
         match token.value:
             case '+':
                 return arg_1 + arg_2
@@ -51,7 +52,8 @@ class Expression:
     def scope(self):
         return self._scope
 
-    def to_number(self, string):
+    @staticmethod
+    def to_number(string):
         try:
             return int(string)
         except ValueError:
