@@ -8,13 +8,7 @@ from xset import XSet
 class XCalculation(XImplementation):
     def __init__(self, base_set, expressions):
         self.base = base_set
-        self.expressions = []
-        for expr in expressions:
-            rpn = Parser(expr).rpn()
-            calc = Expression(None, rpn)
-            tokens = [t.value for t in calc._tokens]
-            print(calc.scope(), tokens)
-            self.expressions.append(calc)
+        self.expressions = [Expression(None, Parser(expr).rpn()) for expr in expressions]
 
     def __iter__(self):
         for record, record_scope in self.base:
