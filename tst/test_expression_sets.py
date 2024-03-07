@@ -24,8 +24,7 @@ class XCalculation(XImplementation):
 
     def create_calculated_values(self, record):
         calculated = [(calc.result(record), calc.scope()) for calc in self.expressions]
-        all_results = XSet.from_tuples(calculated)
-        return all_results
+        return XSet.from_tuples(calculated)
 
     def __hash__(self):
         return hash(self.base)
