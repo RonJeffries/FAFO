@@ -8,14 +8,18 @@ from xset import XSet
 class XCalculation(XImplementation):
     def __init__(self, base_set, expressions):
         self.base = base_set
-        self.expressions = expressions
+        self.expressions = []
+        for expr in expressions:
+            rpn = Parser(expr).rpn()
+            calc = Expression(None, rpn)
+            tokens = [t.value for t in calc._tokens]
+            print(calc.scope(), tokens)
+            self.expressions.append(calc)
 
     def __iter__(self):
         for record, s in self.base:
             calculated = []
-            for expr in self.expressions:
-                rpn = Parser(expr).rpn()
-                calc = Expression(None, rpn)
+            for calc in self.expressions:
                 value = calc.result(record)
                 calculated.append((value, calc.scope()))
             all_results = XSet.from_tuples(calculated)
@@ -46,13 +50,6 @@ class TestExpressionSets:
         r2 = result[2]
         tp2 = r2['totalpay']
         assert tp2 == '54321'
-
-    def test_x_calculation(self):
-        expression = 'totalpay = salary + bonus'
-        data = XSet.n_tuple(["a", "b"])
-        x_calc = XCalculation(data, [expression])
-        assert x_calc.base == data
-        assert expression in x_calc.expressions
 
     def test_x_calculation_iter(self):
         p1 = XSet.from_tuples((('joe', 'name'),('10000', 'salary'), ('2345', 'bonus')))

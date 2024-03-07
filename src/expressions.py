@@ -18,8 +18,11 @@ class Expression:
 
     def result(self, record):
         stack = []
-        while self._tokens:
-            token = self._tokens.pop()
+        working_tokens = [t for t in self._tokens]
+        if not working_tokens:
+            return 'Empty expression'
+        while working_tokens:
+            token = working_tokens.pop()
             if token.kind == 'literal':
                 stack.append(token.value)
             elif token.kind == 'scope':
