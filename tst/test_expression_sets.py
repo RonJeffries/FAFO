@@ -17,14 +17,15 @@ class XCalculation(XImplementation):
             self.expressions.append(calc)
 
     def __iter__(self):
-        for record, s in self.base:
-            calculated = []
-            for calc in self.expressions:
-                value = calc.result(record)
-                calculated.append((value, calc.scope()))
-            all_results = XSet.from_tuples(calculated)
-            full_record = record.union(all_results)
-            yield full_record, s
+        for record, record_scope in self.base:
+            calculated_values = self.create_calculated_values(record)
+            full_record = record.union(calculated_values)
+            yield full_record, record_scope
+
+    def create_calculated_values(self, record):
+        calculated = [(calc.result(record), calc.scope()) for calc in self.expressions]
+        all_results = XSet.from_tuples(calculated)
+        return all_results
 
     def __hash__(self):
         return hash(self.base)
