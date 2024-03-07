@@ -41,24 +41,6 @@ class XFlat(XImplementation):
         return field_definitions
 
 
-# unused
-class XFlatFileIterator:
-    def __init__(self, flat_file, generator):
-        self.file = flat_file
-        self.scope_gen = generator
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        _element, scope = next(self.scope_gen)
-        element_tuple = (rec := self.file.element_at(scope), scope)
-        if rec is None:
-            raise StopIteration
-        else:
-            return element_tuple
-
-
 class XFlatFile(XImplementation):
     def __init__(self, file_path, fields, scope_set=None):
         self.file_path = file_path
