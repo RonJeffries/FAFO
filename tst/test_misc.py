@@ -101,3 +101,8 @@ class TestMisc:
 
     def test_type_string(self):
         assert type("ethel") is not int
+
+    def test_how_in_fails(self):
+        x = 37
+        with pytest.raises(TypeError):
+            assert 5 in x

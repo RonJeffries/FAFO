@@ -103,10 +103,7 @@ class XSet:
     def includes(self, element, scope) -> bool:
         if scope is None:
             scope = self.null
-        try:
-            return (element, scope) in self.implementation
-        except NotImplementedError:
-            return any(e == element and s == scope for e, s in self)
+        return (element, scope) in self.implementation
 
     def intersect(self, other):
         return XSet.from_tuples((e, s) for e, s in self if other.includes(e, s))

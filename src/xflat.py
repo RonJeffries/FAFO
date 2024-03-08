@@ -10,15 +10,6 @@ class XFlat(XImplementation):
         self.fields = fields
         self.record = record
 
-    def __contains__(self, item):
-        element, scope = item
-        for symbol, start, end in self.fields:
-            if symbol == scope:
-                field = self.record[start:end].strip()
-                if field == element:
-                    return True
-        return False
-
     def __iter__(self):
         for symbol, start, end in self.fields:
             yield self.record[start:end].strip(), symbol
@@ -52,7 +43,7 @@ class XFlatFile(XImplementation):
 
     def __contains__(self, item):
         if self.scope_set is not None:
-            raise NotImplementedError
+            return any(es == item for es in self)
         de, ds = item
         return de == self.element_at(ds)
 
