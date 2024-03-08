@@ -152,6 +152,23 @@ class TestXFlat:
         amy = ff_set.select(lambda e, s: s == 1 and e.includes('amy', 'first'))
         assert len(amy) == 1
 
+    def test_uses_named_scope(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        scopes = XSet.from_tuples(((107, "amy"), (932, "janet")))
+        ff = XFlatFile(path, fields, scopes)
+        ff_set = XSet(ff)
+        assert len(ff_set) == 2
+        e, s = ff_set.select(lambda e, s: s == "amy").pop()
+        assert e.includes('amy', 'first')
+        assert any(s == 'amy' and e.includes('amy', 'first') for e,s in ff_set)
+        assert any(s == 'janet' and e.includes('janet', 'first') for e,s in ff_set)
+        assert all(e.includes('amy', 'first') for e,s in ff_set if s == 'amy')
+        assert all(e.includes('janet', 'first') for e,s in ff_set if s == 'janet')
+        amy = ff_set.select(lambda e, s: s == 'amy' and e.includes('amy', 'first'))
+        assert len(amy) == 1
+
+
     def test_re_scope(self):
         path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
