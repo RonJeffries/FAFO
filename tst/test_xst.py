@@ -359,6 +359,13 @@ class TestXST:
         assert c == XSet.null
         assert c.pop() == (None, None)
 
+    def test_n_tuple_produces_elements_in_order(self):
+        s = XSet.n_tuple(['a', 'b', 'c'])
+        it = iter(s)
+        assert next(it) == ('a', 1)
+        assert next(it) == ('b', 2)
+        assert next(it) == ('c', 3)
+
     def test_tuples_from_set(self):
         s = XSet.n_tuple(['a', 'b', 'c'])
         try:
@@ -371,35 +378,18 @@ class TestXST:
             pass
         a, b, c = s
         a_e, a_s = a
-        assert a_e in ['a', 'b', 'c']
-        assert a_s in [1, 2, 3]
+        assert a_e == 'a'
+        assert a_s == 1
 
     def test_tuple_split(self):
         s = XSet.n_tuple(['a', 'b', 'c'])
         (a0, a1), (b0, b1), (c0, c1) = s
-        assert a0 in ['a', 'b', 'c']
-        assert b0 in ['a', 'b', 'c']
-        assert c0 in ['a', 'b', 'c']
+        assert a0 == 'a'
+        assert b0 == 'b'
+        assert c0 == 'c'
 
     def test_n_tuple_string(self):
         n = XSet.n_tuple(['a', 'b', 'c'])
         output = [f'{e}^{s}' for e, s in n]
         result = ', '.join(output)
-        # This result relies on a fact not in evidence,
-        # namely that an n_tuple produces its elements in numeric order.
-        # If this fails ... what should we do? I do not know. R: 20240309
         assert result == 'a^1, b^2, c^3'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
