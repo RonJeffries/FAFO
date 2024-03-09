@@ -332,8 +332,10 @@ class TestXST:
 
     def test_subscripting(self):
         x = XSet.from_tuples((("a", 1), ("b", 2)))
-        with pytest.raises(TypeError):
-            e, s = x[0]  # must implement getitem for this to work
+        e = x[1]
+        assert e == 'a'
+        e = x[0]
+        assert e is None
 
     def test_list(self):
         x = XSet.from_tuples((("a", 1),))
@@ -383,6 +385,9 @@ class TestXST:
         n = XSet.n_tuple(['a', 'b', 'c'])
         output = [f'{e}^{s}' for e, s in n]
         result = ', '.join(output)
+        # This result relies on a fact not in evidence,
+        # namely that an n_tuple produces its elements in numeric order.
+        # If this fails ... what should we do? I do not know. R: 20240309
         assert result == 'a^1, b^2, c^3'
 
 
