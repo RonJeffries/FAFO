@@ -393,3 +393,4 @@ class TestXST:
         output = [f'{e}^{s}' for e, s in n]
         result = ', '.join(output)
         assert result == 'a^1, b^2, c^3'
+
