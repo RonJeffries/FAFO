@@ -394,3 +394,8 @@ class TestXST:
         result = ', '.join(output)
         assert result == 'a^1, b^2, c^3'
 
+    def test_n_tuple_as_list(self):
+        n = XSet.n_tuple(['a', 'b', 'c'])
+        tuples = list(n)
+        assert tuples == [('a', 1), ('b', 2), ('c', 3)]
+
