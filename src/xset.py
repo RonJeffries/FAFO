@@ -146,7 +146,7 @@ class XSet:
             return self.generic_re_scope(other)
 
     def generic_re_scope(self, other):
-        tuples = [(e, new) for e, s in self for old, new in other if old == s]
+        tuples = ((e, new) for e, s in self for old, new in other if old == s)
         return XSet.from_tuples(tuples)
 
     def restrict(self, restrictor) -> Self:
