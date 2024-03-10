@@ -146,12 +146,8 @@ class XSet:
             return self.generic_re_scope(other)
 
     def generic_re_scope(self, other):
-        sb = SetBuilder()
-        for e, s in self:
-            for old, new in other:
-                if old == s:
-                    sb.put(e, new)
-        return sb.set()
+        tuples = [(e, new) for e, s in self for old, new in other if old == s]
+        return XSet.from_tuples(tuples)
 
     def restrict(self, restrictor) -> Self:
         def other_has_match(e, s):
