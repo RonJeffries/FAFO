@@ -115,7 +115,7 @@ class Parser:
         return result
 
     def lex(self):
-        rx = '([^a-zA-Z0-9.])'
+        rx = '([^a-zA-Z0-9._])'
         split = re.split(rx, self._expr)
         return [item for item in split if item and item != ' ']
 

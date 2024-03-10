@@ -109,14 +109,14 @@ class TestExpressions:
         assert result == '12345'
 
     def test_twice(self):
-        text = 'pay = salary + bonus'
+        text = 'total_pay = salary + bonus'
         rpn = Parser(text).rpn()
         print()
         print("rpn", rpn)
         record = XSet.from_tuples((('10000', 'salary'), ('2345', 'bonus')))
         assert record.get('salary') == '10000'
         expr = Expression('ignored', rpn)
-        assert expr.scope() == 'pay'
+        assert expr.scope() == 'total_pay'
         result = expr.result(record)
         assert result == '12345'
         result = expr.result(record)
