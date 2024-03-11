@@ -50,3 +50,13 @@ class TestXSelect:
         assert next(it) == ('dxef', 2)
         assert next(it) == ('xyz', 4)
 
+    def test_through_XSet(self):
+        source = XSet.n_tuple(('abc', 'dxef', 'ghi', 'xyz'))
+        sel1 = XSet.from_tuples((('dxef', 2), ))
+        sel2 = XSet.from_tuples((('xyz', 4), ))
+        sub1 = source.x_select(lambda e, s: (e, s) in sel1)
+        sub2 = source.x_select(lambda e, s: (e, s) in sel2)
+        result = sub1 | sub2
+        assert ('dxef', 2) in result
+        assert ('xyz', 4) in result
+

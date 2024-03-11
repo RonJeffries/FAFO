@@ -1,6 +1,5 @@
 from typing import Self
 
-from set_builder import SetBuilder
 from xfrozen import XFrozen
 from ximpl import XImplementation
 from xtuple import XTuple
@@ -163,6 +162,11 @@ class XSet:
     def select(self, cond) -> Self:
         tuples = ((e, s) for e, s in self if cond(e, s))
         return XSet.from_tuples(tuples)
+
+    def x_select(self, cond) -> Self:
+        from test_x_select import XSelect
+        x_sel = XSelect(self, cond)
+        return XSet(x_sel)
 
     def sym_diff(self, other):
         return (self - other) | (other - self)
