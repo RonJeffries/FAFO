@@ -168,8 +168,8 @@ class XSet:
         return (self - other) | (other - self)
 
     def union(self, other):
-        mine = set((e, s) for e, s in self)
-        others = set((e, s) for e, s in other)
+        mine = set(tup for tup in self)
+        others = set(tup for tup in other)
         both = mine | others
         return XSet.from_tuples(both)
 
