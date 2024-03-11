@@ -159,8 +159,7 @@ class XSet:
         """
         rename scopes of this set per (old, new) tuples
         this is re_scope //, not \\
-        Note: only scopes named in the set will be returned.
-        Unmentioned scopes are removed.
+        Note: scopes not mentioned are left alone, per `convert_rename_to_re_scope`.
         :param old_to_new_re_scope_set:
         :return: this set with scopes renamed as shown.
         """
