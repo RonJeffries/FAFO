@@ -137,6 +137,14 @@ class XSet:
         return next(it, (None, None))
 
     def project(self, field_selector: Self) -> Self:
+        """
+        given a set of "records", sets of elements containing "fields",
+        modeled as (value, name) = (element, scope),
+        return a classical set containing "records" including only
+        the field names (scopes) mentioned in the field-selector
+        :param field_selector: list of names to retain
+        :return:classical set of records containing only the original elements at those names.
+        """
         projector = XSet.from_tuples([(e, e) for e, _ignored in field_selector])
         projected = (record_element.re_scope(projector)
                      for record_element, record_scope in self)
