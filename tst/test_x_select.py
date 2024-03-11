@@ -1,4 +1,3 @@
-from set_builder import SetBuilder
 from ximpl import XImplementation
 from xset import XSet
 
@@ -31,7 +30,7 @@ class TestXSelect:
         assert 3 == 3
 
     def test_plain_select(self):
-        def cond(e, s):
+        def cond(e, _s):
             return 'x' in e
 
         source = XSet.n_tuple(('abc', 'dxef', 'ghi', 'xyz'))
@@ -40,7 +39,7 @@ class TestXSelect:
         assert selected[4] == 'xyz'
 
     def test_x_select(self):
-        def cond(e, s):
+        def cond(e, _s):
             return 'x' in e
 
         source = XSet.n_tuple(('abc', 'dxef', 'ghi', 'xyz'))
@@ -61,10 +60,10 @@ class TestXSelect:
         assert ('xyz', 4) in result
 
     def test_cascade(self):
-        def even(e, s):
+        def even(e, _s):
             return e%2 == 0
 
-        def fiveish(e, s):
+        def fiveish(e, _s):
             return e%5 == 0
 
         source = XSet.classical_set(range(21))
