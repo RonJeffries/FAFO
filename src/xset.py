@@ -137,11 +137,6 @@ class XSet:
         return next(it, (None, None))
 
     def project(self, field_selector: Self) -> Self:
-        """
-        produce a set from self containing only selected fields (scopes).
-        :param field_selector: set of field names to be selected as scopes
-        :return: set of records (sets) containing only the scopes listed in field_selector
-        """
         projector = XSet.from_tuples([(e, e) for e, _ignored in field_selector])
         projected = (record_element.re_scope(projector)
                      for record_element, record_scope in self)

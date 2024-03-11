@@ -37,7 +37,7 @@ class TestXSelect:
 
     def test_x_select(self):
         source = XSet.n_tuple(('abc', 'dxef', 'ghi', 'xyz'))
-        x_select = XSelect(source, )
+        x_select = XSelect(source, lambda e, _s: 'x' in e)
         assert len(x_select) == 2
         it = iter(x_select)
         assert next(it) == ('dxef', 2)
