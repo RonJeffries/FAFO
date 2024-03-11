@@ -120,8 +120,8 @@ class XSet:
 
     def project(self, field_selector: Self) -> Self:
         projector = XSet.from_tuples([(e, e) for e, _ignored in field_selector])
-        projected = [record_element.re_scope(projector)
-                     for record_element, record_scope in self]
+        projected = (record_element.re_scope(projector)
+                     for record_element, record_scope in self)
         return XSet.classical_set(projected)
 
     def rename(self, old_to_new_re_scope_set: Self):
