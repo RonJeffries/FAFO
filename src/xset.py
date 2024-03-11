@@ -82,6 +82,11 @@ class XSet:
         return len(self)
 
     def diff(self, other):
+        """
+        set difference or relative complement
+        :param other: any set
+        :return: self - other
+        """
         mine = set((e, s) for e, s in self)
         others = set((e, s) for e, s in other)
         remaining = mine - others
