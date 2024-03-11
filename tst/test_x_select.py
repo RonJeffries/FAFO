@@ -60,3 +60,16 @@ class TestXSelect:
         assert ('dxef', 2) in result
         assert ('xyz', 4) in result
 
+    def test_cascade(self):
+        def even(e, s):
+            return e%2 == 0
+
+        def fiveish(e, s):
+            return e%5 == 0
+
+        source = XSet.classical_set(range(21))
+        fives = source.x_select(fiveish)
+        even_fives = fives.x_select(even)
+        expected = XSet.classical_set((0, 10, 20))
+        assert even_fives == expected
+
