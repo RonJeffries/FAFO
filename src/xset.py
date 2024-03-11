@@ -156,6 +156,14 @@ class XSet:
         return XSet.classical_set(projected)
 
     def rename(self, old_to_new_re_scope_set: Self):
+        """
+        rename scopes of this set per (old, new) tuples
+        this is re_scope //, not \\
+        Note: only scopes named in the set will be returned.
+        Unmentioned scopes are removed.
+        :param old_to_new_re_scope_set:
+        :return: this set with scopes renamed as shown.
+        """
         # renames this set, not its contents sets
         complete_re_scope = self.convert_rename_to_re_scope(old_to_new_re_scope_set)
         return self.re_scope(complete_re_scope)
