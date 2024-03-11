@@ -161,7 +161,7 @@ class XSet:
         return XSet.from_tuples((s, s) for e, s in self)
 
     def select(self, cond) -> Self:
-        tuples = list((e, s) for e, s in self if cond(e, s))
+        tuples = ((e, s) for e, s in self if cond(e, s))
         return XSet.from_tuples(tuples)
 
     def sym_diff(self, other):
