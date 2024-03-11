@@ -30,20 +30,14 @@ class TestXSelect:
         assert 3 == 3
 
     def test_plain_select(self):
-        def cond(e, _s):
-            return 'x' in e
-
         source = XSet.n_tuple(('abc', 'dxef', 'ghi', 'xyz'))
-        selected = source.select(cond)
+        selected = source.select(lambda e, _s: 'x' in e)
         assert selected[2] == 'dxef'
         assert selected[4] == 'xyz'
 
     def test_x_select(self):
-        def cond(e, _s):
-            return 'x' in e
-
         source = XSet.n_tuple(('abc', 'dxef', 'ghi', 'xyz'))
-        x_select = XSelect(source, cond)
+        x_select = XSelect(source, )
         assert len(x_select) == 2
         it = iter(x_select)
         assert next(it) == ('dxef', 2)
