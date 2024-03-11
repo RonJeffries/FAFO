@@ -88,18 +88,34 @@ class XSet:
         return XSet.from_tuples(remaining)
 
     def element_set(self):
+        """
+        See also scope_set
+        """
         return XSet.from_tuples((e, e) for e, s in self)
 
     def excludes(self, element, scope) -> bool:
         return not self.includes(element, scope)
 
     def get(self, scope):
+        """
+        Returns an arbitrary element whose scope is the one provided,
+        or None if none exists
+        :param scope: any scope
+        :return: an element from the set at that scope or None
+        """
         for e, s in self:
             if s == scope:
                 return e
         return None
 
     def includes(self, element, scope) -> bool:
+        """
+        Answer whether element is an element at scope in self.
+        supplies null set as scope if not provided, as a convenience.
+        :param element: any element
+        :param scope: any scope or None -> XSet.null
+        :return: True if element is in the set at the provided scope, else False
+        """
         if scope is None:
             scope = self.null
         return (element, scope) in self.implementation
@@ -114,6 +130,9 @@ class XSet:
             return NotImplemented
 
     def pop(self):
+        """
+        Return any element-scope tuple that is in the set, (None, None) if empty.
+        """
         it = iter(self)
         return next(it, (None, None))
 
@@ -157,6 +176,9 @@ class XSet:
         return self.select(other_has_match)
 
     def scope_set(self):
+        """
+        see also element_set
+        """
         return XSet.from_tuples((s, s) for e, s in self)
 
     def select(self, cond) -> Self:
