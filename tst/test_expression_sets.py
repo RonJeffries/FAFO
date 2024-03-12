@@ -12,12 +12,14 @@ class TestExpressionSets:
         personnel = XSet.n_tuple((p1, p2))
         total = 'total_pay = salary + bonus'
         result = personnel.calculate([total])
-        r1 = result[1]
-        tp1 = r1['total_pay']
-        assert tp1 == '12345'
-        r2 = result[2]
-        tp2 = r2['total_pay']
-        assert tp2 == '54321'
+        joe_rec = result[1]
+        assert joe_rec['name'] == 'joe'
+        assert joe_rec['total_pay'] == '12345'
+        assert joe_rec['double'] == '4690'
+        sam_rec = result[2]
+        assert sam_rec['name'] == 'sam'
+        assert sam_rec['total_pay'] == '54321'
+        assert sam_rec['double'] == '8040'
 
     def test_x_calculation_iter(self):
         p1 = XSet.from_tuples((('joe', 'name'),('10000', 'salary'), ('2345', 'bonus')))
