@@ -113,3 +113,5 @@ class TestMisc:
         assert vec_without_ends == '123.45,678,91.3'
         xyz = vec_without_ends.split(',')
         assert xyz == ['123.45', '678', '91.3']
+        floats = list(map(float, xyz))
+        assert floats == [123.45, 678.0, 91.3]
