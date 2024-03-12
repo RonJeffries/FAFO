@@ -34,6 +34,7 @@ class XFlat(XImplementation):
 
 class XFlatFile(XImplementation):
     read_count = 0
+
     def __init__(self, file_path, fields, scope_set=None):
         self.file_path = file_path
         self.full_file_path = expanduser(file_path)
