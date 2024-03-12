@@ -1,17 +1,17 @@
 import pytest
 
-from st.expressions import XCalculation
+from expressions import XCalculation
 from xset import XSet
 
 
 class TestExpressionSets:
-    @pytest.mark.skip("later")
     def test_total_pay(self):
         p1 = XSet.from_tuples((('joe', 'name'),('10000', 'salary'), ('2345', 'bonus')))
         p2 = XSet.from_tuples((('sam', 'name'),('50301', 'salary'), ('4020', 'bonus')))
         personnel = XSet.n_tuple((p1, p2))
         total = 'total_pay = salary + bonus'
-        result = personnel.calculate([total])
+        double = 'double = bonus * 2'
+        result = personnel.calculate([total, double])
         joe_rec = result[1]
         assert joe_rec['name'] == 'joe'
         assert joe_rec['total_pay'] == '12345'

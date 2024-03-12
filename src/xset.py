@@ -78,6 +78,11 @@ class XSet:
         assert isinstance(other, self.__class__)
         return self.sym_diff(other)
 
+    def calculate(self, expressions):
+        from expressions import XCalculation
+        x_calc = XCalculation(self, expressions)
+        return XSet(x_calc)
+
     def cardinality(self):
         return len(self)
 
@@ -205,6 +210,10 @@ class XSet:
         from test_x_select import XSelect
         x_sel = XSelect(self, cond)
         return XSet(x_sel)
+
+    def old_select(self, cond) -> Self:
+        tuples = ((e, s) for e, s in self if cond(e, s))
+        return XSet.from_tuples(tuples)
 
     def sym_diff(self, other):
         return (self - other) | (other - self)

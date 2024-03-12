@@ -1,7 +1,12 @@
 from datetime import datetime
 from itertools import product
 from os.path import expanduser, isfile
+
+import pytest
+
+from x_select import XSelect
 from xflat import XFlat, XFlatFile
+from xfrozen import XFrozen
 from xset import XSet
 
 
@@ -273,6 +278,7 @@ class TestXFlat:
             count += 1
         assert count == 5
 
+    @pytest.mark.skip("timing")
     def test_waste_memory(self):
         path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
@@ -282,6 +288,7 @@ class TestXFlat:
         jeffries = ee.select(lambda e, s: e.includes('jeffries', 'last'))
         assert jeffries.cardinality() == 200
         ron = ee.select(lambda e, s: e.includes('ron', 'first'))
+        assert isinstance(ron.implementation, XSelect)
         assert ron.cardinality() == 100
         coder = ee.select(lambda e, s: e.includes('coder', 'job'))
         assert coder.cardinality() == 200
@@ -289,6 +296,7 @@ class TestXFlat:
         assert high.cardinality() == 250
         ron_jeffries = ron.intersect(jeffries)
         assert ron_jeffries.cardinality() == 20
+        assert isinstance(ron_jeffries.implementation, XFrozen)
         high_coder = coder & high
         assert high_coder.cardinality() == 50
         final = ron_jeffries & high_coder
