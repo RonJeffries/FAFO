@@ -33,6 +33,7 @@ class XFlat(XImplementation):
 
 
 class XFlatFile(XImplementation):
+    read_count = 0
     def __init__(self, file_path, fields, scope_set=None):
         self.file_path = file_path
         self.full_file_path = expanduser(file_path)
@@ -79,6 +80,7 @@ class XFlatFile(XImplementation):
     def get_record(self, index):
         seek_address = index*self.record_length
         with open(self.full_file_path, "r") as f:
+            self.__class__.read_count += 1
             f.seek(seek_address)
             rec = f.read(self.record_length)
         return rec

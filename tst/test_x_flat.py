@@ -280,6 +280,7 @@ class TestXFlat:
 
     @pytest.mark.skip("timing")
     def test_waste_memory(self):
+        XFlatFile.read_count = 0
         path = '~/Desktop/job_db'
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
@@ -307,6 +308,7 @@ class TestXFlat:
         assert employee.includes('ron', 'first')
         assert employee.includes('coder', 'job')
         assert employee.includes('12000', 'pay')
+        assert XFlatFile.read_count == 261746
 
     def test_do_not_waste_memory(self):
         path = '~/Desktop/job_db'
