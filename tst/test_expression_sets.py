@@ -36,28 +36,28 @@ class TestExpressionSets:
         p1 = XSet.from_tuples((('joe', 'name'),('10000', 'salary'), ('2345', 'bonus')))
         p2 = XSet.from_tuples((('sam', 'name'),('50301', 'salary'), ('4020', 'bonus')))
         personnel = XSet.n_tuple((p1, p2))
-        total = 'totalpay = salary + bonus'
+        total = 'total_pay = salary + bonus'
         result = personnel.calculate([total])
         r1 = result[1]
-        tp1 = r1['totalpay']
+        tp1 = r1['total_pay']
         assert tp1 == '12345'
         r2 = result[2]
-        tp2 = r2['totalpay']
+        tp2 = r2['total_pay']
         assert tp2 == '54321'
 
     def test_x_calculation_iter(self):
         p1 = XSet.from_tuples((('joe', 'name'),('10000', 'salary'), ('2345', 'bonus')))
         p2 = XSet.from_tuples((('sam', 'name'),('50301', 'salary'), ('4020', 'bonus')))
         personnel = XSet.n_tuple((p1, p2))
-        total = 'totalpay = salary + bonus'
+        total = 'total_pay = salary + bonus'
         double = 'double = bonus * 2'
         x_calc = XCalculation(personnel, [total, double])
         for e, s in x_calc:
             if s == 1:
                 assert e['name'] == 'joe'
-                assert e['totalpay'] == '12345'
+                assert e['total_pay'] == '12345'
                 assert e['double'] == '4690'
             elif s == 2:
                 assert e['name'] == 'sam'
-                assert e['totalpay'] == '54321'
+                assert e['total_pay'] == '54321'
                 assert e['double'] == '8040'
