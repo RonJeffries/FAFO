@@ -106,3 +106,10 @@ class TestMisc:
         x = 37
         with pytest.raises(TypeError):
             assert 5 in x
+
+    def test_parse_vector(self):
+        vec = '<123.45,678,91.3>'
+        vec_without_ends = vec[1:-1]
+        assert vec_without_ends == '123.45,678,91.3'
+        xyz = vec_without_ends.split(',')
+        assert xyz == ['123.45', '678', '91.3']
