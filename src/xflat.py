@@ -57,6 +57,7 @@ class XFlatFile(XImplementation):
 
         it = iter(self.scope_set) if self.scope_set else lots()
         for old_scope, new_scope in it:
+            print("getting record", old_scope)
             rec = self.element_at(old_scope)
             if rec is None:
                 return

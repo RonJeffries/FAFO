@@ -1,5 +1,3 @@
-import pytest
-
 from expressions import XCalculation
 from xset import XSet
 
