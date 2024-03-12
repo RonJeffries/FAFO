@@ -21,8 +21,8 @@ class TestXSelect:
         source = XSet.n_tuple(('abc', 'dxef', 'ghi', 'xyz'))
         sel1 = XSet.from_tuples((('dxef', 2), ))
         sel2 = XSet.from_tuples((('xyz', 4), ))
-        sub1 = source.x_select(lambda e, s: (e, s) in sel1)
-        sub2 = source.x_select(lambda e, s: (e, s) in sel2)
+        sub1 = source.select(lambda e, s: (e, s) in sel1)
+        sub2 = source.select(lambda e, s: (e, s) in sel2)
         result = sub1 | sub2
         assert ('dxef', 2) in result
         assert ('xyz', 4) in result
@@ -35,8 +35,8 @@ class TestXSelect:
             return e%5 == 0
 
         source = XSet.classical_set(range(21))
-        fives = source.x_select(fiveish)
-        even_fives = fives.x_select(even)
+        fives = source.select(fiveish)
+        even_fives = fives.select(even)
         expected = XSet.classical_set((0, 10, 20))
         assert even_fives == expected
 
