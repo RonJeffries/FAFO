@@ -35,15 +35,18 @@ class XFlat(XImplementation):
 class XFlatFile(XImplementation):
     read_count = 0
 
-    def __init__(self, file_path, fields, scope_set=None):
+    def __init__(self, file_path, fields, scope_set=None, buffer=None):
         self.file_path = file_path
         self.full_file_path = expanduser(file_path)
         self.fields = fields
         field_def = self.fields[-1]
         self.record_length = field_def[-1]
         self.scope_set = scope_set
-        with open(self.full_file_path, "r") as f:
-            self.buffer = f.read()
+        if buffer is None:
+            with open(self.full_file_path, "r") as f:
+                self.buffer = f.read()
+        else:
+            self.buffer = buffer
 
     def __contains__(self, item):
         if self.scope_set is not None:
@@ -111,7 +114,7 @@ class XFlatFile(XImplementation):
         re_scoping_set = self.validate_scope_set(re_scoping_set)
         if len(re_scoping_set) == 0:
             return XSet.null
-        new_impl = self.__class__(self.full_file_path, self.fields, re_scoping_set)
+        new_impl = self.__class__(self.full_file_path, self.fields, re_scoping_set, self.buffer)
         return XSet(new_impl)
 
     def validate_scope_set(self, re_scoping_set):
