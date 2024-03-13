@@ -74,8 +74,7 @@ class XFlatFile(XImplementation):
         return self.file_length_in_records()
 
     def file_length_in_records(self):
-        file_length = stat(self.full_file_path).st_size
-        return int(file_length / self.record_length)
+        return int(len(self.buffer) / self.record_length)
 
     def __repr__(self):
         return f'XFlatFile({self.file_path})'

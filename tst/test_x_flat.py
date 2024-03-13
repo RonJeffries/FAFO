@@ -352,6 +352,7 @@ class TestXFlat:
         fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
         ff = XFlatFile(path, fields)
         assert len(ff.buffer) == 44000
+        assert len(ff) == 1000
 
 
 
