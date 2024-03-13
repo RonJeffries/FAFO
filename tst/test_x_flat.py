@@ -346,6 +346,35 @@ class TestXFlat:
             assert person.includes('jeffries', 'last_name')
             break
 
+    def test_full_read(self):
+        new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        assert len(ff.buffer) == 44000
+
+
+
+    @pytest.mark.skip("timing")
+    def test_memory_capacity(self):
+        XFlatFile.read_count = 0
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        ee = XSet(ff)
+        records = []
+        for t in ee:
+            records.append(t)
+        many = []
+        times = 1_000_000
+        for copy in range(times):
+            for t in records:
+                many.append(t)
+        assert len(many) == times*len(records)
+        assert len(many) == 1_000_000_000
+        many_set = XSet.n_tuple(many)
+        assert many_set.cardinality() == 1_000_000_000
+
 
     # def test_100_thousand(self):
     #     path = '~/Desktop/job_db'

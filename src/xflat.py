@@ -42,6 +42,8 @@ class XFlatFile(XImplementation):
         field_def = self.fields[-1]
         self.record_length = field_def[-1]
         self.scope_set = scope_set
+        with open(self.full_file_path, "r") as f:
+            self.buffer = f.read()
 
     def __contains__(self, item):
         if self.scope_set is not None:
@@ -58,7 +60,6 @@ class XFlatFile(XImplementation):
 
         it = iter(self.scope_set) if self.scope_set else lots()
         for old_scope, new_scope in it:
-            print("getting record", old_scope)
             rec = self.element_at(old_scope)
             if rec is None:
                 return
