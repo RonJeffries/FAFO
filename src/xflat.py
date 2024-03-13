@@ -81,11 +81,10 @@ class XFlatFile(XImplementation):
 
     def get_record(self, index):
         seek_address = index*self.record_length
-        with open(self.full_file_path, "r") as f:
-            self.__class__.read_count += 1
-            f.seek(seek_address)
-            rec = f.read(self.record_length)
-        return rec
+        if seek_address > len(self.buffer):
+            return ''
+        else:
+            return self.buffer[seek_address:seek_address + self.record_length]
 
     def element_at(self, scope):
         if not isinstance(scope, int) or scope < 1:
