@@ -131,7 +131,10 @@ class XSet:
         return (element, scope) in self.implementation
 
     def intersect(self, other):
-        return XSet.from_tuples((e, s) for e, s in self if other.includes(e, s))
+        mine = set(self)
+        others = set(other)
+        both = mine & others
+        return XSet.from_tuples(both)
 
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):

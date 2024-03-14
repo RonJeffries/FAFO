@@ -321,34 +321,34 @@ class TestXFlat:
         assert len(ff) == 1000
 
     # @pytest.mark.skip("timing")
-    # def test_waste_time(self):
-    #     path = '~/Desktop/job_db'
-    #     fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
-    #     ff = XFlatFile(path, fields)
-    #     ee = XSet(ff)
-    #     assert ee.cardinality() == 1000
-    #     jeffries = ee.select(lambda e, s: e.includes('jeffries', 'last'))
-    #     assert jeffries.cardinality() == 200
-    #     ron = ee.select(lambda e, s: e.includes('ron', 'first'))
-    #     assert isinstance(ron.implementation, XSelect)
-    #     assert ron.cardinality() == 100
-    #     coder = ee.select(lambda e, s: e.includes('coder', 'job'))
-    #     assert coder.cardinality() == 200
-    #     high = ee.select(lambda e, s: e.includes('12000', 'pay'))
-    #     assert high.cardinality() == 250
-    #     ron_jeffries = ron.intersect(jeffries)
-    #     assert ron_jeffries.cardinality() == 20
-    #     assert isinstance(ron_jeffries.implementation, XFrozen)
-    #     high_coder = coder & high
-    #     assert high_coder.cardinality() == 50
-    #     final = ron_jeffries & high_coder
-    #     assert final.cardinality() == 1
-    #     assert len(final) == 1
-    #     employee, scope = final.pop()
-    #     assert employee.includes('jeffries', 'last')
-    #     assert employee.includes('ron', 'first')
-    #     assert employee.includes('coder', 'job')
-    #     assert employee.includes('12000', 'pay')
+    def test_waste_time(self):
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        ee = XSet(ff)
+        assert ee.cardinality() == 1000
+        jeffries = ee.select(lambda e, s: e.includes('jeffries', 'last'))
+        assert jeffries.cardinality() == 200
+        ron = ee.select(lambda e, s: e.includes('ron', 'first'))
+        assert isinstance(ron.implementation, XSelect)
+        assert ron.cardinality() == 100
+        coder = ee.select(lambda e, s: e.includes('coder', 'job'))
+        assert coder.cardinality() == 200
+        high = ee.select(lambda e, s: e.includes('12000', 'pay'))
+        assert high.cardinality() == 250
+        ron_jeffries = ron.intersect(jeffries)
+        assert ron_jeffries.cardinality() == 20
+        assert isinstance(ron_jeffries.implementation, XFrozen)
+        high_coder = coder & high
+        assert high_coder.cardinality() == 50
+        final = ron_jeffries & high_coder
+        assert final.cardinality() == 1
+        assert len(final) == 1
+        employee, scope = final.pop()
+        assert employee.includes('jeffries', 'last')
+        assert employee.includes('ron', 'first')
+        assert employee.includes('coder', 'job')
+        assert employee.includes('12000', 'pay')
 
     # @pytest.mark.skip("timing")
     # def test_memory_capacity(self):
