@@ -210,13 +210,13 @@ class XSet:
         return XSet.from_tuples((s, s) for e, s in self)
 
     def select(self, cond) -> Self:
+        tuples = ((e, s) for e, s in self if cond(e, s))
+        return XSet.from_tuples(tuples)
+
+    def streaming_select(self, cond) -> Self:
         from test_x_select import XSelect
         x_sel = XSelect(self, cond)
         return XSet(x_sel)
-
-    def old_select(self, cond) -> Self:
-        tuples = ((e, s) for e, s in self if cond(e, s))
-        return XSet.from_tuples(tuples)
 
     def sym_diff(self, other):
         return (self - other) | (other - self)

@@ -327,14 +327,14 @@ class TestXFlat:
         ff = XFlatFile(path, fields)
         ee = XSet(ff)
         assert ee.cardinality() == 1000
-        jeffries = ee.select(lambda e, s: e.includes('jeffries', 'last'))
+        jeffries = ee.streaming_select(lambda e, s: e.includes('jeffries', 'last'))
         assert jeffries.cardinality() == 200
-        ron = ee.select(lambda e, s: e.includes('ron', 'first'))
+        ron = ee.streaming_select(lambda e, s: e.includes('ron', 'first'))
         assert isinstance(ron.implementation, XSelect)
         assert ron.cardinality() == 100
-        coder = ee.select(lambda e, s: e.includes('coder', 'job'))
+        coder = ee.streaming_select(lambda e, s: e.includes('coder', 'job'))
         assert coder.cardinality() == 200
-        high = ee.select(lambda e, s: e.includes('12000', 'pay'))
+        high = ee.streaming_select(lambda e, s: e.includes('12000', 'pay'))
         assert high.cardinality() == 250
         ron_jeffries = ron.intersect(jeffries)
         assert ron_jeffries.cardinality() == 20
