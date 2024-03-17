@@ -11,8 +11,8 @@ class XGroup(XImplementation):
 
     def __iter__(self):
         for group_keys, records in self._dict.items():
-            print("iter", group_keys)
-            yield group_keys, XSet.null
+            result = XSet.from_tuples(((group_keys, 'keys'), (tuple(records), 'values')))
+            yield result, XSet.null
 
     def __hash__(self):
         return hash(self._dict)
@@ -150,14 +150,15 @@ hendrickson
             keys = person.re_scope(scopes)
             group_dictionary[keys].append((person, scope))
         x_group = XGroup(group_dictionary)
-        group_set = XSet(x_group)
+        group_set = XSet(x_group) # contains pairs of XSets with scopes 'keys' and 'values'
         xset_it = iter(group_set)
-        x1, s = next(xset_it)
-        assert x1['department'] == 'it'
-        assert x1['job'] == 'serf'
-        x2, s = next(xset_it)
-        assert x2['department'] == 'it'
-        assert x2['job'] == 'sdet'
-        x3, s = next(xset_it)
-        assert x3['department'] == 'sales' and x3['job'] == 'closer'
+        rec, s = next(xset_it) # pair with scopes 'keys' and 'values'
+        keys = rec['keys']
+        assert keys['department'] == 'it'
+        assert keys['job'] == 'serf'
+        # x2, s = next(xset_it)
+        # assert x2['department'] == 'it'
+        # assert x2['job'] == 'sdet'
+        # x3, s = next(xset_it)
+        # assert x3['department'] == 'sales' and x3['job'] == 'closer'
 

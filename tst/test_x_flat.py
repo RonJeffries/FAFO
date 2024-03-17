@@ -320,6 +320,23 @@ class TestXFlat:
         assert len(ff.buffer) == 44000
         assert len(ff) == 1000
 
+    def test_find_serfs(self):
+        new_names = XSet.from_tuples((('first', 'first_name'), ('last', 'last_name')))
+        path = '~/Desktop/job_db'
+        fields = XFlat.fields(('last', 12, 'first', 12, 'job', 12, 'pay', 8))
+        ff = XFlatFile(path, fields)
+        buffer = ff.buffer
+        result = []
+        for rec in range(1000):
+            start = 44*rec + 24
+            job_field = buffer[start:start+12]
+            if 'serf        ' == job_field:
+                record = buffer[start:start+44]
+                result.append(record)
+        assert len(result) == 200
+        packed = ''.join(result)
+        assert len(packed) == 8800
+
     # @pytest.mark.skip("timing")
     def test_waste_time(self):
         path = '~/Desktop/job_db'
