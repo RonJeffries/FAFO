@@ -162,3 +162,38 @@ hendrickson
         # x3, s = next(xset_it)
         # assert x3['department'] == 'sales' and x3['job'] == 'closer'
 
+    def test_group_keys_via_project(self):
+        peeps = self.build_peeps()
+        fields = XSet.classical_set(("department", "job"))
+        keys = peeps.project(fields)
+        print()
+        lines = []
+        for key_set, scope in keys:
+            record = []
+            for key,value in key_set:
+                record.append(f'{value}^{key}')
+            lines.append(','.join(sorted(record)))
+        report = '\n'.join(sorted(lines))
+        expected = \
+"""department^it,job^sdet
+department^it,job^serf
+department^sales,job^closer
+department^sales,job^prospector"""
+        assert report == expected
+
+    def test_restrict_returns_group_records(self):
+        personnel = self.build_peeps()
+        fields = XSet.classical_set(("department", "job"))
+        groups = personnel.project(fields)
+        group_keys, _scope = groups.pop()
+        search_set = XSet.classical_set([group_keys])
+        selected_people = personnel.restrict(search_set)
+        assert len(selected_people) == 2
+        department = group_keys['department']
+        job = group_keys['job']
+        for person, _scope in selected_people:
+            assert person['department'] == department
+            assert person['job'] == job
+
+
+
