@@ -195,5 +195,53 @@ department^sales,job^prospector"""
                 assert person['department'] == department
                 assert person['job'] == job
 
+    def test_build_report(self):
+        def details(rec, scope):
+            return f"        {scope}: {rec['job']}: {rec['pay']}"
+
+        print()
+        personnel = self.build_peeps()
+        get_departments = XSet.classical_set(("department",))
+        departments = personnel.project(get_departments)
+        department_names = []
+        for dept_rec, _dept in departments:
+            department_names.append(dept_rec['department'])
+        department_names = sorted(department_names)
+        report_lines = []
+        for dept in department_names:
+            report_lines.append("Dept: " + dept)
+            dept_rec = XSet.from_tuples([(dept, 'department')])
+            dept_set = XSet.classical_set([dept_rec])
+            dept_recs = personnel.restrict(dept_set)
+            job_names = set()
+            for rec, scope in dept_recs:
+                job = rec['job']
+                job_names.add(job)
+            job_names = sorted(job_names)
+            for job in job_names:
+                report_lines.append("    Job: " + job)
+                job_rec = XSet.from_tuples([(job, 'job')])
+                job_set = XSet.classical_set([job_rec])
+                job_recs = dept_recs.restrict(job_set)
+                local_lines = sorted([details(rec, scope) for rec, scope in job_recs])
+                report_lines.extend(local_lines)
+        report = '\n'.join(report_lines)
+        expected = """Dept: it
+    Job: sdet
+        3: sdet: 10000
+        4: sdet: 11000
+    Job: serf
+        1: serf: 1000
+        2: serf: 1100
+Dept: sales
+    Job: closer
+        5: closer: 1000
+        6: closer: 1100
+    Job: prospector
+        7: prospector: 10000
+        8: prospector: 11000"""
+        assert report == expected
+
+
 
 
