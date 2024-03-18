@@ -185,15 +185,15 @@ department^sales,job^prospector"""
         personnel = self.build_peeps()
         fields = XSet.classical_set(("department", "job"))
         groups = personnel.project(fields)
-        group_keys, _scope = groups.pop()
-        search_set = XSet.classical_set([group_keys])
-        selected_people = personnel.restrict(search_set)
-        assert len(selected_people) == 2
-        department = group_keys['department']
-        job = group_keys['job']
-        for person, _scope in selected_people:
-            assert person['department'] == department
-            assert person['job'] == job
+        for group_keys, _scope in groups:
+            search_set = XSet.classical_set([group_keys])
+            selected_people = personnel.restrict(search_set)
+            assert len(selected_people) == 2
+            department = group_keys['department']
+            job = group_keys['job']
+            for person, _scope in selected_people:
+                assert person['department'] == department
+                assert person['job'] == job
 
 
 
