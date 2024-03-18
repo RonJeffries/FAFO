@@ -130,7 +130,7 @@ class XSet:
         group = []
         for e, s in projected:
             name = e[a_scope]
-            values = self.select(lambda detail, s: detail[a_scope] == name)
+            values = self.select(lambda detail, _s: detail[a_scope] == name)
             obj = GroupHolder(name, values)
             group.append(obj)
         return sorted(group, key=lambda x: x.name)

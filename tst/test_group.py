@@ -247,9 +247,10 @@ Dept: sales
         personnel = self.build_peeps()
         for dept in personnel.group_by('department'):
             print(dept.name)
-            dept_values = dept.values
-            for job in dept_values.group_by('job'):
+            for job in dept.values.group_by('job'):
                 print("    ", job.name)
+                for pay in sorted([worker['pay'] for worker, scope in job.values]):
+                    print("        ", pay)
         assert False
 
 
