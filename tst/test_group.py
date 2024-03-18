@@ -242,6 +242,13 @@ Dept: sales
         8: prospector: 11000"""
         assert report == expected
 
+    def test_group_by(self):
+        personnel = self.build_peeps()
+        for dept in personnel.group_by('department'):
+            print(dept.name)
+        assert False
+
+
 
 
 

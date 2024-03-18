@@ -5,6 +5,12 @@ from ximpl import XImplementation
 from xtuple import XTuple
 
 
+class GroupHolder:
+    def __init__(self, name, values):
+        self.name = name
+        self.values = values
+
+
 class XSet:
     null = None
 
@@ -117,6 +123,16 @@ class XSet:
             if s == scope:
                 return e
         return None
+
+    def group_by(self, a_scope):
+        projector = XSet.classical_set((a_scope,))
+        projected = self.project(projector)
+        group = []
+        for e, s in projected:
+            name = e[a_scope]
+            obj = GroupHolder(name, None)
+            group.append(obj)
+        return sorted(group, key=lambda x: x.name)
 
     def includes(self, element, scope) -> bool:
         """
