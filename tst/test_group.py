@@ -243,9 +243,13 @@ Dept: sales
         assert report == expected
 
     def test_group_by(self):
+        print()
         personnel = self.build_peeps()
         for dept in personnel.group_by('department'):
             print(dept.name)
+            dept_values = dept.values
+            for job in dept_values.group_by('job'):
+                print("    ", job.name)
         assert False
 
 
