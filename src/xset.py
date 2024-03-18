@@ -130,9 +130,7 @@ class XSet:
         group = []
         for e, s in projected:
             name = e[a_scope]
-            selector_rec = XSet.from_tuples([(name, a_scope)])
-            selector_set = XSet.classical_set([selector_rec])
-            values = self.restrict(selector_set)
+            values = self.select(lambda detail, s: detail[a_scope] == name)
             obj = GroupHolder(name, values)
             group.append(obj)
         return sorted(group, key=lambda x: x.name)
