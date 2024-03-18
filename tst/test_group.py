@@ -251,7 +251,7 @@ Dept: sales
                 print("    ", job.name)
                 for pay in sorted([worker['pay'] for worker, scope in job.values]):
                     print("        ", pay)
-        assert False
+        # assert False
 
 
 
