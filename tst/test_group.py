@@ -4,6 +4,9 @@ from xset import XSet
 
 
 class TestGroup:
+    """
+    Various experiments leading up to the group_by method.
+    """
     def test_group(self):
         j1 = SetBuilder() \
             .put("jeffries", "last") \
