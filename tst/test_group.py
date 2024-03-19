@@ -243,15 +243,30 @@ Dept: sales
         assert report == expected
 
     def test_group_by(self):
-        print()
+        report_lines = []
         personnel = self.build_peeps()
         for dept in personnel.group_by('department'):
-            print(dept.name)
+            report_lines.append(dept.name)
             for job in dept.values.group_by('job'):
-                print("    ", job.name)
+                report_lines.append("    " + job.name)
                 for pay in sorted([worker['pay'] for worker, scope in job.values]):
-                    print("        ", pay)
-        # assert False
+                    report_lines.append("        " + str(pay))
+        report = '\n'.join(report_lines)
+        expected = """it
+    sdet
+        10000
+        11000
+    serf
+        1000
+        1100
+sales
+    closer
+        1000
+        1100
+    prospector
+        10000
+        11000"""
+        assert report == expected
 
 
 
