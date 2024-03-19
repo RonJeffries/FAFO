@@ -33,14 +33,13 @@ class TestGroup:
             report += last + "\n"
             for peep, s in group[last]:
                 report += "    " + peep["first"] + "\n"
-        expected = """
-jeffries
-    ron
-    tom
-hendrickson
-    chet
-    sue
-"""
+        expected = ("\n"
+                    "jeffries\n"
+                    "    ron\n"
+                    "    tom\n"
+                    "hendrickson\n"
+                    "    chet\n"
+                    "    sue\n")
         assert report == expected
 
     def test_two_keys(self):
@@ -124,10 +123,10 @@ hendrickson
                 record.append(f'{value}^{key}')
             lines.append(','.join(sorted(record)))
         report = '\n'.join(sorted(lines))
-        expected = """department^it,job^sdet
-department^it,job^serf
-department^sales,job^closer
-department^sales,job^prospector"""
+        expected = ("department^it,job^sdet\n"
+                    "department^it,job^serf\n"
+                    "department^sales,job^closer\n"
+                    "department^sales,job^prospector")
         assert report == expected
 
     def test_restrict_returns_group_records(self):
@@ -175,20 +174,20 @@ department^sales,job^prospector"""
                 local_lines = sorted([details(rec, scope) for rec, scope in job_recs])
                 report_lines.extend(local_lines)
         report = '\n'.join(report_lines)
-        expected = """Dept: it
-    Job: sdet
-        3: sdet: 10000
-        4: sdet: 11000
-    Job: serf
-        1: serf: 1000
-        2: serf: 1100
-Dept: sales
-    Job: closer
-        5: closer: 1000
-        6: closer: 1100
-    Job: prospector
-        7: prospector: 10000
-        8: prospector: 11000"""
+        expected = ("Dept: it\n"
+                    "    Job: sdet\n"
+                    "        3: sdet: 10000\n"
+                    "        4: sdet: 11000\n"
+                    "    Job: serf\n"
+                    "        1: serf: 1000\n"
+                    "        2: serf: 1100\n"
+                    "Dept: sales\n"
+                    "    Job: closer\n"
+                    "        5: closer: 1000\n"
+                    "        6: closer: 1100\n"
+                    "    Job: prospector\n"
+                    "        7: prospector: 10000\n"
+                    "        8: prospector: 11000")
         assert report == expected
 
     def test_group_by(self):
@@ -201,18 +200,18 @@ Dept: sales
                 for pay in sorted([worker['pay'] for worker, scope in job.values]):
                     report_lines.append("        " + str(pay))
         report = '\n'.join(report_lines)
-        expected = """it
-    sdet
-        10000
-        11000
-    serf
-        1000
-        1100
-sales
-    closer
-        1000
-        1100
-    prospector
-        10000
-        11000"""
+        expected = ("it\n"
+                    "    sdet\n"
+                    "        10000\n"
+                    "        11000\n"
+                    "    serf\n"
+                    "        1000\n"
+                    "        1100\n"
+                    "sales\n"
+                    "    closer\n"
+                    "        1000\n"
+                    "        1100\n"
+                    "    prospector\n"
+                    "        10000\n"
+                    "        11000")
         assert report == expected

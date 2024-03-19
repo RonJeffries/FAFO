@@ -115,3 +115,8 @@ class TestMisc:
         assert xyz == ['123.45', '678', '91.3']
         floats = list(map(float, xyz))
         assert floats == [123.45, 678.0, 91.3]
+
+    def test_quotes(self):
+        assert "a""b" == 'ab'
+        assert 'ab' == ("a"
+                        "b")
