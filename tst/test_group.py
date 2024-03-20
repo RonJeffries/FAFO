@@ -7,6 +7,7 @@ class TestGroup:
     """
     Various experiments leading up to the group_by method.
     """
+
     def test_group(self):
         j1 = SetBuilder() \
             .put("jeffries", "last") \
@@ -73,41 +74,49 @@ class TestGroup:
     def build_peeps():
         e1 = SetBuilder() \
             .put("it", "department") \
+            .put("joe", "name") \
             .put("serf", "job") \
             .put(1000, "pay") \
             .set()
         e2 = SetBuilder() \
             .put("it", "department") \
+            .put("bob", "name") \
             .put("serf", "job") \
             .put(1100, "pay") \
             .set()
         e3 = SetBuilder() \
             .put("it", "department") \
+            .put("ole", "name") \
             .put("sdet", "job") \
             .put(10000, "pay") \
             .set()
         e4 = SetBuilder() \
             .put("it", "department") \
+            .put("sam", "name") \
             .put("sdet", "job") \
             .put(11000, "pay") \
             .set()
         e5 = SetBuilder() \
             .put("sales", "department") \
+            .put("ben", "name") \
             .put("closer", "job") \
             .put(1000, "pay") \
             .set()
         e6 = SetBuilder() \
             .put("sales", "department") \
+            .put("cee", "name") \
             .put("closer", "job") \
             .put(1100, "pay") \
             .set()
         e7 = SetBuilder() \
             .put("sales", "department") \
+            .put("don", "name") \
             .put("prospector", "job") \
             .put(10000, "pay") \
             .set()
         e8 = SetBuilder() \
             .put("sales", "department") \
+            .put("fay", "name") \
             .put("prospector", "job") \
             .put(11000, "pay") \
             .set()
@@ -148,7 +157,7 @@ class TestGroup:
 
     def test_build_report(self):
         def details(record, r_scope):
-            return f"        {r_scope}: {record['job']}: {record['pay']}"
+            return f"        {r_scope}: {record['name']} {record['job']}: {record['pay']}"
 
         print()
         personnel = self.build_peeps()
@@ -177,20 +186,20 @@ class TestGroup:
                 local_lines = sorted([details(rec, scope) for rec, scope in job_recs])
                 report_lines.extend(local_lines)
         report = '\n'.join(report_lines)
-        expected = ("Dept: it\n"
-                    "    Job: sdet\n"
-                    "        3: sdet: 10000\n"
-                    "        4: sdet: 11000\n"
-                    "    Job: serf\n"
-                    "        1: serf: 1000\n"
-                    "        2: serf: 1100\n"
-                    "Dept: sales\n"
-                    "    Job: closer\n"
-                    "        5: closer: 1000\n"
-                    "        6: closer: 1100\n"
-                    "    Job: prospector\n"
-                    "        7: prospector: 10000\n"
-                    "        8: prospector: 11000")
+        expected = ('Dept: it\n'
+                    '    Job: sdet\n'
+                    '        3: ole sdet: 10000\n'
+                    '        4: sam sdet: 11000\n'
+                    '    Job: serf\n'
+                    '        1: joe serf: 1000\n'
+                    '        2: bob serf: 1100\n'
+                    'Dept: sales\n'
+                    '    Job: closer\n'
+                    '        5: ben closer: 1000\n'
+                    '        6: cee closer: 1100\n'
+                    '    Job: prospector\n'
+                    '        7: don prospector: 10000\n'
+                    '        8: fay prospector: 11000')
         assert report == expected
 
     def test_group_by(self):
