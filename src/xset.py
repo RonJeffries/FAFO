@@ -230,6 +230,18 @@ class XSet:
         tuples = ((e, s) for e, s in self if cond(e, s))
         return XSet.from_tuples(tuples)
 
+    def statistics(self, fields):
+        pay_count = 0
+        pay_sum = 0
+        for e, s in self:
+            pay_count += 1
+            pay_sum += e['pay']
+        pay_mean = pay_sum/pay_count
+        new_items = XSet.from_tuples(((pay_count, 'pay_count'), (pay_sum, 'pay_sum'), (pay_mean, 'pay_mean')))
+        key, _scope = self.pop()
+        result = key | new_items
+        return result
+
     def streaming_select(self, cond) -> Self:
         from test_x_select import XSelect
         x_sel = XSelect(self, cond)

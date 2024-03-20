@@ -262,3 +262,35 @@ class TestGroup:
                     '        11000\n'
                     '        avg: 10500.0')
         assert report == expected
+
+    def test_statistics(self):
+        report_lines = []
+        personnel = self.build_peeps()
+        for dept in personnel.group_by('department'):
+            report_lines.append(dept.name)
+            for job in dept.values.group_by('job'):
+                report_lines.append("    " + job.name)
+                for pay in sorted([worker['pay'] for worker, scope in job.values]):
+                    report_lines.append("        " + str(pay))
+                stats = job.values.statistics(['pay'])  # just returns the record
+                report_lines.append(f"        avg: {stats['pay_mean']}")
+        report = '\n'.join(report_lines)
+        expected = ('it\n'
+                    '    sdet\n'
+                    '        10000\n'
+                    '        11000\n'
+                    '        avg: 10500.0\n'
+                    '    serf\n'
+                    '        1000\n'
+                    '        1100\n'
+                    '        avg: 1050.0\n'
+                    'sales\n'
+                    '    closer\n'
+                    '        1000\n'
+                    '        1100\n'
+                    '        avg: 1050.0\n'
+                    '    prospector\n'
+                    '        10000\n'
+                    '        11000\n'
+                    '        avg: 10500.0')
+        assert report == expected
