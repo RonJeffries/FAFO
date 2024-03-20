@@ -77,48 +77,56 @@ class TestGroup:
             .put("joe", "name") \
             .put("serf", "job") \
             .put(1000, "pay") \
+            .put(100, "bonus") \
             .set()
         e2 = SetBuilder() \
             .put("it", "department") \
             .put("bob", "name") \
             .put("serf", "job") \
             .put(1100, "pay") \
+            .put(110, "bonus") \
             .set()
         e3 = SetBuilder() \
             .put("it", "department") \
             .put("ole", "name") \
             .put("sdet", "job") \
             .put(10000, "pay") \
+            .put(1000, "bonus") \
             .set()
         e4 = SetBuilder() \
             .put("it", "department") \
             .put("sam", "name") \
             .put("sdet", "job") \
             .put(11000, "pay") \
+            .put(1100, "bonus") \
             .set()
         e5 = SetBuilder() \
             .put("sales", "department") \
             .put("ben", "name") \
             .put("closer", "job") \
             .put(1000, "pay") \
+            .put(200, "bonus") \
             .set()
         e6 = SetBuilder() \
             .put("sales", "department") \
             .put("cee", "name") \
             .put("closer", "job") \
             .put(1100, "pay") \
+            .put(220, "bonus") \
             .set()
         e7 = SetBuilder() \
             .put("sales", "department") \
             .put("don", "name") \
             .put("prospector", "job") \
             .put(10000, "pay") \
+            .put(2000, "bonus") \
             .set()
         e8 = SetBuilder() \
             .put("sales", "department") \
             .put("fay", "name") \
             .put("prospector", "job") \
             .put(11000, "pay") \
+            .put(2200, "bonus") \
             .set()
         peeps = XSet.n_tuple((e1, e2, e3, e4, e5, e6, e7, e8))
         return peeps
@@ -272,25 +280,25 @@ class TestGroup:
                 report_lines.append("    " + job.name)
                 for pay in sorted([worker['pay'] for worker, scope in job.values]):
                     report_lines.append("        " + str(pay))
-                stats = job.values.statistics(['pay'])  # just returns the record
-                report_lines.append(f"        avg: {stats['pay_mean']}")
+                stats = job.values.statistics(['pay', 'bonus'])  # just returns the record
+                report_lines.append(f"        pay_mean: {stats['pay_mean']}  bonus_mean: {stats['bonus_mean']}")
         report = '\n'.join(report_lines)
         expected = ('it\n'
                     '    sdet\n'
                     '        10000\n'
                     '        11000\n'
-                    '        avg: 10500.0\n'
+                    '        pay_mean: 10500.0  bonus_mean: 1050.0\n'
                     '    serf\n'
                     '        1000\n'
                     '        1100\n'
-                    '        avg: 1050.0\n'
+                    '        pay_mean: 1050.0  bonus_mean: 105.0\n'
                     'sales\n'
                     '    closer\n'
                     '        1000\n'
                     '        1100\n'
-                    '        avg: 1050.0\n'
+                    '        pay_mean: 1050.0  bonus_mean: 210.0\n'
                     '    prospector\n'
                     '        10000\n'
                     '        11000\n'
-                    '        avg: 10500.0')
+                    '        pay_mean: 10500.0  bonus_mean: 2100.0')
         assert report == expected

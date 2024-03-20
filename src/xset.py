@@ -231,13 +231,26 @@ class XSet:
         return XSet.from_tuples(tuples)
 
     def statistics(self, fields):
-        pay_count = 0
-        pay_sum = 0
+        statistics = {}
+        for field in fields:
+            statistics[field] = {field+'_count': 0, field+'_sum': 0}
         for e, s in self:
-            pay_count += 1
-            pay_sum += e['pay']
-        pay_mean = pay_sum/pay_count
-        new_items = XSet.from_tuples(((pay_count, 'pay_count'), (pay_sum, 'pay_sum'), (pay_mean, 'pay_mean')))
+            for field in fields:
+                value = e[field]
+                count_name = field+'_count'
+                sum_name = field+'_sum'
+                entry = statistics[field]
+                entry[count_name] = entry[count_name] +1
+                entry[sum_name] = entry[sum_name] + value
+        new_tuples = []
+        for field_name, field_values in statistics.items():
+            for name, value in field_values.items():
+                new_tuples.append((value, name))
+            sum_name = field_name+"_sum"
+            count_name = field_name+"_count"
+            mean_name = field_name+"_mean"
+            new_tuples.append((field_values[sum_name] / field_values[count_name], mean_name))
+        new_items = XSet.from_tuples(new_tuples)
         key, _scope = self.pop()
         result = key | new_items
         return result
