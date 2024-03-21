@@ -47,4 +47,9 @@ class TestStatsObject:
         assert stats['pay_mean'] == 2777.5
         assert stats['pay'] is None
 
+    def test_statistics_maker_returns_null_with_no_input(self):
+        maker = StatisticsMaker(['pay'])
+        stats = maker.statistics()
+        assert stats == XSet.null
+
 

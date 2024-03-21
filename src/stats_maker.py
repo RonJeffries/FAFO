@@ -53,6 +53,9 @@ class StatisticsMaker:
         self._key = xSet.re_scope(desired_scopes)
 
     def statistics(self):
+        from xset import XSet
+        if not self._key:
+            return XSet.null
         result = self._key
         for accumulator in self._accumulators:
             result = result | accumulator.statistics()
