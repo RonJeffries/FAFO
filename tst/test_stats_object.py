@@ -53,7 +53,7 @@ class TestStatsObject:
         stats = maker.statistics()
         assert stats == XSet.null
 
-    def test_one_accumulator_gets_no_data(self):
+    def test_one_accumulator_gets_no_data_returns_no_result(self):
         rec1 =  XSet.from_tuples((('it', 'department'), ('serf', 'job'), (1234, 'pay')))
         maker = StatisticsMaker(['pay', 'bonus'])
         maker.record(rec1)
