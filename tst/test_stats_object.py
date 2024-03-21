@@ -1,4 +1,4 @@
-from stats_maker import StatsAccumulator
+from stats_maker import StatsAccumulator, StatisticsMaker
 from xset import XSet
 
 
@@ -36,4 +36,15 @@ class TestStatsObject:
         stats.record(record)
         assert stats._count == 0
         assert stats._sum == 0
+
+    def test_statistics_maker_removes_fields(self):
+        rec1 =  XSet.from_tuples((('it', 'department'), ('serf', 'job'), (1234, 'pay')))
+        rec2 =  XSet.from_tuples((('it', 'department'), ('serf', 'job'), (4321, 'pay')))
+        maker = StatisticsMaker(['pay'])
+        maker.record(rec1)
+        maker.record(rec2)
+        stats = maker.statistics()
+        assert stats['pay_mean'] == 2777.5
+        assert stats['pay'] is None
+
 

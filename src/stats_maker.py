@@ -33,11 +33,19 @@ class StatsAccumulator:
 class StatisticsMaker:
     def __init__(self, fields):
         self._accumulators = [StatsAccumulator(field) for field in fields]
+        self._scopes = self.make_scopes(fields)
         self._key = None
+
+    def make_scopes(self, scopes):
+        from xset import XSet
+        tuples = [(scope, scope) for scope in scopes]
+        return XSet.from_tuples(tuples)
 
     def record(self, xSet):
         if not self._key:
-            self._key = xSet
+            all_scopes = xSet.scope_set()
+            desired_scopes = all_scopes - self._scopes
+            self._key = xSet.re_scope(desired_scopes)
         for accumulator in self._accumulators:
             accumulator.record(xSet)
 
