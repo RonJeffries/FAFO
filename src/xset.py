@@ -1,6 +1,6 @@
 from typing import Self
 
-from stats_maker import StatsMaker
+from stats_maker import StatsAccumulator, StatisticsMaker
 from xfrozen import XFrozen
 from ximpl import XImplementation
 from xtuple import XTuple
@@ -232,18 +232,10 @@ class XSet:
         return XSet.from_tuples(tuples)
 
     def statistics(self, fields):
-        makers = []
-        for field in fields:
-            makers.append(StatsMaker(field))
+        maker = StatisticsMaker(fields)
         for record, _s in self:
-            for maker in makers:
-                maker.record(record)
-        key, _scope = self.pop()
-        for maker in makers:
-            stats = maker.statistics()
-            key = key | stats
-        return key
-
+            maker.record(record)
+        return maker.statistics()
     def streaming_select(self, cond) -> Self:
         from test_x_select import XSelect
         x_sel = XSelect(self, cond)

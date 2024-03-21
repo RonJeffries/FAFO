@@ -1,6 +1,6 @@
 
 
-class StatsMaker:
+class StatsAccumulator:
     def __init__(self, name):
         self._name = name
         self._count = 0
@@ -28,3 +28,22 @@ class StatsMaker:
 
     def mean(self):
         return self._sum / self._count
+
+
+class StatisticsMaker:
+    def __init__(self, fields):
+        self._accumulators = [StatsAccumulator(field) for field in fields]
+        self._key = None
+
+    def record(self, xSet):
+        if not self._key:
+            self._key = xSet
+        for accumulator in self._accumulators:
+            accumulator.record(xSet)
+
+    def statistics(self):
+        result = self._key
+        for accumulator in self._accumulators:
+            result = result | accumulator.statistics()
+        return result
+
