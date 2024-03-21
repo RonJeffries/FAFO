@@ -55,7 +55,7 @@ class XSet:
 
     def __iter__(self):
         for e, s in self.implementation:
-            yield e,s
+            yield e, s
 
     def __le__(self, other):
         return self.is_subset(other)
@@ -155,7 +155,7 @@ class XSet:
 
     def is_subset(self, other) -> bool:
         if isinstance(other, self.__class__):
-            return all(other.includes(e, s) for e,s in self)
+            return all(other.includes(e, s) for e, s in self)
         else:
             return NotImplemented
 
@@ -213,7 +213,7 @@ class XSet:
         return XSet.from_tuples(tuples)
 
     def restrict(self, restrictor) -> Self:
-        def other_has_match(e, s):
+        def other_has_match(e, _s):
             return any((e_r.is_subset(e) for e_r, s_r in restrictor))
 
         if not isinstance(restrictor, self.__class__):
@@ -231,14 +231,14 @@ class XSet:
         return XSet.from_tuples(tuples)
 
     def statistics(self, fields):
-        def count_field(field):
-            return field+'_count'
+        def count_field(field_name):
+            return field_name+'_count'
 
-        def sum_field(field):
-            return field+'_sum'
+        def sum_field(field_name):
+            return field_name+'_sum'
 
-        def mean_field(field):
-            return field+'_mean'
+        def mean_field(field_name):
+            return field_name+'_mean'
 
         statistics = {}
         for field in fields:
