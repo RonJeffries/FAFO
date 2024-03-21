@@ -1,4 +1,3 @@
-from xset import XSet
 
 
 class StatsMaker:
@@ -13,6 +12,7 @@ class StatsMaker:
             self.value(value)
 
     def statistics(self):
+        from xset import XSet
         return XSet.from_tuples(self.tuples())
 
     def tuples(self):

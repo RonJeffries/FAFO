@@ -1,5 +1,6 @@
 from typing import Self
 
+from stats_maker import StatsMaker
 from xfrozen import XFrozen
 from ximpl import XImplementation
 from xtuple import XTuple
@@ -231,32 +232,17 @@ class XSet:
         return XSet.from_tuples(tuples)
 
     def statistics(self, fields):
-        def count_field(field_name):
-            return field_name+'_count'
-
-        def sum_field(field_name):
-            return field_name+'_sum'
-
-        def mean_field(field_name):
-            return field_name+'_mean'
-
-        statistics = {}
+        makers = []
         for field in fields:
-            statistics[field] = {count_field(field): 0, sum_field(field): 0}
+            makers.append(StatsMaker(field))
         for record, _s in self:
-            for field in fields:
-                entry = statistics[field]
-                entry[count_field(field)] += 1
-                entry[sum_field(field)] = entry[sum_field(field)] + record[field]
-        new_tuples = []
-        for field, values in statistics.items():
-            new_tuples.append((values[count_field(field)], count_field(field)))
-            new_tuples.append((values[sum_field(field)], sum_field(field)))
-            new_tuples.append((values[sum_field(field)] / values[count_field(field)], mean_field(field)))
-        new_items = XSet.from_tuples(new_tuples)
+            for maker in makers:
+                maker.record(record)
         key, _scope = self.pop()
-        result = key | new_items
-        return result
+        for maker in makers:
+            stats = maker.statistics()
+            key = key | stats
+        return key
 
     def streaming_select(self, cond) -> Self:
         from test_x_select import XSelect
