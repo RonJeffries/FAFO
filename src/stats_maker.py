@@ -7,9 +7,8 @@ class StatsMaker:
         self._count = 0
         self._sum = 0
 
-    def value(self, number):
-        self._count += 1
-        self._sum += number
+    def record(self, xset):
+        self.value(xset[self._name])
 
     def statistics(self):
         return XSet.from_tuples(self.tuples())
@@ -20,6 +19,10 @@ class StatsMaker:
         tups.append((self._sum, self._name+'_sum'))
         tups.append((self.mean(), self._name+'_mean'))
         return tups
+
+    def value(self, number):
+        self._count += 1
+        self._sum += number
 
     def mean(self):
         return self._sum / self._count

@@ -1,4 +1,5 @@
 from stats_maker import StatsMaker
+from xset import XSet
 
 
 class TestStatsObject:
@@ -21,3 +22,11 @@ class TestStatsObject:
         assert result['pay_count'] == 4
         assert result['pay_sum'] == 10000
         assert result['pay_mean'] == 2500.0
+
+    def test_stats_given_record(self):
+        stats = StatsMaker("pay")
+        record = XSet.from_tuples(((1000, 'pay'),))
+        stats.record(record)
+        assert stats._count == 1
+        assert stats._sum == 1000
+
