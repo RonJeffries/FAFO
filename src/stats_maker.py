@@ -43,11 +43,14 @@ class StatisticsMaker:
 
     def record(self, xSet):
         if not self._key:
-            all_scopes = xSet.scope_set()
-            desired_scopes = all_scopes - self._scopes
-            self._key = xSet.re_scope(desired_scopes)
+            self.make_key_set(xSet)
         for accumulator in self._accumulators:
             accumulator.record(xSet)
+
+    def make_key_set(self, xSet):
+        all_scopes = xSet.scope_set()
+        desired_scopes = all_scopes - self._scopes
+        self._key = xSet.re_scope(desired_scopes)
 
     def statistics(self):
         result = self._key
