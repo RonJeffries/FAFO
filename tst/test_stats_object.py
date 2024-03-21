@@ -30,3 +30,10 @@ class TestStatsObject:
         assert stats._count == 1
         assert stats._sum == 1000
 
+    def test_stats_given_record_without_field(self):
+        stats = StatsMaker("pay")
+        record = XSet.from_tuples(((1000, 'pork'),))
+        stats.record(record)
+        assert stats._count == 0
+        assert stats._sum == 0
+

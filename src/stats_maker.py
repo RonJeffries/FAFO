@@ -8,7 +8,9 @@ class StatsMaker:
         self._sum = 0
 
     def record(self, xset):
-        self.value(xset[self._name])
+        value = xset[self._name]
+        if value:
+            self.value(value)
 
     def statistics(self):
         return XSet.from_tuples(self.tuples())
