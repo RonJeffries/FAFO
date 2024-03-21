@@ -17,9 +17,10 @@ class StatsAccumulator:
 
     def tuples(self):
         tups = []
-        tups.append((self._count, self._name+'_count'))
-        tups.append((self._sum, self._name+'_sum'))
-        tups.append((self.mean(), self._name+'_mean'))
+        if self._count:
+            tups.append((self._count, self._name+'_count'))
+            tups.append((self._sum, self._name+'_sum'))
+            tups.append((self.mean(), self._name+'_mean'))
         return tups
 
     def value(self, number):
@@ -27,14 +28,15 @@ class StatsAccumulator:
         self._sum += number
 
     def mean(self):
-        return self._sum / self._count
+        return self._sum / self._count if self._count else 0.0
 
 
 class StatisticsMaker:
     def __init__(self, fields):
+        from xset import XSet
         self._accumulators = [StatsAccumulator(field) for field in fields]
         self._scopes = self.make_scopes(fields)
-        self._key = None
+        self._key = XSet.null
 
     def make_scopes(self, scopes):
         from xset import XSet
@@ -53,9 +55,6 @@ class StatisticsMaker:
         self._key = xSet.re_scope(desired_scopes)
 
     def statistics(self):
-        from xset import XSet
-        if not self._key:
-            return XSet.null
         result = self._key
         for accumulator in self._accumulators:
             result = result | accumulator.statistics()

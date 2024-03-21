@@ -36,6 +36,7 @@ class TestStatsObject:
         stats.record(record)
         assert stats._count == 0
         assert stats._sum == 0
+        assert stats.mean() == 0
 
     def test_statistics_maker_removes_fields(self):
         rec1 =  XSet.from_tuples((('it', 'department'), ('serf', 'job'), (1234, 'pay')))
@@ -51,5 +52,14 @@ class TestStatsObject:
         maker = StatisticsMaker(['pay'])
         stats = maker.statistics()
         assert stats == XSet.null
+
+    def test_one_accumulator_gets_no_data(self):
+        rec1 =  XSet.from_tuples((('it', 'department'), ('serf', 'job'), (1234, 'pay')))
+        maker = StatisticsMaker(['pay', 'bonus'])
+        maker.record(rec1)
+        stats = maker.statistics()
+        assert stats['pay_sum'] == 1234
+        assert stats['bonus_sum'] is None
+
 
 
