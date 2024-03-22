@@ -236,6 +236,7 @@ class XSet:
         for record, _s in self:
             maker.record(record)
         return maker.statistics()
+
     def streaming_select(self, cond) -> Self:
         from test_x_select import XSelect
         x_sel = XSelect(self, cond)
