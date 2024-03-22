@@ -312,3 +312,4 @@ class TestGroup:
         assert stats['bonus_count'] == 8
         assert stats['bonus_sum'] == 6930
         assert stats['bonus_mean'] == 6930/8
+
