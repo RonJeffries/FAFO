@@ -302,3 +302,15 @@ class TestGroup:
                     '        11000\n'
                     '        pay_mean: 10500.0  bonus_mean: 2100.0')
         assert report == expected
+
+    def test_whole_set(self):
+        peeps = self.build_peeps()
+        projector = XSet.classical_set(['pay', 'bonus'])
+        pay_and_bonus = peeps.project(projector)
+        stats = pay_and_bonus.statistics(['pay', 'bonus'])
+        assert stats['pay_count'] == 8
+        assert stats['pay_sum'] == 46200
+        assert stats['pay_mean'] == 46200/8
+        assert stats['bonus_count'] == 8
+        assert stats['bonus_sum'] == 6930
+        assert stats['bonus_mean'] == 6930/8
