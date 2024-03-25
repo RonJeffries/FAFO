@@ -312,4 +312,13 @@ class TestGroup:
         assert stats['bonus_count'] == 8
         assert stats['bonus_sum'] == 6930
         assert stats['bonus_mean'] == 6930/8
+        # for e,s in stats:
+        #     print(f'{s}: {e}')
+        # assert False
+
+    def test_project_whole_set(self):
+        peeps = self.build_peeps()
+        projector = XSet.classical_set(('pay',))
+        pay_and_bonus = peeps.project(projector)
+        assert len(pay_and_bonus) == 4
 

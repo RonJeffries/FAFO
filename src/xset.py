@@ -99,8 +99,8 @@ class XSet:
         :param other: any set
         :return: self - other
         """
-        mine = set((e, s) for e, s in self)
-        others = set((e, s) for e, s in other)
+        mine = set(t for t in self)
+        others = set(t for t in other)
         remaining = mine - others
         return XSet.from_tuples(remaining)
 
@@ -173,7 +173,7 @@ class XSet:
         modeled as (value, name) = (element, scope),
         return a classical set containing "records" including only
         the field names (scopes) mentioned in the field-selector
-        :param field_selector: list of names to retain
+        :param field_selector: set of names to retain
         :return:classical set of records containing only the original elements at those names.
         """
         projector = XSet.from_tuples([(e, e) for e, _ignored in field_selector])
