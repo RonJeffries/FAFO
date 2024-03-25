@@ -20,3 +20,6 @@ class XFrozen(XImplementation):
 
     def __repr__(self):
         return repr(self.data)
+
+    def diff(self, other):
+        raise AttributeError
