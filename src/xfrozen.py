@@ -26,7 +26,8 @@ class XFrozen(XImplementation):
         if not isinstance(other.implementation, self.__class__):
             raise AttributeError
         else:
-            diff = self.data - other.data
-            return XSet(frozenset(diff))
+            diff = self.data - other.implementation.data
+            impl = self.__class__(diff)
+            return XSet(impl)
 
 

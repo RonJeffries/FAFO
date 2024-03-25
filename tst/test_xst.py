@@ -248,6 +248,14 @@ class TestXST:
         assert diff.includes(30, 3)
         assert diff.excludes(2, 2)
 
+    def test_diff_not_frozen_other_way(self):
+        a = XSet.from_tuples(((10, 10), (2, 2), (30, 3)))
+        b = XSet.n_tuple((10, 2))
+        diff = a.diff(b)
+        assert diff.excludes(10, 1)
+        assert diff.excludes(2, 2)
+        assert diff.includes(30, 3)
+
     def test_sym_diff(self):
         first = XSet.classical_set(('a', 'b', 'c'))
         second = XSet.classical_set(('c', 'd'))
