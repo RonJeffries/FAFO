@@ -22,4 +22,10 @@ class XFrozen(XImplementation):
         return repr(self.data)
 
     def diff(self, other):
-        raise AttributeError
+        if True:
+            raise AttributeError
+        else:
+            diff = self.data - other.data
+            return XSet(frozenset(diff))
+
+
