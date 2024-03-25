@@ -22,7 +22,8 @@ class XFrozen(XImplementation):
         return repr(self.data)
 
     def diff(self, other):
-        if True:
+        from xset import XSet
+        if not isinstance(other.implementation, self.__class__):
             raise AttributeError
         else:
             diff = self.data - other.data
