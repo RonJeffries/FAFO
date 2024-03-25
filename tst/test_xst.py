@@ -25,6 +25,8 @@ class TestXST:
         r2 = XSet.from_tuples([("jeffries", "last")])
         assert r2.is_subset(r1)
         assert not r1.is_subset(r2)
+        with pytest.raises(TypeError):
+            assert r2.is_subset((1, 2,3))
 
     def test_xset_in(self):
         list1 = [("x", 1), ("y", 2)]
@@ -93,6 +95,15 @@ class TestXST:
         assert serfs.excludes(ron, None)
         assert serfs.excludes(chet, None)
         assert serfs.includes(hill, None)
+
+    def test_restrict_not_set(self):
+        ron = XSet.from_tuples([("jeffries", "last"), ("ron", "first"), ("boss", "job")])
+        chet = XSet.from_tuples([("chet", "first"), ("hendrickson", "last"), ("boss", "job")])
+        hill = XSet.from_tuples([("hill", "last"), ("geepaw", "first"), ("serf", "job")])
+        personnel = XSet.classical_set([ron, chet, hill])
+        not_a_set = [("serf", "job")]
+        with pytest.raises(TypeError):
+            serfs: XSet = personnel.restrict(not_a_set)
 
     def test_select(self):
         def sel(e, s):

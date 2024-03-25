@@ -161,7 +161,7 @@ class XSet:
         if isinstance(other, self.__class__):
             return all(other.includes(e, s) for e, s in self)
         else:
-            return NotImplemented
+            raise TypeError("parameter must be XSet")
 
     def pop(self):
         """
@@ -221,7 +221,7 @@ class XSet:
             return any((e_r.is_subset(e) for e_r, s_r in restrictor))
 
         if not isinstance(restrictor, self.__class__):
-            return NotImplemented
+            raise TypeError
         return self.select(other_has_match)
 
     def scope_set(self):
