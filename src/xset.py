@@ -99,10 +99,13 @@ class XSet:
         :param other: any set
         :return: self - other
         """
-        mine = set(t for t in self)
-        others = set(t for t in other)
-        remaining = mine - others
-        return XSet.from_tuples(remaining)
+        try:
+            return self.implementation.diff(other)
+        except AttributeError:
+            mine = set(t for t in self)
+            others = set(t for t in other)
+            remaining = mine - others
+            return XSet.from_tuples(remaining)
 
     def element_set(self):
         """
