@@ -100,7 +100,7 @@ class XSet:
         :return: self - other
         """
         try:
-            return self.implementation.diff(other)
+            return XSet(self.implementation.diff(other))
         except AttributeError:
             mine = set(t for t in self)
             others = set(t for t in other)

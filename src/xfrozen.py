@@ -27,7 +27,4 @@ class XFrozen(XImplementation):
             raise AttributeError
         else:
             diff = self.data - other.implementation.data
-            impl = self.__class__(diff)
-            return XSet(impl)
-
-
+            return self.__class__(diff)
