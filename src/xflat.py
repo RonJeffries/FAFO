@@ -103,8 +103,7 @@ class XFlatFile(XImplementation):
                 if name == old:
                     changed_name = new
             new_names.append((changed_name, start, len))
-        new_impl = self.__class__(self.full_file_path, new_names, self.scope_set)
-        return XSet(new_impl)
+        return self.__class__(self.full_file_path, new_names, self.scope_set)
 
     def re_scope(self, re_scoping_set):
         if self.scope_set is not None:

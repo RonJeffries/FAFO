@@ -201,7 +201,7 @@ class XSet:
 
     def rename_contents(self, re_scoping_set: Self):
         try:
-            return self.implementation.rename_contents(re_scoping_set)
+            return XSet(self.implementation.rename_contents(re_scoping_set))
         except AttributeError:
             new_tuples = ((e.rename(re_scoping_set), s) for e, s in self)
             return XSet.from_tuples(new_tuples)
