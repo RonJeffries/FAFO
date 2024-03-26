@@ -111,8 +111,7 @@ class XFlatFile(XImplementation):
         re_scoping_set = self.validate_scope_set(re_scoping_set)
         if len(re_scoping_set) == 0:
             return None
-        new_impl = self.__class__(self.full_file_path, self.fields, re_scoping_set, self.buffer)
-        return XSet(new_impl)
+        return self.__class__(self.full_file_path, self.fields, re_scoping_set, self.buffer)
 
     def validate_scope_set(self, re_scoping_set):
         maximum = self.file_length_in_records()

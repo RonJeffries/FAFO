@@ -209,9 +209,7 @@ class XSet:
     def re_scope(self, other) -> Self:
         try:
             impl = self.implementation.re_scope(other)
-            if impl is None:
-                return XSet.null
-            return impl
+            return XSet.null if impl is None else XSet(impl)
         except AttributeError:
             return self.generic_re_scope(other)
 
