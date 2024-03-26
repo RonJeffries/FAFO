@@ -110,7 +110,7 @@ class XFlatFile(XImplementation):
             re_scoping_set = self.scope_set.re_scope(re_scoping_set)
         re_scoping_set = self.validate_scope_set(re_scoping_set)
         if len(re_scoping_set) == 0:
-            return XSet.null
+            return None
         new_impl = self.__class__(self.full_file_path, self.fields, re_scoping_set, self.buffer)
         return XSet(new_impl)
 
